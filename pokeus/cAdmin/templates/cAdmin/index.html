@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Techspire</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login-style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+<body>
+  <div class="container">
+    <input type="checkbox" id="flip">
+    <div class="cover">
+      <img src="{% static 'images/login-cover.jpg' %}">
+      <div class="front">
+        <img src="{% static 'images/mefs_login.png' %}" alt="MEFS Logo" class="logo">
+        <div class="text">
+          <span class="text-1">TECHSPIRE</span>
+          <span class="text-3">Version 1.0</span>
+          
+        </div>
+      </div>
+    </div>
+    <div class="forms">
+      <div class="form-content">
+        <div class="login-form">
+          <div class="title">Login</div>
+          <form action="{% url 'admin_login' %}" method="POST" id="loginForm">
+            {% csrf_token %}
+            <div class="input-boxes">
+              <div class="input-box">
+                <i class='bx bx-user'></i>
+                <input type="text" name="username" placeholder="Username" required>
+              </div>
+              <div class="input-box">
+                <i class='bx bx-lock-alt'></i>
+                <input id='passwrd' type="password" name="password" placeholder="Password" required>
+                <i id='togglebtn' class="fa fa-eye-slash" onclick='passwordview();'></i>
+              </div>
+              <div class="text">{{ message }}</div>
+              <div class="button input-box">
+                <input type="submit" value="Login">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    setTimeout(function () {
+      window.location.reload(1);
+    }, 720000);
+    {% for message in messages %}
+      alert('{{ message }}');
+    {% endfor %}
+
+    function passwordview(){
+      if(document.getElementById('passwrd').value==''){return;}
+    let pwd = document.getElementById('passwrd');
+    let toggleButton= document.getElementById('togglebtn');
+    if(pwd.type=='password'){
+      toggleButton.setAttribute('class', 'fa fa-eye');
+      pwd.type='text';
+    }
+    else{
+       document.getElementById('togglebtn').setAttribute('class', 'fa fa-eye-slash');
+      pwd.type='password';
+    }
+    }
+  </script>
+</body>
+</html>

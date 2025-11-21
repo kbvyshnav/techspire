@@ -1,0 +1,195 @@
+{% extends "cAdmin/baseUI.html" %}
+{% load static%}
+{% block body %}
+<style>
+ 
+    .register {
+  text-align: center;
+  background: #3C91E6;
+  color:white;
+  width:15%;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+}
+
+.register:hover{
+  background: #bbd9f6; 
+}
+
+
+.back{
+  text-align: center;
+  background: red;
+  color:white;
+  padding: 8px;
+  width:15%;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+  margin-left:20px;
+}
+
+.back:hover {
+  background: #ff9999; 
+}
+
+    #id_first_name,
+    #id_last_name,
+    #id_email,
+    #id_contact{
+        width: 200px; 
+        height: 30px; 
+        border: 1px solid #ccc; 
+        border-radius: 5px;
+        padding: 5px; 
+        outline: none; 
+        font-family: poppins, sans-serif;
+    }
+
+    #id_first_name:hover,
+    #id_last_name:hover,
+    #id_email:hover,
+    #id_contact:hover{
+      border-color: #999; 
+    }
+
+  .back-btn-addev {
+    width: 30px;
+    height: 30px;
+    margin-left: 900px;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+</style>
+
+
+<div class="table-data">
+  <div class="order">
+    <div class="head">
+      <h4 style="color:#800080; font-weight:bold; font-size: 1.2rem;">Edit details</h4>
+              <div class="back-btn" onclick="goBack()">
+                  <div class="back-btn-inner">
+                      <img src="{% static 'images/back-btn-arrw.png' %}" title="Click to go back" alt="back-button-logo">
+                  </div>
+              </div>
+    </div>
+    <hr>
+     
+    <form name = 'usrEdit' action="" method="post" onsubmit="javascript: return validation();">
+      {%csrf_token%}
+          <table id="table-datas">
+            <tbody>
+                        
+                        <tr>
+                            <td>First name</td>
+                            <td>{{ form.first_name }}</td>
+                        </tr>
+
+                        <tr>
+                          <td>Last name</td>
+                          <td>{{ form.last_name }}</td>
+                      </tr>
+
+                      <tr>
+                        <td>E-mail</td>
+                        <td>{{ form.email }}</td>
+                    </tr>
+                    <tr>
+                      <td>Contact</td>
+                      <td>{{ form.contact }}</td>
+                  </tr>
+                  <tr>
+                        
+                    <td><button type="submit" class="btn register" >Save</button><button type="button" onclick="goBack()" class="btn back">Cancel</button</td>
+                </tr>
+                        
+            </tbody>
+          </table>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('main-head').style.display ='none';
+
+  var contact = document.getElementById('id_contact');
+  var contact_val = contact.value;
+  
+  function validation(){
+    var fst_nme = document.getElementById('id_first_name').value.trim();
+    var lst_nme = document.getElementById('id_last_name').value.trim();
+    var email = document.getElementById('id_email').value.trim();
+    // var contact = document.getElementById('id_contact').value.trim();
+  
+    var count = fst_nme.split(/\s+/).length; // splits where space occurs.
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+     
+      if( fst_nme === '' || fst_nme === null){
+        alert("First name can't be empty.");
+          return false
+        
+      }
+  
+      if(count !== 1 )
+          {
+            alert('First name only contains single part.')
+            return false;
+          }
+  
+      if(lst_nme === '' || lst_nme === null)
+      {
+        alert("Last name can't be null");
+        return false;
+      }
+  
+      if( email === '' || email === null ){
+        alert(" Email can't be empty!");
+        return false;
+      }
+  
+      if(!emailRegex.test(email)){
+        alert("Please enter email in correct format!");
+        return false;
+      }
+  
+      if(contact.value == '' || contact.value == null){
+        alert("Contact field can not be empty!" + '+' + contact.value);
+        return false;
+      }
+  
+      return true;
+  }
+  
+  
+  contact.addEventListener('input', function(event) {
+    
+        var isNumeric = contact.value === '' || /^\d+$/.test(contact.value);
+       
+        if (!isNumeric) {
+          alert('Only numeric input is permitted.');   
+          contact.value = contact_val;    
+        }
+        contact_val = contact.value;
+      });
+  
+      function goBack() {
+       window.history.back();
+       }
+  
+  
+   </script>
+
+{%endblock%}

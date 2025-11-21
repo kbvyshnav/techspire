@@ -1,0 +1,108 @@
+{% extends "cAdmin/baseUI.html" %}
+{% load static %}
+{% block body %}
+
+<style>
+   
+  .category {
+     width: 150px;
+  height: 40px;
+  text-align: center;
+  background: #3C91E6;
+  color:white;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+}
+
+.category:hover{
+  background: #bbd9f6; 
+}
+
+.delete {
+   width: 150px;
+  height: 40px;
+  text-align: center;
+  background: red;
+  color:white;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+}
+
+.delete:hover{
+  background: #ff9999; 
+}
+
+</style>
+    
+<div class="table-data">
+    <div class="order">
+       <div class="head" > 
+             <span style="color:#800080; font-weight:bold; font-size: 1.2rem;"> Company Settings  </span>
+             <div class="back-btn" onclick="goBack()">
+                  <div class="back-btn-inner">
+                      <img src="{% static 'images/back-btn-arrw.png' %}" title="Click to go back" alt="back-button-logo">
+                  </div>
+              </div>
+       </div> 
+       <hr><br>
+       &nbsp <strong>Company Name : {{cmpnyId.companyName}}</strong><br><br>
+         <table id="table-datas">
+           <tbody>
+           
+           <!-- <tr><td> <button type="button" class="btn department" onclick="departmentview(this.value)" id="dept" value = {{cmpnyId}} ><i class='bx bx-plus-medical'> &nbsp;Add Department </i> </button> </td></tr> -->
+
+           <tr><td> <button type="button" class="category" onclick="categoryview(this.value)" id="dept" value = {{cmpnyId.companyId}} > &nbsp;Add Category</i>  </button> </td></tr>
+
+           <form name="company-deactivate" action="{% url 'deleteCompany' %}" method="post">
+            {%csrf_token %}
+           <tr><td> <button type="submit" class="delete" name="cmpnyId" id="cmpnyId" onclick="javascript: return confirmation();" value = {{cmpnyId.companyId}} >  &nbsp Delete  </button> </td></tr>
+           </form>
+                    
+           
+           </tbody>
+
+    
+    </table>
+</div>
+
+<script>
+ document.getElementById('main-head').style.display ='none';
+
+function categoryview(value) {
+  var url = "/cadmin/categoryManagement/" + value + "/";
+  window.location.href = url;
+}
+
+function departmentview(value) {
+  var url = "/cadmin/departmentManagement/" + value + "/";
+  window.location.href = url;
+}
+
+function confirmation(){
+  var cf = confirm("Are you sure you want to delete '{{cmpnyId.companyName}}'? This can't be reversed!");
+  if(cf == true){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+   function goBack() {
+  window.history.back();
+   }
+  
+    </script>
+
+
+    {%endblock%}

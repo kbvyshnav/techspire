@@ -1,0 +1,1039 @@
+
+{% extends "cAdmin/baseUI.html" %}
+{% block body %}
+{%load static%}
+<style>
+
+  .exit-symbol {
+ position: absolute;
+ top: 10px;
+ right: 24px;
+ font-size: 30px;
+ cursor: pointer;
+}
+
+.log {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #fff;
+display: none;
+border-radius: 20px;
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+width: 1000px;
+height: 650px;
+z-index: 9995;
+}
+.log .closeboxlog {
+    position:absolute;
+    color: #0a0a0a;
+    float: right;
+    font-size: 30px;
+    top: 10px;
+    right:45px;
+     cursor: pointer;
+     z-index: 9996 ;
+}
+.log .popup-body {
+
+   height: 100%;
+   width: 100%;
+  overflow-y: auto ;
+}
+
+.chat-frame {
+position: absolute;
+top: 50%;
+left: 75%;
+ transform: translate(-50%, -50%);
+ background-color: transparent; 
+display: none;
+border-radius: 20px;
+ /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);  */
+width: 400px;
+height: 650px;
+z-index: 9998;
+}
+.chat-frame .chat-close{
+    display: none;
+    position:absolute;
+    color: #0a0a0a;
+    float: right;
+    font-size: 30px;
+    top: 30px;
+    left:445px;
+     cursor: pointer;
+     z-index: 9999 ;
+}
+
+
+.btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: left;
+  }
+.edit {
+  background: #1181dd;
+  margin-right: 60px;
+  color: #ffffff;
+}
+.delete {
+  background: #e20b0b;
+  
+  color: #ffffff;
+}
+.edit:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+  .view {
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+}
+
+.view:hover {
+  animation: ani 8s linear infinite;
+  border: none;
+}
+
+@keyframes ani {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 400%;
+  }
+}
+
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  display: none;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding-bottom: 25px;
+  width: 1000px;
+  height: 600px;
+  z-index: 9991;
+}
+
+
+.box .child {
+  display: none;
+}
+
+
+.popup-header {
+  background-color: #5c5c8a; /* Blue background color */
+  color: white; /* White font color */
+  text-align: center;
+  border-radius: 20px 0 0 0; /* Rounded corners only at the top */
+  font-size: 1.3rem;
+  padding: 0 5px; /* Remove padding at the top and add padding to the sides */
+  height: 110px; /* Adjust the height as needed */
+  line-height: 40px; /* Vertically center the content */
+  position: sticky;
+  top: 0;
+}
+
+
+.popup-header p {
+  margin: 0; /* Remove the top and bottom margin for the paragraph */
+}
+
+.ticket-id {
+  text-align: left;
+  font-size: 2rem;
+  padding: 15px 25px 0; /* Adjust padding to move content higher */
+  margin-top: -10px; /* Add negative margin to move the entire block upwards */
+}
+
+.panel-label {
+    background-color: white; /* Background color */
+    color: black; /* Text color */
+    padding: 0px 15px 5px; /* Padding for spacing (adjust the top padding) */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 24px;
+}
+
+.status-label {
+    background-color: #7863b6; /* Background color */
+    color: white; /* Text color */
+    padding: 5px 15px; /* Padding for spacing */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 14px;
+    margin-top: 20px; /* Add top margin to move it downwards */
+    margin-left: 0px; /* Add left margin to move it to the left */
+    border: 1px solid white; /* Light and thin white border */
+}
+
+
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 755px;
+  margin-top:-30px /* Adjust the left margin as needed */
+  /* Add top margin to push buttons down slightly */
+}
+
+.header-button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.header-button:hover {
+  background-color: #3462C2;
+}
+
+.ticket-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 20px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.ticket-details {
+  font-size: 1rem;
+  line-height: 2.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the top-left */
+}
+
+.ticket-details p {
+  margin: 0; /* Remove margin for paragraphs inside the ticket-details box */
+}
+
+.ticket-details span {
+  text-align: center; /* Center the text in the span elements */
+}
+
+.flex-ticketbox {
+            display: flex;
+            justify-content: space-around;
+            
+            
+        }
+           .flex-item1 {          
+            width: 100px;
+            height: 50px;
+            margin: 1px;
+            text-align: left;
+            font-size: 16px;
+            font-weight:bold;                      
+           }
+
+          
+        .flex-item2 {
+    width: 100px;
+    height: 50px;
+    margin: 1px;
+    text-align: right;
+    font-size: 16px;
+    margin-left: 150px; 
+}
+
+
+       .flex-item3 {
+    width: 400px;
+    height: 50px;
+    margin: 1px;
+    text-align: left;
+    font-size: 16px;
+    margin-left: 80px; 
+}
+
+
+.gap {
+  height: 20px; /* Adjust the height of the gap as needed */
+}
+
+.additional-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  border-radius: 20px;
+  padding: 25px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+   margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.additional-details p {
+  margin: 10px 0; /* Add margin for spacing between paragraphs */
+}
+
+/* Action box CSS */
+.action-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 15px; /* Adjust padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+  height: 150px; /* Increase the height */
+  border-radius: 20px; /* Rounded corners only at the top */
+}
+
+
+
+.view:before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 400%;
+  border-radius: 35px;
+  transition: 1s;
+  
+}
+
+.view:hover::before {
+  filter: blur(20px);
+}
+
+.view:active {
+  background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+}
+  #open {
+    display: inline-block;
+  border-radius: 20px;
+  background-color: #7948d4;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+
+#assigndev {
+  text-align: center; /* Center-align the contents of the <p> element */
+}
+
+#assigndev button {
+  /* Style for the oval-shaped button */
+  background-color: #1181dd; /* Blue color */
+  color: #ffffff;
+  padding: 5px 20px; /* Adjust padding for oval shape */
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block; /* Ensure the button is not displayed as a block element */
+  border-radius:10px;
+  box-shadow:3px 3px 3px 1px grey;
+}
+
+#rejectdev {
+  text-align: center; /* Center-align the contents of the <p> element */
+  
+}
+
+#rejectdev button {
+  /* Style for the oval-shaped button */
+  background-color: red; /* Blue color */
+  color: #ffffff;
+  padding: 5px 20px; /* Adjust padding for oval shape */
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block; /* Ensure the button is not displayed as a block element */
+ border-radius:10px;
+  box-shadow:3px 3px 3px 1px grey;
+}
+
+#table-datas {
+        border-collapse: collapse; /* This removes the default spacing between table cells */
+        width: 100%;
+        cursor:pointer;
+    }
+
+    #table-datas tbody tr {
+        border-bottom: 1px solid #dddddd; /* Add a bottom border to tbody rows */
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2); /* Add a small shadow to the bottom of each row */
+         border-right: none; /* Hide the right vertical border */
+        border-left: none; /* Hide the left vertical border */
+    }
+
+    #table-datas th, #table-datas td {
+        text-align: left;
+        
+    }
+
+.exclude-hover td {
+  padding: 10px; /* Adjust the padding as needed */
+}
+
+/* Attachment icon trasnition*/
+.bigger-icon {
+       transition: transform 0.2s, background-color 0.2s;
+      display: inline-block;
+    }
+
+    .bigger-icon:hover {
+      background-color: 4px solid lightgrey;
+      transform: scale(1.1);
+      border-radius: 50%;
+    }
+
+/* Attachment icon trasnition*/
+
+
+
+.custom-p {
+        color: #c653c6;
+        display: inline;
+    }
+
+
+.thead-tstrheader {
+  background-color: #7863b6;
+  color: white;
+  padding-left: 17px
+  width: 200px; 
+  height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 10px 10px 0 0;
+}
+
+    </style>
+ 
+<ul class="box-info">
+  <a href = "{% url 'admin_home' company_id prev_date to_date keyword flag|default:'0' %}">
+	<li>
+		<i class='bx bxs-calendar-check' ></i>
+		<span class="text">
+			<h3 id="Requests">{{inbox}}</h3>
+			<p>Inbox</p>
+		</span>
+	</li>
+</a>
+ <a href = "{% url 'admin_inprogress' company_id prev_date to_date keyword flag|default:'0' %}">
+	<li>
+		<i class='bx bx-hourglass'></i>
+		<span class="text">
+			<h3 id="Pending" >{{inprogress}}</h3>
+			<p>In progress</p>
+		</span>
+	</li></a>
+    <a href = "{% url 'admin_forwarded' company_id prev_date to_date keyword flag|default:'0' %}">
+	<li>
+		<i class='bx bx-pause-circle'></i>
+		<span class="text">
+			<h3 id="hold" >{{forwarded}}</h3>
+			<p>Forwarded</p>
+		</span>
+	</li></a>
+  <a href = "{% url 'admin_closed' company_id prev_date to_date keyword flag|default:'0' %}">
+<li style="background-color:  #f0eef7; 	padding: 24px;  border-radius: 20px; display: flex;align-items: center;  grid-gap: 24px;  outline: none;  border-color: #7a7aff;  box-shadow: 0 0 5px #7a7aff;">  <i class='bx bx-window-close'></i>
+		<span class="text">
+			<h3 id="Closed">{{tickets.count}}</h3>
+			<p>Closed</p>
+		</span>
+	</li>
+  </a>
+</ul>
+
+<div class="table-data">
+    <div class="order">
+        <div class="head">
+          <h3>Tickets 
+<p style="color:#c653c6 ; display: inline;" >CLOSED</p></h3>
+            
+        </div>
+         <table id="table-datas">
+            <thead class="thead-tstrheader">
+                <tr>
+
+                    <td>Ticket ID</td>
+                    <td>Requester</td>
+                    <td>Client</td>
+                    <td> </td>
+                    <td>Subject</td>
+                    <td>Issue Date</td>
+                    <td> </td>
+                    <td> </td>
+
+                    <!-- <th>Date Of Expiry</th> -->
+                    
+                  
+                </tr>
+            </thead>
+        
+        <tbody> 
+          {% for ticket in tickets %}
+          <tr data-ticket="{{ ticket.ticket_no }}"  id="{{ticket.ticket_no}}" onclick=" actionselect('{{ticket.ticket_no}}','{{ticket.maker.username}}');"><td>{{ticket.ticket_no}}</td>
+          <td>{{ticket.maker.username}}</td>
+          <td>{{ticket.client}}</td>
+          {% if ticket.file.url is not None%}
+          <td class="projection">
+                    <a href="{{ ticket.file.url }}" target="_blank" onclick="event.stopPropagation();"> <button class="attachment-icon" title="open files" ></button></a>
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+                    </td>
+
+                    {%else %}
+                    <td> </td>
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="none">
+                    {% endif %}
+          <td>{{ticket.subject}}</td>
+          <td>{{ticket.issued_on | date:"d-m-y"}} </td>
+          <td>
+
+            <button class="chat-icon" title="open chat" onclick="javascript:document.getElementById('updtid').value='{{ticket.ticket_no}}'; chatfn(); event.stopPropagation();"></button>
+             </td>
+          <td>
+            <button class="log-icon" title="Open log"  onclick="javascript:document.getElementById('updtid').value='{{ticket.ticket_no}}'; outlook(); event.stopPropagation();"></button>  
+           </td> 
+          <td><input type="Hidden" id = 'tdes{{ticket.ticket_no}}' value="{{ticket.desc}}">
+          <input type="Hidden" id = 'tsub{{ticket.ticket_no}}' value="{{ticket.subject}}">
+          <input type="Hidden" id = 'ttester{{ticket.ticket_no}}' value="{{ticket.tester}}">
+          <input type="Hidden" id = 'tpriority{{ticket.ticket_no}}' value="{{ticket.priority}}">
+          <input type="Hidden" id = 'tcli{{ticket.ticket_no}}' value="{{ticket.client}}">
+          <input type="Hidden" id = 'tissuedt{{ticket.ticket_no}}' value="{{ticket.issued_on | date:'d-m-Y'}}">
+          <input type="Hidden" id = 'tclosedt{{ticket.ticket_no}}' value="{{ticket.closed_on | date:'d-m-Y' }}">
+          <input type="Hidden" id = 'tdevs' value="{{devs.client}}">
+          <input type="Hidden" id = 'tester' value="{{devs.tester_id}}">
+          <input type="Hidden" id = 'trmk{{ticket.ticket_no}}' value="{{ticket.remarks}}">
+
+
+
+          <input type="Hidden" id = 'tstatus{{ticket.ticket_no}}' value="{{ticket.status}}"></td>
+          {%empty%}
+          <td style="text-align: center; color: red;">NO ENTRIES!</td>
+      
+        {% endfor %}
+        <input type="Hidden" id = 'updtid' value="">
+        <input type="hidden" id="page_id" value="C">
+        
+      </tr>
+    </tbody>
+      </table></div></div>
+
+<!--TICKET DETAILS BOX-------------------->
+
+
+      <div class="box" name="tcktpopup" id="tcktpopup" style="overflow-y: auto;">
+        <div>
+         
+             <div class="popup-header">
+                       <!-- <span class="panel-label">Inbox</span>  -->
+
+              <span class="exit-symbol" onclick="closeBox()">&times;</span>
+
+               <div class="ticket-id">Ticket <span id="ticket_no"></span>
+          <div ><span class="status-label" id="wrdstat">STATUS : Closed.</span></div>
+
+           <div class="header-buttons">
+            <button class="header-button" onclick="javascript: chatfn(); ">Chat</button>  
+                <button class="header-button" onclick="javascript: outlook(); ">Outlook</button>
+          
+              </div>
+            </div>  
+          </div>
+                  
+                   <hr>
+                   <body>
+                  <br>
+                
+                <div class="ticket-details-box">
+                  <div class="ticket-details">
+
+                          <div class="flex-ticketbox">
+                                <div class="flex-item1">Client</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tcli"></span></div>
+                                 
+                         </div>
+
+                        <div class="flex-ticketbox">
+                                <div class="flex-item1">Maker</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="maker"></span></div>
+                                 
+                         </div>
+
+                         
+                        <div class="flex-ticketbox">
+                                <div class="flex-item1">Priority</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tpri"></span></div>
+                                 
+                         </div>
+
+                        
+                         <div class="flex-ticketbox">
+                                <div class="flex-item1">Issued on</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tissuedt"></span></div>
+                                 
+                         </div>
+                         <div class="flex-ticketbox">
+                                <div class="flex-item1">Closed on</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tclosedt"></span></div>
+                                 
+                         </div>
+                     
+
+                    
+                  </div>
+                </div>
+             
+                 <!--  gap -->
+              <div class="gap"></div>
+
+              <div class="additional-details-box">
+                  <div class="additional-details">
+                      <p><b>Subject :</b></p>
+                      <p id="tsub"></p>
+                      <p><b>File :</b></p>
+                      <p><a id="tfile"></a></p>
+                      <p><b>Description :</b></p>
+                      <textarea input type="text" disabled id="tdesc" rows="6" cols="100"
+                          style="border: none; color: #342E37; font-family: poppins, sans-serif; font-size: 16px;"></textarea>
+                      <p STYLE="color: RED;">Closing Remarks :</p> 
+                      <p id="cremark"></p>   
+                  </div>
+               </div>
+
+                
+                  
+                       <!--  gap -->
+              <div class="gap"></div>
+             </body>
+            </table>         
+         </div>
+
+                  
+                 
+                 <!----------------- Actions box ---------------------------------------------------------------------------------->
+                   {% comment %} <div class="action-box"> {% endcomment %}
+
+                    <div id = 'devasgn' name = 'devasgn' class="child"> <!-- For assign a developer for ticket For : TP -->
+                    <table>
+                    <tr class="exclude-hover"><td><b>Assign to </b></td>
+                    
+                      <td><select  id="devassign"  value="{{devs}}" style="width:150px; height:30px; border-radius:10px;" placeholder= "select" required>
+                    
+                            {%  for dev in devs %}
+                                <option value={{dev.username}} id ={{dev.id}}> {{dev.username}}</option>
+                            {% endfor %}
+                      </td>
+                  </tr>
+
+                      <tr class="exclude-hover"><td id="assigndev"><button type="button"  onclick="assigndev()">Assign</button></td>
+                      <td id="rejectdev"></td>
+                      </tr></table>
+                  </div>
+
+
+                  <div id = 'tstr_slct' class="child"> <!-- for status : PP -->
+                    <!-- After Test completetion tester forwarded to admin to Accept -->
+                    <table>
+                    <tr class="exclude-hover" >
+                        <td>
+                          <!-- Function : uatclifwd() 
+                          usage : To forward ticket to client for testing
+                          -->
+                          <select name="tstr_drpdwn" id="tstr_drpdwn">
+                            {% for tester in testers %}
+                              <option value="{{ tester}}"  >
+                                {{ tester}}
+                              </option>
+                            {% endfor %}
+                          </select>
+
+                          
+
+                            <button type="button"  id = 'tstr_btn' onclick="tstrops()"> Forward to client</button> 
+                        </td>
+                    </tr>
+                    </table>
+  
+                  </div>      
+                  
+                 <div id = 'dev_slct' class="child"> <!-- for status : PP -->
+                  <!-- After Test completetion tester forwarded to admin to Accept -->
+                  <table>
+                  <tr class="exclude-hover" >
+                      <td>
+                        <!-- Function : uatclifwd() 
+                        usage : To forward ticket to client for testing
+                        -->
+                                             
+
+                          <button type="button"  id = 'dev_btn' onclick="devops()"> Forward to client</button> 
+                      </td>
+                  </tr>
+                  </table>
+
+                </div> 
+                
+                <div id = 'tckt_clse' class="child"> <!-- for status : PC  and closing the ticket-->
+                  <!-- After Test completetion tester forwarded to admin to Accept -->
+                  <table>
+                  <tr class="exclude-hover" >
+                      <td>
+                        <!-- Function : uatclifwd() 
+                        usage : To forward ticket to client for testing
+                        -->
+                                             
+
+                          <button type="button"  id = 'dev_btn' onclick="devops()"> Close </button> 
+                      </td>
+                  </tr>
+                  </table>
+
+                </div> 
+
+
+
+
+
+                  <!-- mark-->
+                <!--<div id = 'tstrasgn' class="child">--> <!-- for status : PP -->
+                  <!-- After Test completetion tester forwarded to admin to Accept Also used for
+                  Assign tester when Status : EH-->
+                  <!-- <table>
+                  <tr class="exclude-hover" >
+                      <td> -->
+                        <!-- Function : tstrutils() 
+                        usage : Tester related function are combined to one.
+                        -->
+                          <!-- <button type="button" onclick="tstrutils()"> Forward to client</button> 
+                      </td>
+                  </tr>
+                  </table>
+
+                </div> -->
+
+
+
+
+                    <!-- <button type="button"  onclick="chatwindow()">Reject</button></td> -->
+                  
+                
+                </div> 
+</div> 
+
+
+<div id = 'logframe' class = "log">
+
+  <header><span  id="closeButton" class="closeboxlog" onclick="javascript:document.getElementById('logframe').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+    </header>
+    <div class="popup-body" >
+      <iframe id="frame1" style="display: none ;" name="frame1" class="log" scrolling ='yes'   width="50%" height="100%" frameborder="0">
+      </iframe>
+  </div>
+  </div>
+
+  <div id = 'chat-div'   class="chat-frame" >
+    <header><span  id="close-chat" class="chat-close"  onclick="javascript:document.getElementById('chat-div').style.display='none';document.getElementById('close-chat').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+     </header>
+   
+    <iframe id="chat"  src="" name="chat" class="chat-frame"  width="50%" height="100%"  scrolling="no"  frameborder="0">
+           </iframe>  
+   
+   </div>
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}"); 
+        </script>
+
+    {% endfor %}
+   
+{% endif %}
+
+{% block script %}
+
+<script>
+
+function actionselect(tno,b){
+    var tstat = 'tstatus'+ tno;
+    document.getElementById('updtid').value = tno;
+    var status = document.getElementById(tstat).value.trim();
+    var ttester = document.getElementById('ttester'+tno).value.trim();
+
+   
+    // alert(status);
+  //  if(status == 'TP'){
+    
+  //     var v = showticket(tno,b);
+  //     document.getElementById('devasgn').style.display = 'block';
+
+  //   }
+  //   else if(status == 'EH' ){
+  //    var v = showticket(tno,b,status); // b refers username
+  //   var button = document.getElementById('tstr_btn');
+  //   button.textContent='Assign';
+  //   document.getElementById('tstr_slct').style.display = 'block';
+  //   document.getElementById('tstr_drpdwn_pp').style.display = 'none';
+  //   }
+  // else if(status == 'PP'){
+  //   var v = showticket(tno,b,status); // b refers username
+  //   var button = document.getElementById('tstr_btn');
+  //   button.textContent='Forward to client';
+  //   document.getElementById('tstr_drpdwn').style.display = 'none';
+  //   document.getElementById('tstr_slct').style.display = 'block';
+  //   // document.getElementById('tstr_drpdwn_pp').style.display = 'block';
+  //   // var drpdwn_pp = document.getElementById('tstr_drpdwn_pp');
+  //   // var tester = document.getElementById('tester').value;
+    
+  //   // drpdwn_pp.value = tester;
+  //   // var event = new Event("change");
+  //   // drpdwn_pp.dispatchEvent(event);
+
+  // }
+  // else if(status == 'RC'){
+  //   var v = showticket(tno,b,status); // b refers username
+  //   // document.getElementById('tstr_drpdwn').style.display = 'none';
+  //   document.getElementById('dev_slct').style.display = 'block';
+  //   var button = document.getElementById('dev_btn');
+  //   button.textContent='Proceed to live';
+  // }
+  // // else{
+  //   // var v =  showticket(tno,b);
+  // // }
+   if(status == 'TC'){
+    var v = showticket(tno,b,status);
+    // document.getElementById('tckt_clse').style.display = 'block';
+  }
+
+  }
+
+  function chatfn(){
+
+var tid = document.getElementById('updtid').value.trim();
+// alert("{% url 'chtbx' " , tid , " %}")
+document.getElementById('chat').src = "{% url 'chtbx' 0 %}".replace('0', tid);
+document.getElementById('chat-div').style.display = 'block';
+document.getElementById('close-chat').style.display = 'block';
+document.getElementById('chat').style.display = 'block';
+}
+
+
+function assigndev()
+  {
+    var devId = document.getElementById('devassign').value;
+    var ticket = document.getElementById('updtid').value;
+     //alert(devId);
+    // return;
+    const link = "/cadmin/assign_tckt/"+ ticket + "/" + devId;
+    window.location.href = link;
+
+  }
+
+// function tstradminacpt(){ // this changes status to PP
+//   tno = document.getElementById('updtid').value;
+//   const link = '/cadmin/tstradmnacpt/' + tno;
+//   window.location.href = link ;
+// }
+
+function tstrops(){ // tester related operations
+  tno = document.getElementById('updtid').value;
+  
+  var status = document.getElementById('tstatus'+tno).value.trim();
+  var tester = document.getElementById('tstr_drpdwn').value;
+
+    const link = '/cadmin/tstr_ops/' + tno + '/' + status + '/' + tester + '/' ;
+    window.location.href = link
+  
+}
+
+function usrops(){ // tester related operations
+  tno = document.getElementById('updtid').value;
+  
+  var status = document.getElementById('tstatus'+tno).value.trim();
+  var dev = document.getElementById('tstr_drpdwn').value;
+
+    const link = '/cadmin/usr_ops/' + tno + '/' + status + '/' + dev + '/' ;
+    window.location.href = link
+  
+}
+
+function devops(){ // developer related operations
+  tno = document.getElementById('updtid').value;
+  
+  var status = document.getElementById('tstatus'+tno).value.trim();
+  //alert(status)
+  if(status == 'EH'){
+   var dev = document.getElementById('tstr_drpdwn').value;
+
+    const link = '/cadmin/dev_ops/' + tno + '/' + status + '/' + dev + '/' ;
+    window.location.href = link
+  }
+  else if (status == 'PC'){
+    var dev = null;
+
+    const link = '/cadmin/dev_ops/' + tno + '/' + status + '/' + dev + '/' ;
+    window.location.href = link
+  }
+  else if(status == 'RC'){
+    var filler = null;
+    const link = '/cadmin/dev_ops/' + tno + '/' + status  + '/' + filler + '/' ; // filler for developer variable
+    window.location.href = link
+  }
+  
+}
+
+
+
+function chatwindow(){
+  document.getElementById('chatw').style.display = 'block';
+}
+
+
+
+ document.getElementById('dashboard').classList.add('active');
+ 
+ 
+function showticket(tno,user){
+
+
+  // alert(tdesc);
+  document.getElementById("tcktpopup").style.display = "block";
+  // document.getElementById("devasgn").style.display = "none";
+
+  // $('#myBox').show();
+  var tdesc = 'tdes'+ tno;
+  var tsub = 'tsub'+tno; // subject
+  var tpriority = 'tpriority'+tno; //priority
+  var tcl = 'tcli' + tno; //Client
+  var tfile = 'tfile' + tno;
+  var tstat = 'tstatus'+ tno;
+  let remark_id = 'trmk' + tno;
+  let remarks = document.getElementById(remark_id).value;
+  // alert(remarks)
+  var status_val = document.getElementById(tstat).value;
+// document.getElementById("myBox").style.display="block";
+
+  //  alert( document.getElementById(tstat).value);
+  // if( status_val == 'TC'){
+  //   document.getElementById('ticket_stat').innerHTML = ":  " +' Closed ' ;
+ 
+  // }
+  
+  document.getElementById('ticket_no').innerHTML=  tno; // ticket number
+  document.getElementById('ticket_no').innerHTML= tno;
+  document.getElementById('maker').innerHTML= user; // user name
+  document.getElementById('cremark').innerHTML= remarks; 
+  document.getElementById('tsub').innerHTML= document.getElementById(tsub).value; // ticket subject
+  document.getElementById('tissuedt').innerHTML= document.getElementById('tissuedt'+ tno).value;
+  document.getElementById('tclosedt').innerHTML= document.getElementById('tclosedt' + tno).value; // ticket description
+  var fileurl = document.getElementById(tfile).value;
+  // alert(document.getElementById(tdesc).value);
+  if(fileurl != 'none'){
+  var fileurl = document.getElementById(tfile).value;
+  var link =document.createElement('a'); 
+  link.href = fileurl;
+  link.target = '_blank';
+  link.textContent = 'Click here to view file';
+  // alert(link);
+  document.getElementById('tfile').appendChild(link);
+  }
+  else{
+    document.getElementById('tfile').innerHTML = ' No Files Attached.';
+  }
+  document.getElementById('tpri').innerHTML= priority(tno); // ticket priority
+  document.getElementById('tdesc').innerHTML= document.getElementById(tdesc).value;
+  document.getElementById('tcli').innerHTML= document.getElementById(tcl).value; // ticket client
+  
+
+}
+
+
+function outlook() {
+    var tid = document.getElementById('updtid').value;
+    // alert(tid)
+    var logsUrl = '/cadmin/logs/' + tid + '/';
+    document.getElementById('frame1').src = logsUrl;
+    document.getElementById('logframe').style.display = 'block';
+    document.getElementById('frame1').style.display = 'block';
+}
+
+
+
+
+
+  
+
+// exit symbol
+function closeBox() {
+  //document.getElementById("myBox").style.display = "none";
+  //document.getElementById("tacptbox").style.display = "none";
+  document.getElementById('tfile').innerHTML =null;
+  document.getElementById("tcktpopup").style.display = "none";
+  //stest
+
+  //jinoy
+  //stest2
+
+  //stest3  // jinoy 2  //stest3
+
+}
+
+
+
+
+
+</script>
+
+{%endblock%}
+
+{%endblock%}

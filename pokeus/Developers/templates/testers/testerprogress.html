@@ -1,0 +1,969 @@
+
+{% extends "testers/testerbaseUI.html" %}
+{% block body %}
+{%load static%}
+
+<style>
+
+
+
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  display: none;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding-bottom: 25px;
+  width: 1000px;
+  height: 600px;
+  z-index: 800;
+}
+.chat-frame {
+position: absolute;
+top: 50%;
+left: 75%;
+ transform: translate(-50%, -50%);
+ background-color: transparent; 
+display: none;
+border-radius: 20px;
+ /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);  */
+width: 400px;
+height: 650px;
+z-index: 9998;
+}
+.chat-frame .chat-close{
+    display: none;
+    position:absolute;
+    color: #0a0a0a;
+    float: right;
+    font-size: 30px;
+    top: 30px;
+    left:445px;
+     cursor: pointer;
+     z-index: 9999 ;
+}
+.log {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #fff;
+display: none;
+border-radius: 20px;
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+width: 1000px;
+height: 650px;
+z-index: 9992;
+}
+.log .closeboxlog {
+    position:absolute;
+    color: #0a0a0a;
+    float: right;
+    font-size: 30px;
+    top: 10px;
+    right:45px;
+     cursor: pointer;
+     z-index: 9993;
+}
+
+.log .popup-body {
+
+   height: 100%;
+   width: 100%;
+  overflow-y: auto ;
+}
+.popup-header {
+  background-color: #668aaf; /* Blue background color */
+  color: white; /* White font color */
+  text-align: center;
+  border-radius: 20px 0 0 0; /* Rounded corners only at the top */
+  font-size: 1.3rem;
+  padding: 0 5px; /* Remove padding at the top and add padding to the sides */
+  height: 110px; /* Adjust the height as needed */
+  line-height: 40px; /* Vertically center the content */
+  position: sticky;
+  top: 0;
+}
+
+
+.popup-header p {
+  margin: 0; /* Remove the top and bottom margin for the paragraph */
+}
+
+.ticket-id {
+  text-align: left;
+  font-size: 2rem;
+  padding: 15px 25px 0; /* Adjust padding to move content higher */
+  margin-top: -47px; /* Add negative margin to move the entire block upwards */
+}
+
+.panel-label {
+    background-color: white; /* Background color */
+    color: black; /* Text color */
+    padding: 0px 15px 5px; /* Padding for spacing (adjust the top padding) */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 24px;
+}
+
+.status-label {
+    background-color: #ae376f; /* Background color */
+    color: white; /* Text color */
+    padding: 5px 15px; /* Padding for spacing */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 14px;
+    margin-top: 20px; /* Add top margin to move it downwards */
+    margin-left: 0px; /* Add left margin to move it to the left */
+    border: 1px solid white; /* Light and thin white border */
+}
+
+
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 755px;
+  margin-top:-30px /* Adjust the left margin as needed */
+  /* Add top margin to push buttons down slightly */
+}
+
+.header-button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.header-button:hover {
+  background-color: #3462C2;
+}
+
+.ticket-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 20px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 34px auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.ticket-details {
+  font-size: 1rem;
+  line-height: 2.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the top-left */
+}
+
+.ticket-details p {
+  margin: 0; /* Remove margin for paragraphs inside the ticket-details box */
+}
+
+.ticket-details span {
+  text-align: center; /* Center the text in the span elements */
+}
+
+.gap {
+  height: 20px; /* Adjust the height of the gap as needed */
+}
+
+.additional-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  border-radius: 20px;
+  padding: 25px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+   margin: -23px auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+.additional-details p {
+  margin: 10px 0; /* Add margin for spacing between paragraphs */
+}
+
+/* Action box CSS */
+.action-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 15px; /* Adjust padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+  height: 92px; /* Increase the height */
+  border-radius: 20px; /* Rounded corners only at the top */
+}
+
+
+
+.flex-ticketbox {
+            display: flex;
+            justify-content: space-around;
+            
+            
+        }
+           .flex-item1 {          
+            width: 100px;
+            height: 50px;
+            margin: 1px;
+            text-align: left;
+            font-size: 16px;
+            font-weight:bold;                      
+           }
+
+          
+        .flex-item2 {
+    width: 100px;
+    height: 50px;
+    margin: 1px;
+    text-align: right;
+    font-size: 16px;
+    margin-left: 150px; 
+}
+
+
+       .flex-item3 {
+    width: 400px;
+    height: 50px;
+    margin: 1px;
+    text-align: left;
+    font-size: 16px;
+    margin-left: 80px; 
+}
+
+
+  .view {
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+}
+  .testerBtn {
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: #ae376f;
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+  cursor:pointer;
+}
+.testerBtn:hover {
+  background: #da8bb0; 
+}
+
+
+.btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: left;
+  }
+.view:hover {
+  animation: ani 8s linear infinite;
+  border: none;
+}
+
+@keyframes ani {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 400%;
+  }
+}
+
+.view:before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 400%;
+  border-radius: 35px;
+  transition: 1s;
+}
+
+#view:hover::before {
+  filter: blur(20px);
+}
+
+#view:active {
+  background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+}
+  #open {
+    display: inline-block;
+  border-radius: 20px;
+  background-color: #7948d4;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.edit {
+  background: #1181dd;
+  
+  color: #ffffff;
+}
+.delete {
+  background: #e20b0b;
+  
+  color: #ffffff;
+}
+.edit:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+.exit-symbol {
+ position: absolute;
+ top: 10px;
+ right: 24px;
+ font-size: 30px;
+ cursor: pointer;
+}
+
+#table-datas {
+        border-collapse: collapse; /* This removes the default spacing between table cells */
+        width: 100%;
+        cursor:pointer;
+    }
+
+    #table-datas tbody tr {
+        border-bottom: 1px solid #dddddd; /* Add a bottom border to tbody rows */
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2); /* Add a small shadow to the bottom of each row */
+        border-right: none; /* Hide the right vertical border */       
+        /*border-left: 6px solid #42A8D5;*/
+    }
+
+    #table-datas th, #table-datas td {
+        text-align: left;
+        
+    }
+
+
+
+.qrybtn button {
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 15em;
+  height: 3em;
+  line-height: 2em;
+  text-align: center;
+  background: #ae376f;
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+
+}
+
+.qrybtn button:hover {
+  background: #da8bb0; 
+}
+
+ .thead-header {
+  background-color: #ae376f;
+  color: white;
+  padding-left: 17px
+  width: 200px; 
+  height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 10px 10px 0 0;
+}
+
+
+    </style>
+ 
+<ul class="box-info">
+
+<a href='{% url "tester_home" company_id prev_date to_date keyword%}'>	
+  <li> 
+		<i class='bx bxs-calendar-check'style='color:  #602040; background-color:  #e6b3cc;' ></i>
+		<span class="text">
+			<h3 id="Requests">{{open}}</h3>
+			<p>Open</p>
+		</span>
+	</li></a>
+  <a href='{% url "tester_pendings" company_id prev_date to_date keyword %}'>
+	<li style="background-color:  #f9ecf2; 	padding: 24px;  border-radius: 20px; display: flex;align-items: center;  grid-gap: 24px;  outline: none;  border-color: #adc2eb;  box-shadow: 0 0 5px  #c85188;">
+		<i class='bx bx-hourglass' style='color:  #602040; background-color:  #e6b3cc;'></i>
+		<span class="text">
+			<h3 id="Pending" >{{tickets.count}}</h3>
+			<p>In progress</p>
+		</span>
+	</li>
+  </a>
+  <a href='{% url "tester_forwarded" company_id prev_date to_date keyword%}'>
+	<li><i class='bx bx-pause-circle' style='color:  #602040; background-color:  #e6b3cc;'></i>
+		<span class="text">
+			<h3 id="Closed">{{forwarded}}</h3>
+			<p>Forwarded</p>
+		</span>
+	</li>
+</a>
+<a href='{% url "tester_closed" company_id prev_date to_date keyword%}'>
+  <li><i class='bx bx-window-close' style='color:  #602040; background-color:  #e6b3cc;'></i>
+		<span class="text">
+			<h3 id="Closed">{{closed}}</h3>
+			<p>Closed</p>
+		</span>
+	</li>
+</a>
+</ul>
+
+<div class="table-data">
+  <div class="order">
+      <div class="head">
+        <h3>Tickets 
+<p style="color:#ae376f ; display: inline;" >IN PROGRESS</p></h3>
+          
+      </div>
+       <table id="table-datas">
+          <thead class="thead-header">
+              <tr>
+
+                  <td>Ticket ID</td>
+                  <td>Requester</td>
+                  <td>Client</td>
+                   <td> </td>
+                  <td>Subject</td>
+                  <td>Issue date </td>
+                  <!-- <th>Date Of Expiry</th> --> 
+                  <td>Actions </td>  
+                   <td> </td>
+                    <td> </td>
+              </tr>
+          </thead>
+      </div>
+      <tbody> 
+        {% for ticket in tickets %}
+        <tr data-ticket="{{ ticket.ticket_no }}"  id="{{ticket.ticket_no}}" onclick="showticket('{{ticket.ticket_no}}','{{ticket.maker.username}}');"><td>{{ticket.ticket_no}}</td>
+        <td>{{ticket.maker.username}}</td>
+        <td>{{ticket.client}}</td>
+        <td class="projection">
+                {% if ticket.file.url is not None%}
+                    <a href="{{ ticket.file.url }}" target="_blank"> <button class="attachment-icon" title="open files" onclick="event.stopPropagation();" ></button></a>
+
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+                    </td>
+
+                    {% else %}
+
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="none">
+                    {% endif %}
+          </td>
+        <td>{{ticket.subject}}</td>
+        <td>{{ticket.issued_on | date:"d-m-y"}}</td>
+        
+        <form action="{% url 'tester_push' %}" method="post" id="tstr_fwd" onsubmit="javascript:return fwdToAdmn('{{ticket.ticket_no}}');">
+          {% csrf_token %}
+        <td><button type="submit" class="testerBtn" name="tcktno" value="{{ticket.ticket_no}}" id="t{{ticket.ticket_no}}">Forward</button></td>
+        <td>
+        <button type="button" class="chat-icon" title="open chat"  onclick="javascript:document.getElementById('updtid').value='{{ticket.ticket_no}}'; chatfn(); event.stopPropagation();"></button>
+        </td>
+        <td>
+            <button type="button" class="log-icon" title="Open log"  onclick="javascript:document.getElementById('updtid').value='{{ticket.ticket_no}}'; outlook(); event.stopPropagation();"></button>
+         </td>
+        
+        </form>
+        {% if ticket.file.url is not None%}
+        <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+        {%else %}
+        <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="none">
+        {% endif %}
+        <input type="Hidden" id = 'tstat{{ticket.ticket_no}}' value="{{ticket.status}}">
+        <td><input type="Hidden" id = 'tdesc{{ticket.ticket_no}}' value="{{ticket.desc}}"></td>
+        <td><input type="Hidden" id = 'tsub{{ticket.ticket_no}}' value="{{ticket.subject}}"></td>
+        <td><input type="Hidden" id = 'tpriority{{ticket.ticket_no}}' value="{{ticket.priority}}"></td>
+        <td><input type="Hidden" id = 'tstatus{{ticket.ticket_no}}' value="{{ticket.status}}"></td>
+        <td><input type="Hidden" id = 'tremarks{{ticket.ticket_no}}' value="{{ticket.remarks}}"></td>
+        <td><input type="Hidden" id = 'tcli{{ticket.ticket_no}}' value="{{ticket.client}}">
+        <input type="Hidden" id = 'tissued{{ticket.ticket_no}}' value="{{ticket.issued_on | date:'d-m-y'}}">
+        <td><input type="Hidden" id = 'tgt{{ticket.ticket_no}}' value="{{ticket.tgt_days}}">
+        <td><input type="Hidden" id = 'texp{{ticket.ticket_no}}' value="{{ticket.expiry}}">
+        <td><input type="Hidden" id = 'texp{{ticket.ticket_no}}' value="{{ticket.expiry}}">
+
+          <input type="Hidden" id = 'seltno' value="">
+        </td>
+  
+        
+         
+
+
+        
+        
+      {% endfor %}
+      <input type="Hidden" id = 'updtid' value="">
+      <input type="hidden" id="page_id" value="I">
+
+      
+    </tr>
+  </tbody>
+    </table>
+      
+
+       <!-----------------------------------TICKET DETAILS BOX-------------------------------------------------->
+
+      <div class="box" name="myBox" id="myBox" style="overflow-y: auto;" >
+        <div>
+            <div class="popup-header">
+            
+          <!-- <span class="panel-label">Inbox</span>  -->
+                      <span class="exit-symbol" onclick="javascript:closeBox();" title="Close">&times;</span>
+
+            <div class="ticket-id">Ticket <span id="ticket_no"></span>
+                <div ><span class="status-label" id="tstatus"></span></div>
+                
+
+              <div class="header-buttons">
+                <button class="header-button" onclick="javascript: chatfn();">Chat</button>
+                <button class="header-button" onclick="javascript: outlook();">Outlook</button>
+
+                
+              </div>
+            </div>  
+          </div>
+          
+          
+           <hr>
+
+            <body>
+                  <br>
+                
+                <div class="ticket-details-box">
+                  <div class="ticket-details">
+
+                                   <div class="flex-ticketbox">
+                                           <div class="flex-item1">Client</div>
+                                           <div class="flex-item2">:</div>
+                                           <div class="flex-item3"><span id="tcli"></span></div>                                         
+                                    </div>
+
+                                    <div class="flex-ticketbox">
+                                <div class="flex-item1">Maker</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="maker"></span></div>
+                                 
+                                     </div>
+                              
+                               <div class="flex-ticketbox">
+                                    <div class="flex-item1">Issue Date</div>
+                                    <div class="flex-item2">:</div>
+                                    <div class="flex-item3"><span id="tdate"></span></div>
+                                 
+                                </div>
+                         
+                              <div class="flex-ticketbox">
+                                <div class="flex-item1">Priority</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tpri"></span></div>
+                                 
+                              </div>
+                            <div class="flex-ticketbox">
+                                <div class="flex-item1">Target date</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3" style="color: red;"><span id="target_days"></span></div>
+                                 
+                              </div>
+                        
+                        
+                  </div>
+                </div>
+
+            
+
+              <div class="additional-details-box">
+                  <div class="additional-details">
+                      <p><b>Subject :</b></p>
+                      <p id="tsub"></p>
+                      <p><b>File :</b></p>
+                      <p><a id="tfile"></a></p>
+                      <p><b>Description :</b></p>
+                      <textarea input type="text" disabled id="tdesc" rows="6" cols="100"
+                          style="border: none; color: #342E37; font-family: poppins, sans-serif; font-size: 16px;"></textarea>
+                  </div>
+               </div>
+
+                
+                  
+                       <!--  gap -->
+              <div class="gap"></div>
+             </body>
+            </table>         
+         </div>
+
+
+      {% comment %} <div class="box" name="myBox" id="myBox" style="overflow-y: auto; display:none ;" >    
+        <span class="exit-symbol" onclick="closeBox()">&times;</span>
+         <p style="color:rgb(63, 109, 238); font-size:1.3rem;"><b>Ticket Details</b></p>
+         <table>
+         <hr>
+          <body>
+              <tr>
+                <tr class="exclude-hover"><td width = 180><b>Ticket id</b></td><td id="ticket_no" width = 300>:</td></tr>
+                <tr class="exclude-hover"><td><b>Subject </b></td><a><td id="tsub"></a></td></tr>
+                <tr class="exclude-hover"><td><b>Status </b></td><a><td id="tstatus"></a></td></tr>
+                <tr class="exclude-hover"><td><b>Client </b></td><a><td id="tcli"></a></td></tr>
+                <tr class="exclude-hover"><td><b>Priority</b></td><td id="tpri"></td></tr>
+                <tr class="exclude-hover"><td><b>File </b></td><a><td id="tfile"></a></td></tr>
+       
+                <tr class="exclude-hover" style="border-bottom: 2px solid black;  vertical-align: top; text-align: left;"><td><b>Description</b></td>
+                <td><textarea input type="text" disabled id="tdesc" rows="5" cols="80" 
+                  
+                style="border:none; color:#342E37;  font-family:poppins,sans-serif; font-size:16px; " ></textarea></td></tr>
+         </table>
+                    
+
+          <div>
+
+             <form action="{% url 'tstrqry' %}" onsubmit="javascript:return validator ();" method="post">
+                      {% csrf_token %}
+                <p class="exclude-hover"><td><button name="qrybtn"  id= 'qrybtn' value="" >Make Query/Bug Report</p>
+              </form>
+          </body>
+              
+              <textarea id="devquery" rows="3" cols="20" style="display: none;"></textarea>
+              <!-- <p id="ticketinfo"><button type="button" id="qrybtn" onclick="clarification()">Raise Clarification</button></p>
+              <p id="ticketinfo"><button type="button" id="close"  onclick="clarification(x='x')" style="display: none;">Clear</button></p>
+              <p id="ticketinfo"><button type="button"  onclick="Assigndev()">Assign</button></p> -->
+         </div>
+
+      </div> {% endcomment %}
+
+            <!--  gap -->
+              <div class="gap"></div>
+
+    <!----------------- Actions box ---------------------------------------------------------------------------------->
+                  
+                  <div class="action-box">
+
+               <form action="{% url 'tstrqry' %}" onsubmit="return validator();" method="post">
+                      {% csrf_token %}
+                <p class="qrybtn"><td><button name="qrybtn"  id= 'qrybtn' value="" >Make Query/Bug Report</p>
+              </form>
+    </div> 
+
+      </div>
+ <!----------------- Actions box ---------------------------------------------------------------------------------->
+   
+ <div id = 'logframe' class = "log">
+
+  <header><span  id="closeButton" class="closeboxlog" onclick="javascript:document.getElementById('logframe').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+    </header>
+    <div class="popup-body" >
+      <iframe id="frame1" style="display: none ;" name="frame1" class="log" scrolling ='yes'   width="50%" height="100%" frameborder="0">
+      </iframe>
+  </div>
+  </div>
+
+<div id = 'chat-div'   class="chat-frame">
+  <header><span  id="close-chat" class="chat-close"  onclick="javascript:document.getElementById('chat-div').style.display='none';document.getElementById('close-chat').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+   </header>
+ 
+  <iframe id="chat" class="chat-frame"  src="" name="chat"  scrolling="no"  frameborder="0">
+         </iframe>
+</div>
+        
+ 
+ 
+
+  
+
+
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+   
+{% endif %}
+
+
+{% block script %}
+
+<script>
+ document.getElementById('dashboard').classList.add('active');
+
+ function outlook() {
+    var tid = document.getElementById('updtid').value;
+    // alert(tid)
+    var logsUrl = '/cadmin/logs/' + tid + '/';
+    document.getElementById('frame1').src = logsUrl;
+    document.getElementById('logframe').style.display = 'block';
+    document.getElementById('frame1').style.display = 'block';
+}
+
+function chatfn(){
+
+var tid = document.getElementById('updtid').value.trim();
+// alert("{% url 'chtbx' " , tid , " %}")
+document.getElementById('chat').src = "{% url 'chtbx' 0 %}".replace('0', tid);
+document.getElementById('chat-div').style.display = 'block';
+document.getElementById('close-chat').style.display = 'block';
+document.getElementById('chat').style.display = 'block';
+}
+
+function validator(){
+  var cf = confirm('Are you sure tou want to continue?');
+  if (cf == true ){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+
+function showticket(tno,user){
+
+  document.getElementById("myBox").style.display = "block";
+  var tissued = 'tissued' + tno;
+  var tdesc = 'tdes'+ tno;
+  var tsub = 'tsub'+tno; // subject
+  var tpriority = 'tpriority'+tno; //priority
+  var tcl = 'tcli' + tno; //Client
+  var qrybtn = document.getElementById('qrybtn');
+  qrybtn.value = tno;
+  var texp = "texp" + tno;
+  var texp_date = document.getElementById(texp).value
+
+  // alert(qrybtn.value)
+  var fileurl = document.getElementById('tfile'+tno).value;
+  // alert(document.getElementById(tdesc).value);
+  var texp = "texp" + tno;
+  var texp_date = document.getElementById(texp).value
+
+
+  if(fileurl != 'none'){
+  var fileurl = document.getElementById('tfile'+tno).value;
+  var link =document.createElement('a'); 
+  link.href = fileurl;
+  link.target = '_blank';
+  link.textContent = 'Click here to view file';
+  // alert(fileurl);
+  document.getElementById('tfile').appendChild(link);
+  }
+  else{
+    document.getElementById('tfile').innerHTML = ' No Files Attached.';
+  }
+
+      document.getElementById('updtid').value = tno;
+      document.getElementById('tsub').innerHTML = document.getElementById('tsub'+tno).value;
+      document.getElementById('tstatus').innerHTML = 'In progress';
+      document.getElementById('tcli').innerHTML = document.getElementById('tcli'+tno).value;
+
+      document.getElementById('tpri').innerHTML = document.getElementById('tpriority'+tno).value;
+    
+      document.getElementById('ticket_no').innerHTML= tno; // ticket number
+      document.getElementById('maker').innerHTML=" "+ user; // user name
+      document.getElementById('tdate').innerHTML=" " + document.getElementById(tissued).value; // ticket subject
+      document.getElementById('tdesc').innerHTML= document.getElementById('tdesc'+tno).value; // ticket description
+      // document.getElementById('target_days').innerHTML = DaysToDate("{% now 'd-m-Y' %}",tgt_days) + ' [ No.of working days : ' + tgt_days + ' ]' ;
+      document.getElementById('target_days').innerHTML = texp_date  ;
+      
+
+}
+
+function clarification(){
+
+    // alert
+
+}
+
+function fwdToAdmn(tno){
+
+  var cf = confirm('Are you sure you want to forward this?');
+  if(cf == true){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+// const link = '/developers/tstrpsh/' + tno ; 
+//   window.location.href = link;
+
+
+function assignT() { 
+  
+  var tno = document.getElementById('seltno').value;
+  tester = document.getElementById('tdropdown').value;
+  window.location.href = '/developers/assign_tester/' + tester + '/' + tno + '/';}
+
+function testerassign(tno){
+
+  document.getElementById('seltno').value = tno;
+  document.getElementById("testerBox").style.display = "block";
+  if(x=='s'){
+  tester = document.getElementById('tdropdown').value;
+  window.location.href = '/developers/assign_tester/' + tester + '/' + tno + '/';
+  }
+}
+
+
+
+
+  // // Add an event listener to hide the 'myBox' when clicking outside of it
+  // $(document).on('click', function(event) {
+  //   if (!$(event.target).closest('#myBox').length) {
+  //     var box = document.getElementById("myBox");
+  //     box.style.display = "none";
+  //   }
+  // });
+
+
+//exit symbol
+
+function closeBox() {
+ var box = document.getElementById("myBox");
+  box.style.display = "none";
+  var tbox = document.getElementById("testerBox");
+  document.getElementById("tfile").innerHTML = null;
+  tbox.style.display = "none";
+}
+
+
+
+
+// function clarification(x){
+//   // alert("wrkd");
+//     if (x == 'x'){
+//       document.getElementById('devquery').style.display = "none";
+//       document.getElementById('close').style.display = "none";
+//       // alert()
+//     }
+//     else
+//     {
+//     const clarification = document.getElementById('devquery');
+//     clarification.style.display = "block";
+//     // const qryBtn = document.getElementById('qryBtn');
+
+//     document.getElementById('close').style.display = "block";
+//     // ticket = document.getElementById('updtid').value;
+//     // qry = document.getElementById('devquery');
+//     // if(!qry){
+//     //   qryBtn.textContent = 'Raise';
+//       window.location.href = "developers/";
+//     }
+//     }
+
+
+
+
+ 
+  // $(document).ready(function() {
+  //   function updateDatas() {
+  //     $.ajax({
+  //       url: "{% url 'dev_pendings' %}",
+  //       type: 'GET',
+  //       dataType: 'json',
+  //       success: function(data) {
+  //         // Parse the data from the server and update the table
+  //         var myData = JSON.parse(data);
+  //         var t_details = myData.ticket_data.reverse();
+  //         var tbody = $('#table-datas tbody');
+  //         var thead = $('#t-head')
+  //         var counter = 0;
+
+  //         tbody.empty();
+  //         $.each(t_details, function(index, item) {
+  //           counter++;
+  //           var row = $('<tr>');
+  //           row.append($('<td>').text(item.ticketid));
+  //           row.append($('<td>').text(item.issue));
+  //           row.append($('<td>').text(item.issueddate));
+  //           row.append($('<td>').text(item.priority));
+  //           row.append($('<td>').text(item.DOExp));
+  //           row.append($('<td>').append($('<button>').text('View').attr('id', item.ticketid).attr('class', 'view').on('click', function(e) {
+  //             e.stopPropagation(); // Prevent click event from propagating to parent elements
+  //             const box = document.getElementById('myBox');
+  //             const ticketinfo_tag = document.getElementById('ticketinfo');
+  //             const ticket_id = item.ticketid;
+  //             const issue_info = item.issue
+  //             const editUrl = "/user/del_ticket/" + ticket_id + "/";
+  //             const anchorTag = document.createElement("a");
+  //             anchorTag.href = editUrl;
+  //             const editButton = document.createElement("button");
+  //             editButton.type = "button";
+  //             editButton.className = "btn edit";
+  //             editButton.innerText = "Leave a Comment";
+
+  //             const deleteButton = document.createElement("button");
+  //             deleteButton.type = "button";
+  //             deleteButton.className = "btn delete";
+  //             deleteButton.innerText = "Delete";
+  //             anchorTag.appendChild(editButton);
+  //             anchorTag.appendChild(deleteButton);
+  //             ticketinfo_tag.innerHTML = '<table> <tbody  style="padding: 4px; text-align:left; width:50px; height:100px; overflow:auto ;"><tr><td><b>Ticket ID:</b>' + ticket_id + '</td><tr> \
+  //               <tr><td><b>Issue :</b>' + issue_info + '</td><tr> \
+  //                 <tr><td><b>Issue Descripton :</b>' + item.issuedesc + '</td><tr> \
+  //                   <tr><td><b> Priority :</b>' + item.priority + '</td><tr> \
+  //                     <tr><td><b>Date of expiry :</b>' + item.DOExp + '</td><tr> \
+  //                        </tbody></table><br>';
+  //             ticketinfo_tag.appendChild(anchorTag);
+  //             box.style.display = 'block';
+  //           })));
+  //           tbody.append(row);
+  //         });
+  //         $('#Requests').html(counter);
+  //       }
+  //     });
+  //   }
+
+  //   updateDatas();
+  //   setInterval(updateDatas, 10000);
+  //   console.log('wokegd');
+  // });
+</script>
+{%endblock%}
+
+{%endblock%}

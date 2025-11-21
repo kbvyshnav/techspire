@@ -1,0 +1,1010 @@
+
+{% extends "cAdmin/baseUI.html" %}
+{% block body %}
+{%load static%}
+<style>
+ 
+  .exit-symbol {
+ position: absolute;
+ top: 10px;
+ right: 24px;
+ font-size: 30px;
+ cursor: pointer;
+}
+
+
+.btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: left;
+  }
+.edit {
+  background: #1181dd;
+  margin-right: 60px;
+  color: #ffffff;
+}
+.delete {
+  background: #e20b0b;
+  
+  color: #ffffff;
+}
+.edit:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+  .view {
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+}
+
+.view:hover {
+  animation: ani 8s linear infinite;
+  border: none;
+}
+
+@keyframes ani {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 400%;
+  }
+}
+
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  display: none;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding-bottom: 25px;
+  width: 1000px;
+  height: 600px;
+  z-index: 9991;
+}
+
+.log {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #fff;
+display: none;
+border-radius: 20px;
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+width: 1000px;
+height: 650px;
+z-index: 9996;
+}
+.log .closeboxlog {
+    position:absolute;
+    color: #0a0a0a;
+    float: right;
+    font-size: 30px;
+    top: 10px;
+    right:45px;
+     cursor: pointer;
+     z-index: 9999 ;
+}
+.log .popup-body {
+
+   height: 100%;
+   width: 100%;
+  overflow-y: auto ;
+}
+
+.chat-frame {
+position: absolute;
+top: 50%;
+left: 75%;
+ transform: translate(-50%, -50%);
+ background-color: transparent; 
+display: none;
+border-radius: 20px;
+ /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);  */
+width: 400px;
+height: 650px;
+z-index: 9998;
+}
+.chat-frame .chat-close{
+    display: none;
+    position:absolute;
+    color: #0a0a0a;
+    float: right;
+    font-size: 30px;
+    top: 30px;
+    left:445px;
+     cursor: pointer;
+     z-index: 9999 ;
+}
+
+.popup-header {
+  background-color: #669999; /* Blue background color */
+  color: white; /* White font color */
+  text-align: center;
+  border-radius: 20px 0 0 0; /* Rounded corners only at the top */
+  font-size: 1.3rem;
+  padding: 0 5px; /* Remove padding at the top and add padding to the sides */
+  height: 110px; /* Adjust the height as needed */
+  line-height: 40px; /* Vertically center the content */
+  position: sticky;
+  top: 0;
+}
+
+
+.popup-header p {
+  margin: 0; /* Remove the top and bottom margin for the paragraph */
+}
+
+.ticket-id {
+  text-align: left;
+  font-size: 2rem;
+  padding: 15px 25px 0; /* Adjust padding to move content higher */
+  margin-top: -10px; /* Add negative margin to move the entire block upwards */
+}
+
+.panel-label {
+    background-color: white; /* Background color */
+    color: black; /* Text color */
+    padding: 0px 15px 5px; /* Padding for spacing (adjust the top padding) */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 24px;
+}
+
+.status-label {
+    background-color: #7863b6; /* Background color */
+    color: white; /* Text color */
+    padding: 5px 15px; /* Padding for spacing */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 14px;
+    margin-top: 20px; /* Add top margin to move it downwards */
+    margin-left: 0px; /* Add left margin to move it to the left */
+    border: 1px solid white; /* Light and thin white border */
+}
+
+
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 755px;
+  margin-top:-30px /* Adjust the left margin as needed */
+  /* Add top margin to push buttons down slightly */
+}
+
+.header-button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.header-button:hover {
+  background-color: #3462C2;
+}
+
+.ticket-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 20px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.ticket-details {
+  font-size: 1rem;
+  line-height: 2.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the top-left */
+}
+
+.ticket-details p {
+  margin: 0; /* Remove margin for paragraphs inside the ticket-details box */
+}
+
+.ticket-details span {
+  text-align: center; /* Center the text in the span elements */
+}
+
+.gap {
+  height: 20px; /* Adjust the height of the gap as needed */
+}
+
+.additional-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  border-radius: 20px;
+  padding: 25px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+   margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.additional-details p {
+  margin: 10px 0; /* Add margin for spacing between paragraphs */
+}
+
+
+.view:before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 400%;
+  border-radius: 35px;
+  transition: 1s;
+  
+}
+
+.view:hover::before {
+  filter: blur(20px);
+}
+
+.view:active {
+  background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+}
+  #open {
+    display: inline-block;
+  border-radius: 20px;
+  background-color: #7948d4;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+
+#assigndev {
+  text-align: center; /* Center-align the contents of the <p> element */
+}
+
+#assigndev button {
+  /* Style for the oval-shaped button */
+  background-color: #1181dd; /* Blue color */
+  color: #ffffff;
+  padding: 5px 20px; /* Adjust padding for oval shape */
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block; /* Ensure the button is not displayed as a block element */
+  border-radius:10px;
+  box-shadow:3px 3px 3px 1px grey;
+}
+
+#rejectdev {
+  text-align: center; /* Center-align the contents of the <p> element */
+  
+}
+
+#rejectdev button {
+  /* Style for the oval-shaped button */
+  background-color: red; /* Blue color */
+  color: #ffffff;
+  padding: 5px 20px; /* Adjust padding for oval shape */
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block; /* Ensure the button is not displayed as a block element */
+ border-radius:10px;
+  box-shadow:3px 3px 3px 1px grey;
+}
+
+#table-datas {
+        border-collapse: collapse; /* This removes the default spacing between table cells */
+        width: 100%;
+        cursor:pointer;
+    }
+
+    #table-datas tbody tr {
+        border-bottom: 1px solid #dddddd; /* Add a bottom border to tbody rows */
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2); /* Add a small shadow to the bottom of each row */
+         border-right: none; /* Hide the right vertical border */
+        border-left: none; /* Hide the left vertical border */
+    }
+
+    #table-datas th, #table-datas td {
+        text-align: left;
+        {% comment %} padding: 8px; {% endcomment %}
+    }
+
+
+    .exclude-hover td {
+  padding: 10px; /* Adjust the padding as needed */
+}
+
+.flex-ticketbox {
+            display: flex;
+            justify-content: space-around;
+            
+            
+        }
+           .flex-item1 {          
+            width: 100px;
+            height: 50px;
+            margin: 1px;
+            text-align: left;
+            font-size: 16px;
+            font-weight:bold;                      
+           }
+
+          
+        .flex-item2 {
+    width: 100px;
+    height: 50px;
+    margin: 1px;
+    text-align: right;
+    font-size: 16px;
+    margin-left: 150px; 
+}
+
+
+       .flex-item3 {
+    width: 400px;
+    height: 50px;
+    margin: 1px;
+    text-align: left;
+    font-size: 16px;
+    margin-left: 80px; 
+}
+
+
+
+.thead-tstrheader {
+  background-color: #7863b6;
+  color: white;
+  padding-left: 17px
+  width: 200px; 
+  height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 10px 10px 0 0;
+}
+
+.custom-p {
+        color: #c653c6;
+        display: inline;
+    }
+
+
+/*....................Remarks..................... box*/
+.form__group {
+  margin-left: 3px;
+  position: relative;
+  padding: 20px 0 0;
+  width: 100%;
+  max-width: 650px;
+  margin: 10px;
+}
+
+.form__field {
+  
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 17px;
+  color: black;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+.form__field::placeholder {
+  color: transparent;
+}
+
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 17px;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: black;
+  pointer-events: none;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 400;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #116399, #38caef);
+  border-image-slice: 1;
+}
+
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: black;
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required, .form__field:invalid {
+  box-shadow: none;
+}
+.action-box {
+  background-color: #f3f3f3;
+  padding: 38px; 
+  display: flex;
+  flex-direction: column;
+  align-items: left; 
+  text-align: left; 
+  margin: 0 auto; 
+  max-width: 900px; 
+  height: 228px; 
+  border-radius: 20px; 
+}
+
+.reject-button {
+      color: white;
+      background-color: red;
+      padding: 4px;
+      border-radius: 5px;
+      width:162px;
+      border: none;
+      cursor: pointer; 
+    font-size: 14px; 
+    margin:10px;
+    
+    }
+.reject-button:hover {
+  background-color: lightcoral; 
+}
+
+    </style>
+ 
+<ul class="box-info">
+  <a href = "{% url 'admin_home' company_id prev_date to_date keyword flag|default:'0' %}">
+	<li>
+		<i class='bx bxs-calendar-check' ></i>
+		<span class="text">
+			<h3 id="Requests">{{inbox}}</h3>
+			<p>Inbox</p>
+		</span>
+	</li>
+</a>
+ <a href = "{% url 'admin_inprogress' company_id prev_date to_date keyword flag|default:'0' %}">
+	<li>
+		<i class='bx bx-hourglass'></i>
+		<span class="text">
+			<h3 id="Pending" >{{inprogress}}</h3>
+			<p>In progress</p>
+		</span>
+	</li></a>
+
+  <a href="{% url 'admin_forwarded' company_id prev_date to_date keyword flag|default:'0' %}">
+	<li style="background-color:  #f0eef7; 	padding: 24px;  border-radius: 20px; display: flex;align-items: center;  grid-gap: 24px;  outline: none;  border-color: #7a7aff;  box-shadow: 0 0 5px #7a7aff;">
+    <i class='bx bx-pause-circle'></i>
+		<span class="text">
+			<h3 id="hold" >{{tickets.count}}</h3>
+			<p>Forwarded</p>
+		</span>
+	</li> </a>
+  
+  <a href = "{% url 'admin_closed' company_id prev_date to_date keyword flag|default:'0' %}" >
+	<li>
+    <i class='bx bx-window-close'></i>
+		<span class="text">
+			<h3 id="Closed">{{closed}}</h3>
+			<p>Closed</p>
+		</span>
+	</li></a>
+</ul>
+
+<div class="table-data">
+    <div class="order">
+        <div class="head">
+               <h3>Tickets 
+                  <p class="custom-p">FORWARDED</p>
+                </h3>
+           
+        </div>
+         <table id="table-datas">
+            <thead class="thead-tstrheader">
+                <tr>
+
+                    <td>Ticket ID</td>
+                    <td>Requester</td>
+                    <td>Client</td>
+                    <td> </td>
+                    <td>Subject</td>
+                    <td>Issue Date</td>
+                    <td> </td>
+                    <td> </td>
+                    <!-- <th>Date Of Expiry</th> -->
+                    
+                
+                </tr>
+            </thead>
+        
+        <tbody> 
+          {% for ticket in tickets %}
+          <tr data-ticket="{{ ticket.ticket_no }}"  id="{{ticket.ticket_no}}" onclick="javascript:showticket('{{ticket.ticket_no}}','{{ticket.maker.username}}');"><td>{{ticket.ticket_no}}</td>
+          <td>{{ticket.maker.username}}</td>
+          <td>{{ticket.client}}</td>
+          {% if ticket.file.url is not None%}
+          <td class="projection">
+                    <a href="{{ ticket.file.url }}" target="_blank" onclick="event.stopPropagation();" > <button class="attachment-icon" title="open files" ></button></a>
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+                    </td>
+
+                    {%else %}
+                    <td> </td>
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="none">
+                    {% endif %}
+          <td>{{ticket.subject}}</td>
+          <td>{{ticket.issued_on | date:"d-m-y"}}</td>
+          <td>
+            <div class="chat-container">
+                <i  id="chaticon{{ticket.ticket_no}}" class= 'bx bxs-message-alt-dots chat-icon'  title="Open Chat"
+                  onclick="document.getElementById('updtid').value='{{ticket.ticket_no}}'; chatfn(); event.stopPropagation();">
+                </i>
+                {% if ticket.notification %}  <span class="notification-dot"></span> {%endif%}
+            </div>
+        </td>
+        <td>
+           <button class="log-icon" title="Open log"  onclick="javascript:document.getElementById('updtid').value='{{ticket.ticket_no}}'; outlook(); event.stopPropagation();"></button>  
+          <td><input type="Hidden" id = 'tdes{{ticket.ticket_no}}' value="{{ticket.desc}}">
+          <input type="Hidden" id = 'tsub{{ticket.ticket_no}}' value="{{ticket.subject}}">
+          <input type="Hidden" id = 'tmaker{{ticket.ticket_no}}' value="{{ticket.maker.username}}">
+          
+          <input type="Hidden" id = 'ttester{{ticket.ticket_no}}' value="{{ticket.tester}}">
+          <input type="Hidden" id = 'tpriority{{ticket.ticket_no}}' value="{{ticket.priority}}">
+          <input type="Hidden" id = 'tcli{{ticket.ticket_no}}' value="{{ticket.client}}">
+          <input type="Hidden" id = 'tdevs' value="{{devs.cliednt}}">
+          <input type="hidden" id = 'tissued{{ticket.ticket_no}}' value="{{ticket.issued_on | date:"d-m-y" }}">
+          <input type="Hidden" id = 'tester' value="{{devs.tester_id}}">
+          <input type="Hidden" id = 'tstatus{{ticket.ticket_no}}' value="{{ticket.status}}">
+          <input type="Hidden" id = 'tremarks{{ticket.ticket_no}}' value="{{ticket.remarks}}">
+          <input type="Hidden" id = 'dev{{ticket.ticket_no}}' value="{{ticket.dev_id}}">
+          <input type="Hidden" id = 'tstr{{ticket.ticket_no}}' value="{{ticket.tester_id}}">
+
+
+        </td>
+         {%empty%}
+          <td style="text-align: center; color: red;">NO ENTRIES!</td> 
+      
+        {% endfor %}
+        <input type="Hidden" id = 'updtid' value="">
+        <input type="hidden" id="page_id" value="F">
+        
+      </tr>
+    </tbody>
+      </table></div></div>
+
+<!--TICKET DETAILS BOX-------------------->
+
+      <div class="box" name="tcktpopup" id="tcktpopup" style="overflow-y: auto;">
+        <div>
+         <div class="popup-header">
+                   <!-- <span class="panel-label">Forwarded</span>  -->
+
+          <span class="exit-symbol" onclick="closeBox()">&times;</span>
+
+            <div class="ticket-id">Ticket <span id="ticket_no"></span>
+            <div ><span class="status-label" id="wrdstat"></span></div>
+
+            <div class="header-buttons">
+                <button class="header-button" onclick="javascript: chatfn(); ">Chat</button>       
+                <button class="header-button" onclick="javascript: outlook();">Outlook</button>
+                  
+             </div>
+            </div>  
+          </div>
+          
+        <hr>
+
+      <body>
+                  
+                  <br>
+              
+              <div class="ticket-details-box">
+                  <div class="ticket-details">
+
+                    <div class="flex-ticketbox">
+                                <div class="flex-item1">Maker</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="maker"></span></div>
+                                 
+                         </div>
+
+                         
+                        <div class="flex-ticketbox">
+                                <div class="flex-item1">Priority</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tpri"></span></div>
+                                 
+                         </div>
+
+
+                        <div class="flex-ticketbox">
+                                <div class="flex-item1">Client</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tcli"></span></div>
+                                 
+                         </div>
+                         
+                         <div class="flex-ticketbox">
+                                <div class="flex-item1">Issue Date</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tdate"></span></div>
+                                 
+                         </div>
+                      
+                      <div class="flex-ticketbox">
+                                <div class="flex-item1">Developer&nbsp;Assigned</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="dev_id"></span></div>
+                                 
+                         </div>
+
+                         <div class="flex-ticketbox">
+                                <div class="flex-item1">Tester&nbsp;Assigned</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="ttester"></span></div>
+                                 
+                         </div>
+
+                  </div>
+              </div>
+
+               <!--  gap -->
+              <div class="gap"></div>
+
+                      <div class="additional-details-box">
+                  <div class="additional-details">
+                      <p><b>Subject :</b></p>
+                      <p id="tsub"></p>
+                      <p><b>File :</b></p>
+                      <p><a id="tfile"></a></p>
+                      <p><b>Description :</b></p>
+                      <textarea input type="text" disabled id="tdesc" rows="6" cols="100"
+                          style="border: none; color: #342E37; font-family: poppins, sans-serif; font-size: 16px;"></textarea>
+                       <p><b>Remarks :</b></p>
+                      <p id="rmk"></p>    
+                  </div>
+               </div>
+              
+                     <!--  gap -->
+              <div class="gap"></div>
+             </body>
+            </table>         
+         </div>
+                
+            {% comment %} Action box starting.............................. {% endcomment %}
+            <div class="action-box"> 
+
+                  <div class="form__group field">
+                              <input type="input"  id="remarks" name="remarks" class="form__field" placeholder="Name">
+                              <label for="name" class="form__label">Comments...</label>
+                    </div>
+                    
+                    <br>  
+
+                    <span>
+                      <button type="button" class="reject-button" onclick="reject();">Reject or Close Ticket</button> 
+                    </span>
+            </div>     
+            {% comment %} Action box ending.............................. {% endcomment %}
+           
+
+
+
+
+
+                  <!-- mark-->
+                <!--<div id = 'tstrasgn' class="child">--> <!-- for status : PP -->
+                  <!-- After Test completetion tester forwarded to admin to Accept Also used for
+                  Assign tester when Status : EH-->
+                  <!-- <table>
+                  <tr class="exclude-hover" >
+                      <td> -->
+                        <!-- Function : tstrutils() 
+                        usage : Tester related function are combined to one.
+                        -->
+                          <!-- <button type="button" onclick="tstrutils()"> Forward to client</button> 
+                      </td>
+                  </tr>
+                  </table>
+
+                </div> -->
+
+
+
+
+                    <!-- <button type="button"  onclick="chatwindow()">Reject</button></td> -->
+                  
+                
+                </div>
+
+                
+                <div id = 'logframe' class = "log">
+
+                  <header><span  id="closeButton" class="closeboxlog" onclick="javascript:document.getElementById('logframe').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+                    </header>
+                    <div class="popup-body" >
+                      <iframe id="frame1" style="display: none ;" name="frame1" class="log" scrolling ='yes'   width="50%" height="100%" frameborder="0">
+                      </iframe>
+                  </div>
+                  </div>
+
+                  <div id = 'chat-div'  class="chat-frame" >
+                    <header><span  id="close-chat" class="chat-close"  onclick="javascript:document.getElementById('chat-div').style.display='none';document.getElementById('close-chat').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+                     </header>
+                   
+                    <iframe id="chat"   src="" name="chat" class="chat-frame"  width="50%" height="100%"   scrolling="no"  frameborder="0">
+                           </iframe>  
+                   
+                   </div>
+
+
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}"); 
+        </script>
+
+    {% endfor %}
+   
+{% endif %}
+
+{% block script %}
+
+<script>
+
+
+  function chatfn(){
+
+var tid = document.getElementById('updtid').value.trim();
+// alert("{% url 'chtbx' " , tid , " %}")
+let chatContainer = document.getElementById('chaticon' + tid).parentElement;
+    let notificationDot = chatContainer.querySelector('.notification-dot');
+
+    if (notificationDot) {
+        notificationDot.remove(); // Removes the span element
+    }
+document.getElementById('chat').src = "{% url 'chtbx' 0 %}".replace('0', tid);
+document.getElementById('chat-div').style.display = 'block';
+document.getElementById('close-chat').style.display = 'block';
+document.getElementById('chat').style.display = 'block';
+}
+
+
+
+function chatwindow(){
+  document.getElementById('chatw').style.display = 'block';
+}
+
+
+
+ document.getElementById('dashboard').classList.add('active');
+ 
+ 
+function showticket(tno,user){
+
+        // alert(tdesc);
+        document.getElementById("tcktpopup").style.display = "block";
+        // document.getElementById("devasgn").style.display = "none";
+
+        // $('#myBox').show();
+        var tdesc = 'tdes'+ tno;
+        var tsub = 'tsub'+tno; // subject
+        var tcl = 'tcli' + tno; //Client
+        var tfile = 'tfile' + tno;
+        var tstat = 'tstatus'+ tno;
+        var tissued_id = 'tissued' + tno;
+        var status_val = document.getElementById(tstat).value;
+        var tstr = document.getElementById('tstr'+tno).value;
+        var dev = document.getElementById('dev'+tno).value;
+        var rmk = document.getElementById('tremarks'+tno).value;
+
+      // document.getElementById("myBox").style.display="block";
+          // alert(tfile);
+        //  alert( document.getElementById(tstat).value);
+        if( status_val == 'TA'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Forwarded to developer. ' ;
+      
+        }
+        else if( status_val == 'DA'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Developer accepted ticket. ' ;
+      
+        }
+        else if( status_val == 'DH'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Developer Raised for clarification. ' ;
+      
+        }
+        else if( status_val == 'TH'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Query forwarded to client. ' ;
+      
+        }
+        else if( status_val == 'TP'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Client replied.' ;
+                
+        }
+        else if( status_val == 'EH'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Ready for testing.' ;
+                          
+        }
+        else if( status_val == 'EP'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Forwarded to tester.' ;
+                
+        }
+        else if( status_val == 'EA'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Tester accepted.' ;
+                
+        }
+        else if( status_val == 'BP'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Tester Reported bug.' ;
+        }
+        else if( status_val == 'PP'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Testing completed.' ;
+        }
+        else if( status_val == 'PA'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Forwarded to client.' ;
+        }     
+        else if( status_val == 'RC'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Client accepted' ;
+        }
+        else if( status_val == 'RL'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Program copy forwarded to developer.' ;
+        }
+        else if( status_val == 'RA'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Developer accepted copy.' ;
+        }
+        else if( status_val == 'PC'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: Program copied.' ;
+        }
+        else if( status_val == 'CA'){
+          document.getElementById('wrdstat').innerHTML = 'STATUS: UAT failed, Reassigned to developer.' ;
+        }
+      
+document.getElementById('updtid').value = tno; // This variable will get the current selected ticket id
+        
+        document.getElementById('ticket_no').innerHTML=  tno; // ticket number
+        document.getElementById('ticket_no').innerHTML=tno;
+        document.getElementById('maker').innerHTML= user; // user name
+        document.getElementById('tsub').innerHTML= document.getElementById(tsub).value; // ticket subject
+        document.getElementById('tdesc').innerHTML= document.getElementById(tdesc).value; // ticket description
+        document.getElementById('tdate').innerHTML = document.getElementById(tissued_id).value;
+        document.getElementById('dev_id').innerHTML = dev;
+        document.getElementById('ttester').innerHTML = tstr;
+        document.getElementById('rmk').innerHTML = rmk ;
+
+
+        var fileurl = document.getElementById(tfile).value;
+        // alert(document.getElementById(tfile).value);
+        if( fileurl != 'none' ){
+        var fileurl = document.getElementById(tfile).value;
+        var link =document.createElement('a'); 
+        link.href = fileurl;
+        link.target = '_blank';
+        link.textContent = ': Click here to view file';
+        // alert(link);
+        document.getElementById('tfile').appendChild(link);
+        }
+        else{
+          document.getElementById('tfile').innerHTML =  ' No Files Attached.';
+        }
+        document.getElementById('tpri').innerHTML=  priority(tno); // ticket priority
+        document.getElementById('tcli').innerHTML= document.getElementById(tcl).value; // ticket client
+        
+
+}
+
+function outlook() {
+    var tid = document.getElementById('updtid').value;
+    // alert(tid)
+    var logsUrl = '/cadmin/logs/' + tid + '/';
+    document.getElementById('frame1').src = logsUrl;
+    document.getElementById('logframe').style.display = 'block';
+    document.getElementById('frame1').style.display = 'block';
+}
+
+function reject(){
+  tno = document.getElementById('updtid').value.trim();
+  
+  rjct_reason = document.getElementById('remarks');
+  // alert(rjct_reason.value + "j test")
+  if(rjct_reason.value == ''){
+    alert('Kindly add a rejection or closingremark in the comment section before proceeding.');
+    return false
+    // rjct_reason = '~'
+    }
+																  
+  // alert(rjct_reason)
+
+  var cf = confirm("CAUTION : You are about to close this ticket .This can't be undone.");
+  if (cf == true){
+    const link = '/cadmin/adminclose/'+ tno + '/' + rjct_reason.value + '/';
+    window.location.href = link;
+  }
+  else{
+    return false;
+  }
+}
+
+
+
+// exit symbol
+function closeBox() {
+  //document.getElementById("myBox").style.display = "none";
+  //document.getElementById("tacptbox").style.display = "none";
+  document.getElementById('tfile').innerHTML =null;
+  document.getElementById("tcktpopup").style.display = "none";
+  //stest
+
+  //jinoy
+  //stest2
+
+  //stest3  // jinoy 2  //stest3
+
+}
+
+
+
+
+
+</script>
+
+{%endblock%}
+
+{%endblock%}

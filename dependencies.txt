@@ -1,0 +1,8 @@
+Django>=4.2
+pymysql
+django-countries>=7.4
+django-phonenumber-field
+phonenumbers 
+django-auto-logout
+whitenoise
+openpyxl

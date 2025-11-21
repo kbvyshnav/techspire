@@ -1,0 +1,356 @@
+
+{% extends "User/userbaseUI.html" %}
+{% block body %}
+{% load static%}
+<style>
+
+.box {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #fff;
+border-radius: 20px;
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+padding: 5px;
+width: 500px;
+height: 500px;
+z-index: 9999;
+}
+  .view {
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+}
+.btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: left;
+  }
+.view:hover {
+  animation: ani 8s linear infinite;
+  border: none;
+}
+
+@keyframes ani {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 400%;
+  }
+}
+
+.view:before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 400%;
+  border-radius: 35px;
+  transition: 1s;
+}
+
+#view:hover::before {
+  filter: blur(20px);
+}
+
+#view:active {
+  background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+}
+  #open {
+    display: inline-block;
+  border-radius: 20px;
+  background-color: #7948d4;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.edit {
+  background: #1181dd;
+  
+  color: #ffffff;
+}
+.delete {
+  background: #e20b0b;
+  
+  color: #ffffff;
+}
+.edit:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+.exit-symbol {
+position: absolute;
+top: 10px;
+right: 24px;
+font-size: 30px;
+cursor: pointer;
+}
+
+
+    </style>
+ 
+<ul class="box-info">
+
+
+  <a href="{% url 'user_home' %}">
+	<li>
+		<i class='bx bxs-calendar-check' ></i>
+		<span class="text">
+			<h3 id="Requests">{{inbox}}</h3>
+			<p>Inbox</p>
+		</span>
+	</li></a>
+  
+  <li>
+		<i class='bx bx-hourglass'></i>
+		<span class="text">
+			<h3 id="Pending" >{{tickets.count}}</h3>
+			<p>Forwardedb</p>
+		</span>
+	</li>
+
+
+  
+   <a href="{% url 'user_closed' %}">
+	<li><i class='bx bx-window-close'></i>
+		<span class="text">
+			<h3 id="Closed">{{closed}}</h3>
+			<p>Closed</p>
+		</span>
+	</li>
+  </a>
+</ul>
+
+<div class="table-data">
+    <div class="order">
+        <div class="head" id="t-head">
+            <h3>Tickets <p style="color:red ; display: inline;" >PENDINGS</p></h3>
+            <i class='bx bx-search' ></i>
+            <i class='bx bx-filter' ></i>
+        </div>
+         <table id="table-datas">
+            <thead>
+                    <th>Ticket ID</th>
+                    <th>Requester</th>
+                    <th>Issue</th>
+                    <th>Date of Issue</th>
+             
+                    
+                    
+                </tr>
+            </thead>
+        </div>
+           
+        <tbody>
+          {% for ticket in tickets %}
+          <tr data-ticket="{{ ticket.ticket_no }}"  id="{{ticket.ticket_no}}" onclick=" showticket('{{ticket.ticket_no}}','{{ticket.maker.username}}');"><td>{{ticket.ticket_no}}</td>
+            <td>{{ticket.maker.username}}</td>
+            <td>{{ticket.subject}}</td>
+            <td>{{ticket.issued_on}}</td>
+            {% endfor %}
+          </tr>
+
+            
+
+            
+              
+        
+        </tbody>
+
+    </table>
+    <div class="box" id="myBox" style="display: none;">
+      <span class="exit-symbol" onclick="closeBox()">&times;</span>
+       <p style="color:rgb(63, 109, 238);"><b><u>Ticket Details</u></b></p>
+     <p id="ticketinfo"></p>
+      </div>
+
+      
+    </div> 
+</div>
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+   
+{% endif %}
+
+
+{% block script %}
+
+<script>
+ document.getElementById('dashboard').classList.add('active');
+
+
+
+//     $(document).ready(function() {
+//     // Define the Ajax function
+//     function updateCount() {
+//         $.ajax({
+//             url: "% url 'Get_Ticket_Count' id=LoggedUser.id %}",
+//             type: 'GET',
+//             dataType: 'json',
+//             success: function(response) {
+              
+//               console.log(response);
+//         var data = response.data;
+//         for(var i=0; i<data.length; i++){
+//             console.log(data[i].status, data[i].count);
+//             if (data[i].status =='PENDING' ){
+//             $('#Requests').html(data[i].count);}
+//             if(data[i].status== 'IN PROGRESS'){
+//             $('#Pending').html(data[i].count);}
+            
+//             if(data[i] == 'CLOSED'){
+//             $('#Closed').html(data[i].count);}
+           
+
+//         }
+                
+//             }
+//         });
+//     }
+
+//     // Call the function on page load and every 10 seconds
+//     updateCount();
+//     // setInterval(updateCount, 10000);
+// });
+
+// // <!-- fetch('/Get_Ticket_Count/')
+// //   .then(response => response.json())
+// //   .then(data => console.log(data.count));
+
+// $(document).ready(function() {
+//     function updateCount() {
+//       // Your code
+//     }
+
+//     // Call the function on page load and every 10 seconds
+//     updateCount();
+//     // setInterval(updateCount, 10000);
+//   });
+
+//   $(document).ready(function() {
+//     function updateDatas() {
+//       $.ajax({
+//         url: "{% url 'dashboard_pendings' %}",
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(data) {
+//           // Parse the data from the server and update the table
+//           var myData = JSON.parse(data);
+//           var t_details = myData.ticket_data.reverse();
+//           var tbody = $('#table-datas tbody');
+//           var thead = $('#t-head')
+//           var counter = 0;
+
+//           tbody.empty();
+//           $.each(t_details, function(index, item) {
+//             counter++;
+//             var row = $('<tr>');
+//             row.append($('<td style="color:red;" >').text(item.ticketid));
+//               row.append($('<td >').text(item.client));
+//             row.append($('<td>').text(item.issue));
+//             row.append($('<td>').text(item.doe));
+//             // row.append($('<td>').text(item.priority));
+//             // row.append($('<td>').text(item.DOExp));
+//             row.append($('<td>').append($('<button>').text('View').attr('id', item.ticketid).attr('class', 'view').on('click', function(e) {
+//               e.stopPropagation(); // Prevent click event from propagating to parent elements
+//               const box = document.getElementById('myBox');
+//               const ticketinfo_tag = document.getElementById('ticketinfo');
+//               const ticket_id = item.ticketid;
+//               const issue_info = item.issue
+//               const editUrl = "/user/del_ticket/" + ticket_id + "/";
+//               const anchorTag = document.createElement("a");
+//               anchorTag.href = editUrl;
+//               const editButton = document.createElement("button");
+//               editButton.type = "button";
+//               editButton.className = "btn edit";
+//               editButton.innerText = "Edit";
+
+//               const deleteButton = document.createElement("button");
+//               deleteButton.type = "button";
+//               deleteButton.className = "btn delete";
+//               deleteButton.innerText = "Delete";
+//               anchorTag.appendChild(editButton);
+//               anchorTag.appendChild(deleteButton);
+//               ticketinfo_tag.innerHTML = '<table> <tbody  style="padding: 4px; text-align:left; width:50px; height:100px; overflow:auto ;"><tr><td><b>Ticket ID:</b>' + ticket_id + '</td><tr> \
+//                 <tr><td><b>Issue :</b>' + issue_info + '</td><tr> \
+//                   <tr><td><b>Issue Descripton :</b>' + item.issuedesc + '</td><tr> \
+//                                              </tbody></table><br>';
+//               ticketinfo_tag.appendChild(anchorTag);
+//               box.style.display = 'block';
+//             })));
+//             tbody.append(row);
+//           });
+//           $('#Requests').html(counter);
+//           $('#Pending').html(myData.ticket_count.pendings); 
+//           console.log('myData:', myData);
+// console.log('ticket_count:', myData.ticket_count);
+// // console.log('pendings:', myData.ticket_count.pendings);
+//         }
+//       });
+//     }
+
+//     updateDatas();
+//     setInterval(updateDatas, 10000);
+//     console.log('wokegd');
+//   });
+
+//   // Add an event listener to hide the 'myBox' when clicking outside of it
+//   $(document).on('click', function(event) {
+//     if (!$(event.target).closest('#myBox').length) {
+//       var box = document.getElementById("myBox");
+//       box.style.display = "none";
+//     }
+//   });
+  
+
+// exit symbol
+function closeBox() {
+ var box = document.getElementById("myBox");
+  box.style.display = "none";
+  document.getElementById('tfileview').innerHTML =null;
+}
+
+
+
+
+</script>
+
+{%endblock%}
+
+{%endblock%}

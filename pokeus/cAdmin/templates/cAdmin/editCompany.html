@@ -1,0 +1,162 @@
+
+{% extends "cAdmin/baseUI.html" %}
+{% load static %}
+{% block body %}
+<style >
+    .btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: Right;
+    border-radius:10px;
+      box-shadow:3px 3px 3px 1px grey;
+  }
+
+
+
+.save {
+  text-align: center;
+  background: #3C91E6;
+  color:white;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+}
+
+.save:hover{
+  background: #bbd9f6; 
+}
+
+/* Back button styles - Added by Vysh */
+.back-button {
+appearance: none;
+ -webkit-appearance: none;
+ font-family: sans-serif;
+ cursor: pointer;
+padding: 10px 20px;
+border: 1px solid #ccc;
+ border-radius: 5px;
+background-color: #f5f5f5;
+color: #333;
+ font-size: 14px;
+position: fixed;
+top:10%;
+left:90%;
+ box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+ }
+ .back-button:hover {
+background-color: #e0e0e0;
+ }
+
+
+#id_companyName,
+#id_companyCntry,
+#id_companyCntct,
+#id_companymobs,
+#id_companyMail,
+#id_companyCode{
+  width: 200px; 
+  height: 30px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  padding: 5px; 
+  outline: none; 
+  font-family: poppins, sans-serif;
+}
+
+#id_is_active  {
+  width: 200px; 
+  height: 19px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  padding: 5px; 
+  outline: none; 
+  font-family: poppins, sans-serif;
+  margin-left: -82px;
+}
+
+#id_companyName:hover,
+#id_companyCntry :hover,
+#id_companyCntct:hover,
+#id_companymobs:hover,
+#id_companyMail:hover,
+#id_companyCode:hover,
+#id_is_active:hover,
+#id_companyAddr:hover {
+  border-color: #999; 
+}
+
+#id_companyAddr{
+  width: 450px; 
+  height: 110px; 
+  font-family: poppins, sans-serif;
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  padding: 5px; 
+  outline: none; 
+  resize: none; 
+}
+
+    </style>
+    
+<div class="table-data">
+    <div class="order">
+      <div class="head" > 
+             <h3 style="color:#800080; font-weight:bold; font-size: 1.2rem;"> ADD COMPANY</h3>
+             <div class="back-btn" onclick="goBack()">
+                  <div class="back-btn-inner">
+                      <img src="{% static 'images/back-btn-arrw.png' %}" title="Click to go back" alt="back-button-logo">
+                  </div>
+              </div>
+             
+       </div> <hr> 
+         <table id="table-datas">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <tbody>
+           <tr><td>Company Name</td><td>{{ form.companyName}}</td></tr>
+           <tr><td>Address </td><td>{{ form.companyAddr}}</td></tr>
+           <tr><td>Country</td><td>{{ form.companyCntry}}</td></tr>
+           <tr><td>Contact</td><td>{{ form.companyCntct}}</td></tr>
+           <tr><td>Alternate Contact</td><td>{{ form.companymobs}}</td></tr>
+           <tr><td>Email</td><td>{{ form.companyMail}}</td></tr>
+           <tr><td>Enable</td><td>{{ form.is_active}}</td></tr>
+           <tr><td><button type="submit" class="btn save">Save</button></td></tr>
+           </form>
+
+           
+
+
+             
+
+        </div>     
+        </tbody>
+    
+    </table>
+</div>
+
+
+<script>
+    document.getElementById('main-head').style.display ='none';
+
+    function goBack() {
+     window.history.back();
+     }
+ </script>
+
+{%endblock%}
+
+apps-fileview.texmex_20230907.01_p0
+editCompany.html
+Displaying editCompany.html.

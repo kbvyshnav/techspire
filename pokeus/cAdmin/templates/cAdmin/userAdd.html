@@ -1,0 +1,169 @@
+{% extends "cAdmin/baseUI.html" %}
+{% load static %}
+{% block body %}
+<style>
+  
+.register {
+  text-align: center;
+  background: #3C91E6;
+  color:white;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+}
+
+.register:hover{
+  background: #bbd9f6; 
+}
+
+#id_username,
+#id_first_name,
+#id_last_name,
+#id_date_joined,
+#id_department,
+#id_password,
+#cfrm-password,
+#id_email,
+#id_contact{
+ width: 200px; 
+  height: 30px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px;
+  padding: 5px; 
+  outline: none; 
+  font-family: poppins, sans-serif;
+}
+
+#id_username:hover,
+#id_first_name:hover,
+#id_last_name:hover,
+#id_date_joined:hover,
+#id_department:hover,
+#id_password:hover,
+#id_email:hover,
+#id_contact:hover{
+   border-color: #999; 
+}
+
+
+  </style>
+    
+<div class="table-data">
+    <div class="order">
+        <div class="head" > 
+             <span style="color:#800080; font-weight:bold; font-size: 1.2rem;"> ADD USER</span>
+            <div class="back-btn" onclick="goBack()">
+                  <div class="back-btn-inner">
+                      <img src="{% static 'images/back-btn-arrw.png' %}" title="Click to go back" alt="back-button-logo">
+                  </div>
+              </div>
+        </div>  <hr>
+         <table id="table-datas">
+            <form method="POST" action="" id="form" onsubmit = "javascript: return uservalidation();">
+                {% csrf_token %}
+                <tbody>
+           <tr><td>Username</td><br><td>{{ form.username}}</td></tr>
+           
+           <tr><td>First Name </td><td>{{ form.first_name}}</td></tr>
+           <tr><td>Last Name </td><td>{{ form.last_name}}</td></tr>
+           <tr><td>Date of joining</td><td>{{form.date_joined}}</td></tr>
+          {%comment%} <tr><td>Department</td><td>{{ form.department}}</td></tr> {%endcomment%}
+           <tr><td>Password</td><td>{{ form.password}}</td></tr>
+           <tr><td>Re-enter Password</td><td><input type="password" id="cfrm-password" name="cfrm-password"></td></tr>
+           <tr><td>Email</td><td>{{ form.email}}</td></tr>
+           <tr><td>Contact</td><td>{{ form.contact}}</td></tr>
+                    
+           <tr><td><button type="submit" class="btn register">Register</button></td></tr>
+          
+
+           
+          
+
+        </div>     
+        </tbody>
+    </form>
+    </table>
+</div>
+
+  
+
+
+<script>
+  
+ {% if form.errors %}
+  {% for field, errors in form.errors.items %}
+    {% for error in errors %}
+      alert('{{ error }}');
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+    
+
+
+
+
+function uservalidation() {
+    var username = document.getElementById('id_username');
+    var firstname = document.getElementById('id_first_name');
+    var lastname = document.getElementById('id_last_name');
+    var doj = document.getElementById('id_date_joined');
+    var password = document.getElementById('id_password');
+    var cfrm_password = document.getElementById('cfrm-password');
+    var email = document.getElementById('id_email');
+    var phonenumber = document.getElementById('id_contact');
+    const today = new Date().toISOString().split("T")[0];
+    // Regular expression to check for no space and no special characters
+    var username_pattern = /^[a-z0-9]+$/;
+    var name_pattern = /^[a-zA-Z]+$/;
+
+    // Check for username
+    if (!username_pattern.test(username.value)) {
+        alert("Username should not contain capital letters or any special characters.");
+        username.focus();
+        return false; // Prevent form submission if the username is invalid
+    }
+
+    if(!name_pattern.test(firstname.value.trim())){
+      alert("Firstname should not contain special characters or digits .");
+        firstname.focus();
+        return false; 
+    }
+
+    if(!name_pattern.test(lastname.value.trim())){
+      alert("Lastname should not contain special characters or digits .");
+        lastname.focus();
+        return false; 
+    }
+
+    // if(lastname.value() != null && lastname.value.trim() != '' && !pattern.test(lastname.value.trim())){
+    //   alert("Lastname should not contain special characters or digits .");
+    //     lastname.focus();
+    //     return false; 
+    // }
+    if( doj.value === today){
+      alert("The date is matching today's date , are you sure?")
+      doj.focus();
+    }
+    //alert(password.value + cfrm_password.value)
+    if( password.value !== cfrm_password.value ){
+      alert("Password isn't matching!");
+      password.focus();
+      return false;
+    }
+
+    
+
+    return true; // Allow form submission if all validations pass
+}
+
+    function goBack() {
+     window.history.back();
+     }
+
+    </script>
+
+{%endblock%}

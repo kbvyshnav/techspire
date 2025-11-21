@@ -1,0 +1,174 @@
+/* styles.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    padding:30px;
+    background-color: #f4f4f9;
+}
+
+.reports-container {
+    max-width: 1500px;
+    margin: 20px auto;
+    padding: 20px; 
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.date-filter-section {
+    display: flex;
+    align-items: center; /* Aligns items in the same line */
+    gap: 25px; /* Increased gap for better spacing */
+    margin-top: 10px;
+    max-width: 650px; /* Adjust width slightly if needed */
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 13px;
+    flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 140px; /* Slightly increased width */
+}
+
+.filter-item label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.filter-item select,
+.filter-item input {
+    width: 100%;
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.date-filter-section button {
+    background-color: #7863b6;
+    color: white;
+    padding: 4px 8px; /* Small padding */
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px; /* Slightly smaller font */
+    height: 30px; /* Matches input field height */
+    min-width: 70px; /* Keeps button small but readable */
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+    margin-top: 20px; /* Aligns with input fields */
+}
+
+.date-filter-section button:hover {
+    background-color: #5e4f99;
+    transform: scale(1.05);
+}
+
+.download-buttons {
+    text-align: right;
+    margin-bottom: 20px;
+    
+}
+
+.btn {
+    background-color: #4a90e2; /* Soft blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #357ABD; /* Slightly darker blue on hover */
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.reports-table th,
+.reports-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.reports-table th {
+    background-color: #7863b6;
+    color: #fff;
+    font-weight: 600;
+}
+
+.reports-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.reports-table tr:hover {
+    background-color: #e6e6e6;
+}
+
+.reports-table td {
+    color: #000; /* Pure black */
+    font-weight: 400; /* Normal weight for better readability */
+}
+
+/* Status Label Styling */
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Updated colors for status labels */
+.status.new-ticket {
+    background-color: #a2d3f3; /* Soft orange/peach */
+    color: #333; /* Dark text for contrast */
+}
+
+.status.development {
+    background-color: #f1e375; /* Pastel yellow */
+    color: #333; /* Dark text for contrast */
+}
+
+.status.testing {
+    background-color: #c4b5ee; /* Light blue */
+    color: #333; /* Dark text for contrast */
+}
+
+.status.closed {
+    background-color: #a5fc94; /* Soft green/mint */
+    color: #333; /* Dark text for contrast */
+}
+
+.caption-main{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 1074px;
+    margin-left: auto;
+    justify-content: space-between;
+}
+
+.caption-sub{
+    text-align: center;
+    align-self: flex-end;
+}

@@ -1,0 +1,53 @@
+{% extends "cAdmin/baseUI.html" %}
+
+{% block body %}
+<style>
+    .btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 50px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: Right;
+  }
+
+  .register{
+  background: #1181dd;
+  color: #ffffff;
+}
+</style>
+    
+<div class="table-data">
+    <div class="order">
+        <!-- <div class="head" > -->
+             <h4> ADD DEPARTMENT</h4>
+        <!-- </div> -->
+         <table id="table-datas">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <tbody>
+           <tr><td></td><td>{{ form.deptName}}<button type="submit" class="btn register">Register</button></td></tr>
+           </form>
+             
+
+            
+        </tbody>
+    </div>
+    </table>
+</div>
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+    {% debug %}
+{% endif %}
+
+{%endblock%}
+

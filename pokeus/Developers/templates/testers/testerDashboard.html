@@ -1,0 +1,1062 @@
+
+{% extends "testers/testerbaseUI.html" %}
+{%load static%}
+{% block body %}
+
+<style>
+
+
+
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  display: none;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding-bottom: 25px;
+  width: 1000px;
+  height: 600px;
+  z-index: 800;
+}
+
+.chat-frame{
+  position: absolute;
+  top: 10%;
+  left: 68%;
+  bottom: 25%;
+  /* background-color: #03a9f4; */
+  /* transform: translate(50%, -50%); */
+  /* background-color:red;  */
+  display: none;
+  border-radius: 20px;
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);  */
+  width: 400px;
+  height: 600px;
+  z-index:  802;
+}
+.chat-close{
+    display: none;
+    position:absolute;
+    color: #0a0a0a;
+    float: right;
+    font-size: 30px;
+    top: 110px;
+    right:100px;
+     cursor: pointer;
+     z-index: 99999 ;
+}
+
+
+.popup-header {
+  background-color: #668aaf; /* Blue background color */
+  color: white; /* White font color */
+  text-align: center;
+  border-radius: 20px 0 0 0; /* Rounded corners only at the top */
+  font-size: 1.3rem;
+  padding: 0 5px; /* Remove padding at the top and add padding to the sides */
+  height: 110px; /* Adjust the height as needed */
+  line-height: 40px; /* Vertically center the content */
+  position: sticky;
+  top: 0;
+}
+
+
+.popup-header p {
+  margin: 0; /* Remove the top and bottom margin for the paragraph */
+}
+
+.ticket-id {
+  text-align: left;
+  font-size: 2rem;
+  padding: 15px 25px 0; /* Adjust padding to move content higher */
+  margin-top: -10px; /* Add negative margin to move the entire block upwards */
+}
+
+.panel-label {
+    background-color: white; /* Background color */
+    color: black; /* Text color */
+    padding: 0px 15px 5px; /* Padding for spacing (adjust the top padding) */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 24px;
+}
+
+.status-label {
+    background-color: #ae376f; /* Background color */
+    color: white; /* Text color */
+    padding: 5px 15px; /* Padding for spacing */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 14px;
+    margin-top: 20px; /* Add top margin to move it downwards */
+    margin-left: 0px; /* Add left margin to move it to the left */
+    border: 1px solid white; /* Light and thin white border */
+}
+
+
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 755px;
+  margin-top:-30px /* Adjust the left margin as needed */
+  /* Add top margin to push buttons down slightly */
+}
+
+.header-button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.header-button:hover {
+  background-color: #3462C2;
+}
+
+.ticket-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 20px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.ticket-details {
+  font-size: 1rem;
+  line-height: 2.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the top-left */
+}
+
+.ticket-details p {
+  margin: 0; /* Remove margin for paragraphs inside the ticket-details box */
+}
+
+.ticket-details span {
+  text-align: center; /* Center the text in the span elements */
+}
+
+.gap {
+  height: 20px; /* Adjust the height of the gap as needed */
+}
+
+.additional-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  border-radius: 20px;
+  padding: 25px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+   margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.additional-details p {
+  margin: 10px 0; /* Add margin for spacing between paragraphs */
+}
+
+/* Action box CSS */
+.action-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 15px; /* Adjust padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+  height: 288 px; /* Increase the height */
+  border-radius: 20px; /* Rounded corners only at the top */
+}
+
+
+
+.flex-ticketbox {
+            display: flex;
+            justify-content: space-around;
+            
+            
+        }
+           .flex-item1 {          
+            width: 100px;
+            height: 50px;
+            margin: 1px;
+            text-align: left;
+            font-size: 16px;
+            font-weight:bold;                      
+           }
+
+          
+        .flex-item2 {
+    width: 100px;
+    height: 50px;
+    margin: 1px;
+    text-align: right;
+    font-size: 16px;
+    margin-left: 150px; 
+}
+
+
+       .flex-item3 {
+    width: 400px;
+    height: 50px;
+    margin: 1px;
+    text-align: left;
+    font-size: 16px;
+    margin-left: 80px; 
+}
+
+  .view {
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+}
+
+.btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: left;
+  }
+.view:hover {
+  animation: ani 8s linear infinite;
+  border: none;
+}
+
+@keyframes ani {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 400%;
+  }
+}
+
+.view:before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 400%;
+  border-radius: 35px;
+  transition: 1s;
+}
+
+#view:hover::before {
+  filter: blur(20px);
+}
+
+#view:active {
+  background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+}
+  #open {
+    display: inline-block;
+  border-radius: 20px;
+  background-color: #7948d4;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.edit {
+  background: #1181dd;
+  
+  color: #ffffff;
+}
+.delete {
+  background: #e20b0b;
+  
+  color: #ffffff;
+}
+.edit:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+.exit-symbol {
+ position: absolute;
+ top: 10px;
+ right: 24px;
+ font-size: 30px;
+ cursor: pointer;
+}
+
+#ticketinfo {
+  text-align: center; /* Center-align the contents of the <p> element */
+}
+
+#ticketinfo button {
+  
+  background-color: #ae376f; 
+  color: #ffffff;
+  padding: 5px 20px; 
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block; 
+  border-radius:10px;
+  box-shadow:3px 3px 3px 1px grey;
+  margin-top: 10px;
+  margin-left: -780px;
+}
+
+#ticketinfo button:hover {
+  background: #da8bb0; 
+}
+
+.chat-frame {
+position: absolute;
+top: 55%;
+left: 80%;
+ transform: translate(-50%, -50%);
+ background-color: transparent; 
+display: none;
+border-radius: 20px;
+ /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);  */
+width: 400px;
+height: 650px;
+z-index: 9999;
+}
+
+#table-datas {
+        border-collapse: collapse; /* This removes the default spacing between table cells */
+        width: 100%;
+        cursor:pointer;
+        font-size: 16px;
+    }
+
+    #table-datas tbody tr {
+        border-bottom: 1px solid #dddddd; /* Add a bottom border to tbody rows */
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2); /* Add a small shadow to the bottom of each row */
+        border-right: none; /* Hide the right vertical border */       
+        /*border-left: 6px solid #42A8D5;*/
+    }
+
+    #table-datas th, #table-datas td {
+        text-align: left;
+        
+    }
+
+/*....................Remarks..................... box*/
+.form__group {
+  position: relative;
+  padding: 20px 0 0;
+  width: 100%;
+  max-width: 580px;
+}
+
+.form__field {
+  
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 17px;
+  color: black;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+.form__field::placeholder {
+  color: transparent;
+}
+
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 17px;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: black;
+  pointer-events: none;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 400;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #116399, #38caef);
+  border-image-slice: 1;
+}
+
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: black;
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required, .form__field:invalid {
+  box-shadow: none;
+}
+
+    .custom-p {
+        color: #c653c6;
+        display: inline;
+        border: 1px solid purple; 
+        padding: 3px 10px 0 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px #7a7aff;
+      
+    }
+
+
+   .thead-tstrheader {
+  background-color:#ae376f;
+  color: white;
+  padding-left: 17px
+  width: 200px; 
+  height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 10px 10px 0 0;
+}
+
+.new-label {
+            background-color: #FF5733; /* Background color */
+            color: white; /* Text color */
+            padding: 0px 8px; /* Padding for spacing */
+            border-radius: 13px; /* Rounded corners */
+            font-size: 12px;
+        }
+
+    </style>
+ 
+<ul class="box-info">
+  <a href = "{% url 'tester_home' company_id prev_date to_date keyword%}">
+
+	<li style="background-color:  #f9ecf2; 	padding: 24px;  border-radius: 20px; display: flex;align-items: center;  grid-gap: 24px;  outline: none;  border-color: #adc2eb;  box-shadow: 0 0 5px  #c85188;">
+		<i class='bx bxs-calendar-check' style='color:  #602040; background-color: #e6b3cc;' ></i>
+		<span class="text">
+			<h3 id="Requests">{{tickets.count}}</h3>
+			<p>Open</p>
+		</span>
+	</li>
+  </a>
+  <a href = "{% url 'tester_pendings' company_id prev_date to_date keyword%}">
+	<li>
+		<i class='bx bx-hourglass' style='color:  #602040; background-color:  #e6b3cc;'></i>
+		<span class="text">
+			<h3 id="Pending" >{{inprogress}}</h3>
+			<p>In progress</p>
+		</span>
+	</li>
+</a>
+  <a href = "{% url 'tester_forwarded' company_id prev_date to_date keyword%}">
+	<li>
+  <i class='bx bx-pause-circle' style='color:  #602040; background-color:  #e6b3cc;'></i>
+		<span class="text">
+			<h3 id="Closed">{{forwarded}}</h3>
+			<p>Forwarded</p>
+		</span>
+	</li>
+</a>
+<a href = "{% url 'tester_closed' company_id prev_date to_date keyword%}">
+
+  <li>
+  <i class='bx bx-window-close' style='color:  #602040; background-color:  #e6b3cc;'></i>
+		<span class="text">
+			<h3 id="Closed">{{closed}}</h3>
+			<p>Closed</p>
+		</span>
+	</li>
+  </a>
+  
+</ul>
+
+<div class="table-data">
+  <div class="order">
+      <div class="head">
+        <h3>Tickets 
+<p style="color:#ae376f ; display: inline;" >OPEN</p></h3>
+         
+      </div>
+       <table id="table-datas">
+          <thead class="thead-tstrheader">
+              <tr>
+
+                  <td>Ticket ID</td>
+                  <td>Requester</td>
+                  <td>Client</td>
+                  <td> </td>
+                  <td>Issue</td>
+                  <td>Date Of Issue</td>
+                  <td> </td>
+                  <td> </td>
+                  
+                
+              </tr>
+          </thead>
+      </div>
+      <tbody> 
+        {% for ticket in tickets %}
+        <tr data-ticket="{{ ticket.ticket_no }}"  id="{{ticket.ticket_no}}" onclick=" showticket('{{ticket.ticket_no}}','{{ticket.maker.username}}');"><td>{{ticket.ticket_no}}<span class="new-label">New</span></td>
+        <td>{{ticket.maker.username}}</td>
+        <td>{{ticket.client}}</td>
+         <td class="projection">
+                {% if ticket.file.url is not None%}
+                    <a href="{{ ticket.file.url }}" target="_blank"> <button class="attachment-icon" title="open files" onclick="event.stopPropagation();" ></button></a>
+
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+                    </td>
+
+                    {% else %}
+                    
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="none">
+                    {% endif %}
+          </td>
+        <td>{{ticket.subject}}</td>
+        <td>{{ticket.issued_on | date:"d-m-y"}}</td>
+        <td>
+        <button class="chat-icon" title="open chat"  onclick="javascript:document.getElementById('updtid').value='{{ticket.ticket_no}}'; chatfn(); event.stopPropagation();"></button>
+        </td>
+        <td>
+            <button class="log-icon" title="Open log"  onclick="javascript:document.getElementById('updtid').value='{{ticket.ticket_no}}'; outlook(); event.stopPropagation();"></button>
+         </td>
+
+        <input type="Hidden" id = 'tdesc{{ticket.ticket_no}}' value="{{ticket.desc}}">
+        <input type="Hidden" id = 'tsub{{ticket.ticket_no}}' value="{{ticket.subject}}">
+        <input type="Hidden" id = 'tpriority{{ticket.ticket_no}}' value="{{ticket.priority}}">
+        {% if ticket.file.url is not None%}
+        <input type="hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+        {%else %}
+        <input type="hidden" id = 'tfile{{ticket.ticket_no}}' value="">
+        {% endif %}
+        <input type="Hidden" id = 'tcli{{ticket.ticket_no}}' value="{{ticket.client}}">
+        <input type="Hidden" id = 'tstat{{ticket.ticket_no}}' value="{{ticket.status}}">
+        <input type="Hidden" id = 'tsub{{ticket.ticket_no}}' value="{{ticket.subject}}">
+        <input type="Hidden" id = 'tassigned{{ticket.ticket_no}}' value="{{ticket.dev_assigned_date | date:"d-m-y"}}">
+        <input type="Hidden" id = 'tremarks{{ticket.ticket_no}}' value="{{ticket.remarks}}">
+        <input type="Hidden" id = 'tissued{{ticket.ticket_no}}' value="{{ticket.issued_on | date:'d-m-y'}}">
+             
+       </td>
+         
+        {% endfor %}
+
+       </tr>
+     </tbody>
+    </table>
+   
+
+<!-----------------------------------TICKET DETAILS BOX-------------------------------------------------->
+
+      <div class="box" name="myBox" id="myBox" style="overflow-y: auto;" >
+        <div>
+            <div class="popup-header">
+            
+          <!-- <span class="panel-label">Inbox</span>  -->
+                      <span class="exit-symbol" onclick="javascript:closeBox();" title="Close">&times;</span>
+
+            <div class="ticket-id">Ticket <span id="ticket_no"></span>
+                <div ><span class="status-label" id="tstat"></span></div>
+                
+
+              <div class="header-buttons">
+                <button class="header-button" onclick="javascript: chatfn();">Chat</button>
+                <button class="header-button" onclick="javascript: outlook();">Outlook</button>
+
+                
+              </div>
+            </div>  
+          </div>
+          
+          
+           <hr>
+
+            <body>
+                  <br>
+                
+                <div class="ticket-details-box">
+                  <div class="ticket-details">
+
+                                   <div class="flex-ticketbox">
+                                           <div class="flex-item1">Client</div>
+                                           <div class="flex-item2">:</div>
+                                           <div class="flex-item3"><span id="tcli"></span></div>                                         
+                                    </div>
+
+                                    <div class="flex-ticketbox">
+                                <div class="flex-item1">Maker</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="maker"></span></div>
+                                 
+                                     </div>
+                              
+                               <div class="flex-ticketbox">
+                                    <div class="flex-item1">Issue Date</div>
+                                    <div class="flex-item2">:</div>
+                                    <div class="flex-item3"><span id="tdate"></span></div>
+                                 
+                                </div>
+                         
+                              <div class="flex-ticketbox">
+                                <div class="flex-item1">Priority</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tpri"></span></div>
+                                 
+                              </div>
+                              <div class="flex-ticketbox">
+                                <div class="flex-item1">Assigned&nbsp;on</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tassigned"></span></div>
+                                 
+                               </div>
+                        
+                        
+                  </div>
+                </div>
+
+              <!--  gap -->
+              <div class="gap"></div>
+
+              <div class="additional-details-box">
+                  <div class="additional-details">
+                      <p><b>Subject :</b></p>
+                      <p id="tsub"></p>
+                      <p><b>File :</b></p>
+                      <p><a id="tfile"></a></p>
+                      <p><b>Description :</b></p>
+                      <textarea input type="text" disabled id="tdesc" rows="6" cols="100"
+                          style="border: none; color: #342E37; font-family: poppins, sans-serif; font-size: 16px;"></textarea>
+                  </div>
+               </div>
+
+                
+                  
+                       <!--  gap -->
+              <div class="gap"></div>
+             </body>
+            </table>         
+         </div>
+    
+
+      {% comment %} <div class="box" name="myBox" id="myBox" style="overflow-y: auto;" >
+        <span class="exit-symbol" onclick="closeBox()">&times;</span>
+         <p style="color:rgb(63, 109, 238);font-size:1.3rem;"><b>Ticket Details</b></p>
+         <table>
+         <HR>
+          <body>
+              <tr>
+                <tr class="exclude-hover"><td width = 180><b>Ticket id</b></td><td id="ticket_no" width = 300>:</td></tr>
+                <tr class="exclude-hover"><td><b>Subject </b></td><a><td id="tsub"></a></td></tr>
+                <tr class="exclude-hover"><td><b>Status </b></td><a><td id="tstat"></a></td></tr>
+                <tr class="exclude-hover"><td><b>Client </b></td><a><td id="tcli"></a></td></tr>
+                <tr class="exclude-hover"><td><b>Priority</b></td><td id="tpri"></td></tr>
+                <tr class="exclude-hover"><td><b>Assigned on</b></td><td id="tassigned"></td></tr>
+                <tr class="exclude-hover"><td><b>File </b></td><a><td id="tfile"></a></td></tr>
+       
+                <tr class="exclude-hover" style="border-bottom: 2px solid black;  vertical-align: top; text-align: left;"><td><b>Description</b></td>
+                  <td><textarea input type="text" disabled id="tdesc" rows="5" cols="80" 
+                    style="border:none; color:#342E37; font-family:poppins,sans-serif; font-size:16px; " ></textarea></td></tr>
+                
+              </body></table> {% endcomment %}
+
+
+
+ <!----------------- Actions box ---------------------------------------------------------------------------------->
+                  
+                  <div class="action-box">
+             
+              <form action="{% url 'tester_open' %}" id="tstr_acpt" onsubmit="javascript : return validator();" method="post"  enctype="multipart/form-data">
+                {% csrf_token %}
+              <!----------------- Remarks div ----------------------->
+                    <div class="form__group field">
+                        <input type="input"  id="remarks" name="remarks" class="form__field" placeholder="Name" >
+                        <label for="name" class="form__label">Comments...</label>
+                    </div>
+                    <!--<div id = 'rmk_files_div' >-->
+                    <!--  <input type="file" id = 'rmk_files' name = 'rmk_files'> -->
+                    <!--</div>-->
+                    <br>
+              <!----------------- //Remarks div ----------------------->
+              <p>Expected number of working days for completion: 
+                <input type="text" id="tgt_days" name="tgt_days" placeholder="No of days" 
+                       style="border: none; border-bottom: 2px solid red; outline: none; padding:8px; border-radius:13px;"  onchange="javascript:valCalender();">
+              </p>
+              <p>Tentative completion date : &nbsp;&nbsp;<input type ="date" onkeydown="return false" onpaste="return false" id="exp" name="exp" style="width:100px; height:30px; border-radius:10px; cursor: pointer";  onchange="javascript:targetdateval();"></p>
+              <input type="hidden" id="tmptdate" name = 'tmptdate' value="" ></p>
+
+              <br>
+             
+
+            
+            <input type="Hidden" id = 'updtid' name = 'updtid' value="">
+        <input type="hidden" id="page_id" value="P">
+
+       <p id="ticketinfo"><button type="submit" >Accept</button></p> <!-- Tester Accepted = acptstr -->
+              </form>
+        </div>
+      </table>
+    </div> 
+
+      
+ <!----------------- Actions box ---------------------------------------------------------------------------------->
+                  
+ <div id = 'chat-div'  >
+  <header><span  id="close-chat" class="chat-close"  onclick="javascript:document.getElementById('chat-div').style.display='none';document.getElementById('close-chat').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+   </header>
+ 
+  <iframe id="chat" class="chat-frame"  src="" name="chat"  scrolling="no"  frameborder="0">
+         </iframe>  
+ </div>
+
+ <div id = 'logframe' class = "log">
+
+          <header><span  id="closeButton" class="closeboxlog" onclick="javascript:document.getElementById('logframe').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+            </header>
+            <div class="popup-body" >
+              <iframe id="frame1" style="display: none ;" name="frame1" class="log" scrolling ='yes'   width="50%" height="100%" frameborder="0">
+              </iframe>
+          </div>
+          </div>
+      
+
+
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+   
+{% endif %}
+
+
+{% block script %}
+
+<script>
+ document.getElementById('dashboard').classList.add('active');
+ function chatfn(){
+
+var tid = document.getElementById('updtid').value.trim();
+// alert("{% url 'chtbx' " , tid , " %}")
+document.getElementById('chat').src = "{% url 'chtbx' 0 %}".replace('0', tid);
+document.getElementById('chat-div').style.display = 'block';
+document.getElementById('close-chat').style.display = 'block';
+document.getElementById('chat').style.display = 'block';
+}
+ function outlook() {
+    var tid = document.getElementById('updtid').value;
+    // alert(tid)
+    var logsUrl = '/cadmin/logs/' + tid + '/';
+    document.getElementById('frame1').src = logsUrl;
+    document.getElementById('logframe').style.display = 'block';
+    document.getElementById('frame1').style.display = 'block';
+}
+
+function validator(){
+  const today = new Date().toISOString().split("T")[0];
+  var exp = document.getElementById('exp').value;
+  var tgt_days = document.getElementById('tgt_days').value;
+
+  var cf = confirm('Do you want to continue?');
+  if (!exp)
+  {
+   alert("Please , Select an expiry date!");
+   return false;
+  }
+  else if(tgt_days == ''){
+    alert("Please , Enter  working days!");
+   return false;
+  }
+  else 
+  {
+    // alert('this')
+    if (exp < today){
+      alert('Please select current or future date')
+      return false;
+    }
+    // else{
+    //   var filler = null; // for tester variable
+    // const link = "/developers/dev_ops/"+ tno +  "/" +  tstat + "/" +filler + "/"  + exp + "/"  + remarks + '/' ;
+    // // window.location.reload();
+    // window.location.href = link;
+    // alert('elser');
+    // return true;
+    // }
+  }
+    if(cf==true){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+function showticket(tno,user){
+// alert(tdesc);
+      document.getElementById("myBox").style.display = "block";
+
+            // $('#myBox').show();
+            // var tdesc = 'tdesc'+ tno;
+            var tsub = 'tsub'+tno; // subject
+            var tpriority = 'tpriority'+tno; //priority
+            var tcl = 'tcli' + tno; //Client
+            var tissued = 'tissued' + tno;
+            // document.getElementById("myBox").style.display="block";
+
+            // alert(tdesc);
+            var fileurl = document.getElementById('tfile'+tno).value;
+        // alert(document.getElementById(tdesc).value);
+        if(fileurl != ''){
+        var fileurl = document.getElementById('tfile' + tno).value;
+        var link =document.createElement('a'); 
+        link.href = fileurl;
+        link.target = '_blank';
+        link.textContent = ' Click here to view file';
+        // alert(fileurl);
+        document.getElementById('tfile').appendChild(link);
+        }
+        else{
+          document.getElementById('tfile').innerHTML = ' No Files Attached.';
+        }
+            
+            document.getElementById('updtid').value = tno;
+// alert(document.getElementById('updtid').value)
+
+            document.getElementById('tsub').innerHTML = document.getElementById('tsub'+tno).value;
+            // document.getElementById('tstat').innerHTML = document.getElementById('tstat'+tno).value;
+            document.getElementById('tstat').innerHTML = 'Pending';
+            document.getElementById('tcli').innerHTML = document.getElementById('tcli'+tno).value;
+            document.getElementById('tpri').innerHTML = document.getElementById('tpriority'+tno).value;
+            document.getElementById('tassigned').innerHTML = document.getElementById('tassigned'+tno).value;
+            document.getElementById('ticket_no').innerHTML=tno; // ticket number
+            document.getElementById('maker').innerHTML=" "+ user; // user name
+            // document.getElementById('tsub').innerHTML="Subject : " + document.getElementById(tsub).value; // ticket subject
+            document.getElementById('tdesc').innerHTML= document.getElementById('tdesc'+tno).value; // ticket description
+            // alert(document.getElementById(tdesc).value);
+            document.getElementById('tdate').innerHTML=" " + document.getElementById(tissued).value; // ticket priority
+            // document.getElementById('tcli').innerHTML='Client :' + document.getElementById(tcl).value; // ticket client
+
+
+}
+
+function actionselect(tno,usrnme){
+  var tstat = 'tstat' + tno
+  document.getElementById('updtid').value = tno;
+  var status =document.getElementById(tstat).value.trim();
+
+  if (status == 'EP'){
+    showticket(tno,usrnme);
+  }
+}
+
+function acptstr(){
+  tno = document.getElementById('updtid').value;
+  const link = '/developers/tstropen/' + tno ;
+  window.location.href = link;
+}
+
+function valCalender(){
+
+var numberOfDaysToAdd = document.getElementById("tgt_days").value;
+var newDate = new Date(new Date().getTime() + numberOfDaysToAdd*24*60*60*1000);
+var curtdate = new Date(newDate);
+
+var curtdate = curtdate.toISOString().substring(0,10);
+var tdt = new Date(curtdate);
+if (!isNaN(tdt.getTime())) {
+    var tgdate = tdt.getDate() + '-' + tdt.getMonth() + '-' + tdt.getFullYear(); 
+}
+document.getElementById("tmptdate").value = curtdate;
+
+alert('Targeted Completion date: ' + tgdate);
+document.getElementById("exp").value = curtdate;
+targetdateval()
+}
+
+//For validating no of wrk days & target date
+function targetdateval()
+{
+var d = document.getElementById("tgt_days").value.trim();
+if(d == ''){ alert('Enter no of days!'); document.getElementById("exp").value = ''; return ''; }
+var mxdays = 3;             //for no of days extension allowed.
+if(d > 10){
+  var mxdays = 7;
+}
+
+var t = document.getElementById("tmptdate").value;
+var maxtdateallowed = new Date(new Date(t).getTime() + mxdays*24*60*60*1000);
+var e = document.getElementById("exp").value;
+var seltdate = new Date(e);
+if( seltdate > maxtdateallowed ){ 
+  alert("Max days allowed to extend can't be greater than "+ mxdays+"!"); 
+  document.getElementById("exp").value = document.getElementById("tmptdate").value; return ''; 
+}
+}
+
+// function Acceptdev()
+// {
+  
+//   var ticketId = document.getElementById('updtid').value;
+
+//   var exp = document.getElementById('exp').value;
+  
+//   if (!exp)
+//   {
+//    alert("Please , Select an expiry date!");
+//    return false;
+//   }
+//   else
+//   {
+//     const link = "/developers/dev_accept/"+ ticketId +  "/" + exp + "/"   ;
+//     // window.location.reload();
+//     window.location.href = link;
+
+//   }
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   $(document).ready(function() {
+//     function updateDatas() {
+//       $.ajax({
+//         url: "{% url 'dev_pendings' %}",
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(data) {
+//           // Parse the data from the server and update the table
+//           var myData = JSON.parse(data);
+//           var t_details = myData.ticket_data.reverse();
+//           var tbody = $('#table-datas tbody');
+//           var thead = $('#t-head')
+//           var counter = 0;
+
+//           tbody.empty();
+//           $.each(t_details, function(index, item) {
+//             counter++;
+//             var row = $('<tr>');
+//             row.append($('<td>').text(item.ticketid));
+//             row.append($('<td>').text(item.issue));
+//             row.append($('<td>').text(item.doe));
+//             // row.append($('<td>').text(item.priority));
+//             row.append($('<td>').text(item.DOExp));
+//             row.append($('<td>').append($('<button>').text('View').attr('id', item.ticketid).attr('class', 'view').on('click', function(e) {
+//               e.stopPropagation(); // Prevent click event from propagating to parent elements
+//               const box = document.getElementById('myBox');
+//               const ticketinfo_tag = document.getElementById('ticketinfo');
+//               const ticket_id = item.ticketid;
+//               const issue_info = item.issue
+//               const editUrl = "/user/del_ticket/" + ticket_id + "/";
+//               const anchorTag = document.createElement("a");
+//               anchorTag.href = editUrl;
+//               const editButton = document.createElement("button");
+//               editButton.type = "button";
+//               editButton.className = "btn edit";
+//               editButton.innerText = "Leave a Comment";
+
+//               const deleteButton = document.createElement("button");
+//               deleteButton.type = "button";
+//               deleteButton.className = "btn delete";
+//               deleteButton.innerText = "Delete";
+//               anchorTag.appendChild(editButton);
+//               anchorTag.appendChild(deleteButton);
+//               ticketinfo_tag.innerHTML = '<table> <tbody  style="padding: 4px; text-align:left; width:50px; height:100px; overflow:auto ;"><tr><td><b>Ticket ID:</b>' + ticket_id + '</td><tr> \
+//                 <tr><td><b>Requester :</b>' + item.clientid + '</td><tr> \
+//                   <tr><td><b>Company :</b>' + item.company + '</td><tr> \
+//                 <tr><td><b>Issue :</b>' + issue_info + '</td><tr> \
+//                   <tr><td><b>Issue Descripton :</b>' + item.issuedesc + '</td><tr> \
+//                     <tr><td><b> Priority :</b>' + item.priority + '</td><tr> \
+//                       <tr><td><b>Date of expiry :</b>' + item.DOExp + '</td><tr> \
+//                          </tbody></table><br>';
+//               ticketinfo_tag.appendChild(anchorTag);
+//               box.style.display = 'block';
+//             })));
+//             tbody.append(row);
+//           });
+//           $('#Requests').html(counter);
+//         }
+//       });
+//     }
+
+//     updateDatas();
+//     setInterval(updateDatas, 10000);
+//     console.log('wokegd');
+//   });
+
+//   // Add an event listener to hide the 'myBox' when clicking outside of it
+//   $(document).on('click', function(event) {
+//     if (!$(event.target).closest('#myBox').length) {
+//       var box = document.getElementById("myBox");
+//       box.style.display = "none";
+//     }
+//   });
+
+
+//exit symbol
+
+function closeBox() {
+ var box = document.getElementById("myBox");
+  box.style.display = "none";
+  document.getElementById('tfile').innerHTML =null;
+}
+</script>
+{%endblock%}
+
+{%endblock%}

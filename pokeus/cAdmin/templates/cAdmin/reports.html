@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <base href="/" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Techspire - Reports Section</title>
+    <link rel="icon" type="image/png" href="tweedlefavicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/reports.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js">
+    </script>
+</head>
+ <body> 
+        <div class="reports-container" id='content'>
+        <h1>Techspire Reports</h1>
+
+        <div class="date-filter-section">
+            <div class="filter-item">
+                <label for="from-date">From Date</label>
+                <input type="date" id="from-date" value="{{ frmdate|date:'Y-m-d' }}">
+            </div>
+            <div class="filter-item">
+                <label for="to-date">To Date</label>
+                <input type="date" id="to-date" value="{{ todate|date:'Y-m-d' }}">
+            </div>
+            <div class="filter-item">
+                <label for="status">Status</label>
+                <select id="status">
+                    <option>ALL</option>
+                    <option value='A' {% if status == 'A' %} selected {%endif%}>INBOX</option>
+                    <option value="B" {% if status == 'B' %} selected {%endif%}>IN PROGRESS</option>
+                    <option value="C" {% if status == 'C' %} selected {%endif%}>FORWARDED</option>
+                    <option value="D" {% if status == 'D' %} selected {%endif%}>CLOSED</option>
+                </select>
+            </div>
+
+            <!-- ✅ Developer Filter -->
+            <div class="filter-item">
+                <label for="developer">Developer</label>
+                <select id="developer" name="developer">
+                    <option value="ALL">ALL Developers</option>
+                    {% for dev in developers %}
+                        <option value="{{ dev }}" {% if developer == dev %}selected{% endif %}>{{ dev }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- ✅ Client Filter -->
+            <div class="filter-item">
+                <label for="client">Client</label>
+                <select id="client" name="client">
+                    <option value="ALL">ALL Clients</option>
+                    {% for c in clients %}
+                        <option value="{{ c }}" {% if client == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <button id="show" onclick="javascript: reportsred();">Show</button>
+        </div>
+
+        
+        <div class="download-buttons caption-main">
+            
+                <div style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; 
+                        padding: 8px 12px; margin: 12px auto; text-align: center; 
+                        font-size: 13px; color: #444; font-weight: 500; max-width: 90%;margin-left:0px;">       
+                Reports from 
+                <span style="color: #2c3e50; font-weight: 600;">{{ frmdate|date:'d-m-Y' }}</span> 
+                to 
+                <span style="color: #2c3e50; font-weight: 600;">{{ todate|date:'d-m-Y' }}</span> 
+                in  
+                <span style="background: #eef5ff; color: #2c3e91; padding: 2px 6px; 
+                            border-radius: 4px; font-weight: 600;">
+                    {% if not status or status == 'ALL' %}
+                        ALL
+                    {% elif status == 'A' %}
+                        INBOX
+                    {% elif status == 'B' %}
+                        IN PROGRESS
+                    {% elif status == 'C' %}
+                        FORWARDED
+                    {% elif status == 'D' %}
+                        CLOSED
+                    {% endif %}
+                </span>
+                
+                &nbsp; | &nbsp; Total Counts = 
+                <span style="background: #fff4f4; color: #c0392b; padding: 2px 6px; 
+                            border-radius: 4px; font-weight: 600;">
+                    {{ tickets.count }}
+                </span>
+            </div>
+            
+            <button class="btn" id='pdfdwnld'>Download as PDF</button>
+        </div>
+
+        <table class="reports-table" id="table-container">
+            <thead>
+                <tr>
+                    <th>Ticket ID</th>
+                    <th>Client</th>
+                    <th>Subject</th>
+                    <th>Temp ticket issue Date</th>
+                    <th>Client Issue Date</th>
+                    <th>Allotted Date</th>
+                    <th>Developer Assigned</th>
+                    <th>Closed Date</th>
+                    <th>Tat</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.ticket_no }}</td>
+                        <td>{{ ticket.maker.company.companyCode }}</td>
+                        <td>{{ ticket.subject }}</td>
+
+                        {% if ticket.tmp_issued_on %} 
+                            <td>{{ ticket.tmp_issued_on|date:"d-m-Y" }}</td>
+                        {% else %} 
+                            <td>-</td>
+                        {% endif %}
+
+                        {% if ticket.issued_on %} 
+                            <td>{{ ticket.issued_on|date:"d-m-Y" }}</td>
+                        {% else %} 
+                            <td>-</td>
+                        {% endif %}
+
+                        {% if ticket.approved_on %} 
+                            <td>{{ ticket.approved_on|date:"d-m-Y" }}</td>
+                        {% else %} 
+                            <td>-</td>
+                        {% endif %}
+                        <td>{{ ticket.dev_id|default:"-" }}</td>   <!-- ✅ dev column -->
+
+                        {% if ticket.closed_on %} 
+                            <td>{{ ticket.closed_on|date:"d-m-Y" }}</td>
+                        {% else %} 
+                            <td>-</td>
+                        {% endif %}
+
+                        <td style="color: green; text-align: center;">
+                            {% if ticket.tat %}{{ ticket.tat }} days{% else %}-{% endif %}
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+        </table>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        // Convert date to dd-mm-yyyy format
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = ("0" + date.getDate()).slice(-2); 
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); 
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`; 
+}
+
+function reportsred(){
+    let frmdate = document.getElementById("from-date").value;
+    let todate = document.getElementById('to-date').value;
+    let status =  document.getElementById('status').value;
+    let developer = document.getElementById('developer').value;
+    let client = document.getElementById('client').value;
+
+    // Pass formatted dates in the URL
+    window.location.href = "/reports/" + frmdate + "/" + todate + "/" + status + "/" + developer + "/" + client + "/";
+}
+
+document.getElementById('pdfdwnld').addEventListener('click', function () {
+    var { jsPDF } = window.jspdf;
+    var doc = new jsPDF('p', 'mm', 'a4');
+    
+    // Define margin and start position
+    let pageWidth = doc.internal.pageSize.getWidth();
+    let startY = 30;
+    
+    // Add background color
+    doc.setFillColor(242, 242, 242);
+    doc.rect(0, 0, 210, 297, 'F'); // Light gray background
+
+    // Add main heading 
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(40, 40, 40);
+    doc.setFontSize(26);
+    doc.text('Techspire Reports', pageWidth / 2, startY, { align: 'center' });
+    
+    // Add subheading 
+    doc.setFontSize(12);
+    doc.setTextColor(80, 80, 80);
+    doc.text('Middle East Financial Software Solutions', pageWidth / 2, startY + 10, { align: 'center' });
+    
+    // Draw a separator line
+    doc.setDrawColor(0, 0, 0);
+    doc.line(10, startY + 15, 200, startY + 15);
+    
+    // Fetch selected date range and format them
+    let fromDate = formatDate(document.getElementById('from-date').value);
+    let toDate = formatDate(document.getElementById('to-date').value);
+    
+    // date range
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 200);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Date : ${fromDate} - ${toDate}`, pageWidth / 2, startY + 25, { align: 'center' });
+    
+    // table data
+    let table = document.querySelector('.reports-table');
+    let rows = [...table.rows];
+    let data = rows.map(row => [...row.cells].map(cell => cell.innerText));
+    
+    // table 
+    doc.autoTable({
+        head: [data[0]], // Table headers
+        body: data.slice(1), // Table rows
+        startY: startY + 35,
+        margin: { left: 10, right: 10 },
+        theme: 'grid',
+        styles: { fontSize: 9, textColor: [50, 50, 50], halign: 'center' },
+        headStyles: { fontSize: 9, fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [255, 255, 255] }, 
+        tableLineColor: [200, 200, 200],
+        tableLineWidth: 0.1
+    });
+    
+    // Save PDF
+    doc.save('Ticket_Report.pdf');
+});
+    </script>
+</body>
+</html>

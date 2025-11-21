@@ -1,0 +1,191 @@
+{% extends 'testers/testerbaseUI.html' %}
+{% load static %}
+{% block body %}
+
+
+
+
+
+<style>
+    
+
+.register {
+  text-align: center;
+  background: #3C91E6;
+  color:white;
+  width:15%;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey;
+  border-radius: 10px; 
+}
+
+.register:hover{
+  background: #bbd9f6; 
+}
+
+
+.back{
+  text-align: center;
+  background: red;
+  color:white;
+  padding: 8px;
+  width:15%;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+  margin-left:20px;
+  border-radius:10px;
+}
+
+.back:hover {
+  background: #ff9999; 
+}
+
+  .back-btn-addev {
+    width: 30px;
+    height: 30px;
+    margin-left: 900px;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.back-btn-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.5s;
+}
+
+.back-btn-addev:hover .back-btn-inner {
+    background-color: #aaa;
+}
+
+.back-btn-addev img {
+    width: 50%;
+    height: auto;
+    transition: transform 0.5s;
+}
+
+.back-btn-addev:hover img {
+    transform: scale(1.2);
+}
+
+.input-bx {
+        width: 200px;
+        height: 30px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        outline: none;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .input-bx:hover {
+        border-color: #999;
+    }
+
+    .eye-icon {
+    position: relative;
+    right: 30px;
+    cursor: pointer;
+    background: url('{% static "images/eye-icon.png" %}') no-repeat;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-size: cover;
+}
+
+</style>
+
+<div class="table-data">
+    <div class="order">
+      <div class="head" > 
+        <span style="color:#800080; font-weight:bold; font-size: 1.2rem;">RESET PASSWORD</span>
+            
+               <div class="back-btn-addev" onclick="goBack()">
+                  <div class="back-btn-inner">
+                      <img src="{% static 'images/back-btn-arrw.png' %}" title="Click to go back" alt="back-button-logo">
+                  </div>
+               </div>
+       </div> 
+        <hr>
+        
+        <form method="POST" action="" onsubmit="javascript: return psswdCheck();" >
+            {% csrf_token %}
+            <table id="table-datas" >
+                <tbody>
+                    <tr>
+                        <td>Current Password</td>
+                        <td><input type="password" name="psswd" id="psswd" class="input-bx"></td>
+                    </tr>
+                    
+                    <tr>
+                         <td>New Password </td>
+                         <td><input type="password" name="new_psswd" id="new_psswd" class="input-bx">
+                         </td>
+                            
+                    </tr>
+
+                    <tr>
+                        <td>Confirm Password </td>
+                        <td><input type="text" name="cfrm_psswd" id="cfrm_psswd" class="input-bx"></td>
+                   </tr>
+
+                    <tr>
+                        
+                        <td><button type="submit" class="btn register" >Reset</button><button type="button" onclick="goBack()" class="btn back">Cancel</button</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>  
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+{% endif %}
+
+<script>
+
+document.getElementById('main-head').style.display ='none';
+
+
+
+    function goBack() {
+        window.history.back();
+    }
+
+function psswdCheck(){
+
+    var pss1 = document.getElementById('new_psswd').value;
+    var pss2 = document.getElementById('cfrm_psswd').value;
+
+    if( pss1 === pss2 ){
+        return true;
+    }
+    else{
+        alert("Password dosen't match");
+        return false;
+    }
+
+}
+
+</script>
+
+{% endblock %}

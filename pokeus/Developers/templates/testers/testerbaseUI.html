@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load static %}
+	{{ redirect_to_login_immediately }}
+		
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static '/css/tester-style.css' %}">
+	
+
+	<script
+  src="https://code.jquery.com/jquery-3.6.4.min.js"
+  integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+  crossorigin="anonymous"></script>
+ 
+	<title>Tester Dashboard</title>
+</head>
+{%block content%}
+<body>
+ 
+
+	
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<img src="{% static 'images/mefs_logo.png' %}" alt="mefs_logo" width="50" height="50" style="margin-left: 10px; margin-top: 10px;">
+			<span class="text" style="margin-left: 10px; font-size:2rem;margin-top: 10px;font-weight: bold;">Tweedle.</span>
+		</a>
+        
+		<ul class="side-menu top">
+			<li id='dashboard'>
+				<a href="{%url 'tester_home' %}"> 
+				
+					<i class='bx bxs-home'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			
+
+			
+
+
+			
+		</ul>
+		<ul class="side-menu">
+			
+			
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			
+			
+			<form action="#">
+				<div class="form-input">
+					<!-- <input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button> -->
+				</div>
+			</form>
+
+			<span class="text" style="margin-left: 10px;color : purple;">{% if user.is_authenticated %}{{user.first_name}} {{ user.last_name}} {% endif %}</span>
+			
+			
+			<a href="#" class="profile-icon">
+				<img src="{% static 'images/profile-icon.png' %}" onclick="toggleMenu();">
+			</a>
+
+			<div class="sub-menu-wrap" id="subMenu">
+				<div class="sub-menu">
+					<div class="user-info">
+						<img src="{% static 'images/user-img.png' %}">
+						<h3>{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }} {% endif %}</h3>
+					</div>
+					<hr>
+
+					<a href="{% url 'psswd_reset' %}" class="sub-menu-link"  >
+						<img src="{% static 'images/settings-icon.png' %}">
+						<p>Password</p>
+						<span>></span>
+					</a>
+
+					<a href="{% url 'admin_signout' %}" class="sub-menu-link">
+						<img src="{% static 'images/logout-icon.png' %}">
+						<p>Logout</p>
+						<span>></span>
+					</a>
+
+				</div>
+			</div>
+
+
+     
+
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+
+			<form action="{% url 'dev_search' %}" method="post" id="search_panel" name="search_panel" onsubmit="javascript:return  dev_form_validator();">   
+				{% csrf_token %}
+				<input type="hidden" id="page_id_val" name="page_id_val" value="">
+	
+		 <div class="main-head">
+			<div class="header-section">
+				<div class="company">
+					<span class="company-position">Company</span>
+					<select id="companyDropdown" name="companyDropdown">
+						
+						<option value="*" selected >All Companies</option>
+						{% for company in filter_cname %}
+						<option value="{{company.companyCode}}">{{company.companyCode}}</option>
+						{%endfor%}
+					</select>
+				</div>
+	
+	
+				<div class="time-period">
+							<div class="timep-position">
+								<span>Ticket Date</span>
+							</div>
+							<div class="date-input">
+								<span>From</span>
+								<input type="date" id="fromDateInput" name="fromDateInput" >  
+								<span>To</span>
+								<input type="date" id="toDateInput" name="toDateInput">
+							</div>					
+				</div>
+	
+			</div>
+	 
+				<div class="searchfile-icon">
+					<button onclick="javascript:return cmpny_drpdwn_validator();" style="border: none;background:transparent;">
+						<a href="#" onclick="javascript:return cmpny_drpdwn_validator();">
+							<img src="{% static 'images/search-filei.png' %}" alt="Search File">
+						</a>
+					</button>
+				</div>
+	
+	
+	
+				
+			<div class="search-tktid">
+				<div class="search-container">
+					<input type="hidden" value="" id="key" name="key">
+					<input type="text" name = 'keyword' id = 'keyword' placeholder="Search ticket ID ..." >	
+					<button class="search-button" onclick="javascript:return ticket_search();">
+					<img class="search-logo" src="{% static 'images/search-icon.png' %}" alt="search-logo"></button>
+				</div>		
+			</div>
+	</div>
+		</form>
+
+
+
+
+			
+<!-- AJAX implementing -->
+{%block body%}
+            
+
+            
+{% endblock %} 
+
+
+
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+	
+
+
+
+
+
+{%endblock%}
+
+<script src="{% static '/js/dev-script.js' %}"></script>
+<script>
+
+
+ {%comment%} {% for message in messages %}
+  alert('{{ message }}')
+  {% endfor %}
+  {%endcomment%}
+
+	var cmpny_name= "{{company_id}}";
+	var prev_date = "{{prev_date }}";
+	var to_date = "{{to_date }}";
+	var searchkey = "{{keyword}}"; if (searchkey == 'None'){ searchkey = null}
+	
+	srch_data_keeper(cmpny_name,prev_date,to_date,searchkey);
+	
+	</script>
+</body>
+
+</html>

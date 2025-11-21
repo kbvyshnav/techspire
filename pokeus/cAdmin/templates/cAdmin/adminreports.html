@@ -1,0 +1,116 @@
+{% extends "cAdmin/baseUI.html" %}
+{% load static %}
+
+{% block body %}
+<style>
+  .filter-role {
+    color: purple;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1px;
+    margin-left: 200px;
+  }
+
+  .role-info {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+  }
+
+  .role-position {
+    margin-left: -161px;
+  }
+
+  .report-table {
+    margin-top: 20px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  .total {
+    font-weight: bold;
+    color: purple;
+  }
+
+  .separator {
+    border-bottom: 1px solid #dddddd;
+  }
+
+#table-datas {
+        border-collapse: collapse; 
+        width: 100%;
+        cursor:pointer;
+    }
+
+    #table-datas tbody tr {
+        border-bottom: 1px solid #dddddd; 
+        border-right: none; 
+       
+    }
+
+    #table-datas th, #table-datas td {
+        text-align: left;
+    }
+
+
+</style>
+          
+<div class="table-data">
+  <div class="order">
+    <div class="head">
+      <h4 style="color: purple; font-size: 1.2rem;">PERFORMANCE REPORT</h4>
+    </div>
+    <hr>
+
+  
+
+    <div class="report-table">
+      <table id="table-datas">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Accepted</th>
+            <th>In progress</th>
+            <th>Forwarded</th>
+            <th>Closed</th>
+            <th class="total">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jinoy K S</td>
+            <td>Developer</td>
+            <td>10</td>
+            <td>5</td>
+            <td>2</td>
+            <td>8</td>
+            <td class="total">25</td>
+          </tr>
+          <tr>
+            <td>Vyshnav K B</td>
+            <td>Developer</td>
+            <td>11</td>
+            <td>6</td>
+            <td>1</td>
+            <td>9</td>
+            <td class="total">27</td>
+          </tr>
+          <!-- Add more rows as needed -->
+        </tbody>
+      </table>
+      <div class="separator"></div>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById('performance_report').classList.add('active');
+  </script>
+{% endblock %}

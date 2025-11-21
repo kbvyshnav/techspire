@@ -1,0 +1,12 @@
+.chat-log {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 5px;
+  width:70%;
+  margin: auto;
+  font-size: 14px;
+  color :#ffffff;
+  background-color: grey;
+  border-radius: 20px;
+}

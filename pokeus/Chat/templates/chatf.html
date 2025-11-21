@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link rel="stylesheet" type="text/css" href="{% static '/css/chat-style.css' %}">
+
+
+
+</head>
+{% block chatbody %}
+<body>
+<section class="msger">
+ 
+  <header class="msger-header">
+    <div class="msger-header-title">
+      <i class="fas fa-comment-alt"><b>{{ticket.ticket_no}}</b></i>
+      <br>
+      {{ticket.subject}}
+
+    </div>
+    <div class="msger-header-options">
+      <span><i class="fas fa-cog"></i></span>
+    </div>
+  </header>
+
+  <main id = 'char-area' class="msger-chat" >
+
+  {% for msg in messages %}
+
+     
+    {% if msg.msg is not None %}
+    {% if msg.user_id == request.user %}
+    <div class="msg right-msg">
+          <div class="msg-bubble">
+            <div class="msg-info">
+              <div class="msg-info-name">{{msg.user_id.username}} </div>        
+            </div>
+            <div class="msg-text">
+              {{msg.msg}} 
+              {% if msg.atchmnt %}
+               {% if msg.msg %} <br> {%endif%}
+               <b> <a href="{{ msg.atchmnt.url }}" target="_blank" > Open attachment </b> 
+               </a>
+               
+              {% endif %}
+             
+            </div>
+            </div>
+        </div>
+    <span class="time-right">{{msg.updated_on | date:"h:i A - D,dS M y  "}}</span>
+
+    {% else  %}
+
+	  <div class="msg left-msg">    
+        <div class="msg-bubble">
+          <div class="msg-info">
+            <div class="msg-info-name">{% if msg.user_id.role == 'U'%}<span> {{msg.user_id.username}} <span style="color: lightblue;">user</span></span>
+              {% elif msg.user_id.role == 'D' %}  {% if request.user.role != 'U'%} <span>{{msg.user_id.username}} </span>{%endif%} <span style="color: lightpink;">Developer</span>
+              {% elif msg.user_id.role == 'T'%} {% if request.user.role != 'U'%} <span>{{msg.user_id.username}} </span>{%endif%}  <span style="color: darkblue">Tester</span>
+              {% elif msg.user_id.role == 'A'%}{% if request.user.role != 'U'%} <span>{{msg.user_id.username}} </span>{%endif%} <span style="color: rgb(255, 123, 0)">Admin</span>
+
+              {%endif%} </div>
+              
+          </div>
+          <div class="msg-text">
+            {{msg.msg}}
+            {% if msg.atchmnt %}
+               {% if msg.msg %} <br> {%endif%}
+               <b> <a href="{{ msg.atchmnt.url }}" target="_blank" > Open attachment </b></a>
+              {% endif %}
+          </div>
+        </div>	  
+      </div>
+	  <span class="time-left">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </span>
+    {% endif %}
+    {% endif %}
+
+<!-- <input type="text" value="{{msg.status}},{{msg.expiry}},{{msg.dev_id}},{{msg.tester_id}}"> -->
+  {% if msg.status is not None %}
+      
+      <br>
+      {% if msg.status == 'TP' and msg.dev_id == ''   %}
+      <span class="chat-log"    > User raised Ticket  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {% elif msg.status == 'TA' and msg.expiry != '' and msg.dev_id != '' and msg.tester_id == ''%}
+      <span class="chat-log"> Admin accepted ticket  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {% elif msg.status == 'DA' and msg.dev_id != '' and msg.tester_id == '' %}
+      <span class="chat-log">  Developer accepted ticket  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'DH' and msg.dev_id != '' and msg.tester_id == ''  %}	
+      <span class="chat-log">  Developer requested for clarification  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'TH' and msg.dev_id != '' and msg.tester_id == '' %}	   
+      <span class="chat-log">  Admin approved & Forwarded it to client  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'TP' and msg.dev_id != '' and msg.tester_id == '' %}	
+      <span class="chat-log">  User has sent clarification & forwarded to admin  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'DA' and msg.expiry != '' and msg.dev_id != '' and msg.tester_id == '' %}	   
+      <span class="chat-log">   Developer accepted clarification  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'EH'  and msg.dev_id != '' and msg.tester_id == '' %}	   
+      <span class="chat-log">   Developer closed ticket & forwarded to admin  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'EP'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">   Admin Forwarded to tester  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'EA'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">   Tester Accepted ticket  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'BP'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">  Tester reported bug  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'PP'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">  Tester completed testing & Forwarded to admin </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'PA'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">   Admin Forwarded to client for testing </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'RC'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">   Client accepted for Live forwarding  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'RL'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">  Admin forwarded to developer for copy the program  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p> 
+
+      {%elif msg.status == 'RA'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">  Developer accepted Program copy command  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'CR'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">  User Declined to Accept  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'CA'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log"> Developer accepted user requirements  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'CD'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log">Developer closed user request  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'CD'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log"> Developer closed user request  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'PC'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt -->   
+      <span class="chat-log"> Developer copied program to live.  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+      {%elif msg.status == 'TC'  and msg.dev_id != '' and msg.tester_id != '' %}	<!--Have doubt --> 
+      <span class="chat-log">Admin closed Ticket  </span>
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+
+
+      {%endif%}
+      {% if msg.remarks is not None and msg.remarks != '' %}
+      <span class="chat-remark">
+      
+      {% if request.user.role == 'U' %}
+        
+       
+
+              {% if msg.updated_by.role == 'A' %}
+
+                 Admin
+
+              {% elif msg.updated_by.role == 'D' %}
+
+                Developer
+
+              {% elif msg.updated_by.role == 'T' %}
+
+                Tester
+
+              {%endif%}
+
+               
+
+        {% else %}
+
+          {% if not request.user.is_anonymous and msg.status != 'TC' %}
+
+               {{msg.updated_by}}(Remarks)
+          {%else%}
+           Closing remarks
+
+          {%endif%} 
+          
+
+
+
+        {%endif%}
+        
+        
+        
+        <br> {{msg.remarks}} <br> 
+        </span>
+        {% if msg.rmrk_files %}
+
+        <span >
+           <br> <a href="{{ msg.rmrk_files.url }}" target="_blank" class="new-label"> Open attachment </a>
+       </span>
+        {% endif %}
+        
+        
+        
+      <p class="time-center">{{msg.updated_on | date:"h:i A - D,dS M y"   }} </p>
+      
+        {%endif%}
+        
+  {%endif%}
+  
+  {% endfor %}
+  </main>
+
+  <form class="msger-inputarea" id="chat-form" action="{% url 'send_msg' %}" method="post" enctype="multipart/form-data" onsubmit="javascript:return msgValidation(); event.preventDefault(); " target="_self">
+    {%csrf_token%}
+    
+
+
+    <!-- Message input box ................... --> 
+<div class="messageBox">
+  <div class="fileUploadWrapper">
+    <label for="file-input">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
+        <circle
+          stroke-width="20"
+          stroke="#6c6c6c"
+          fill="none"
+          r="158.5"
+          cy="168.5"
+          cx="168.5"
+        ></circle>
+        <path
+          stroke-linecap="round"
+          stroke-width="25"
+          stroke="#6c6c6c"
+          d="M167.759 79V259"
+          
+        ></path>
+        <path
+          stroke-linecap="round"
+          stroke-width="25"
+          stroke="#6c6c6c"
+          d="M79 167.138H259"
+        ></path>
+      </svg>
+      <span class="tooltip">Upload file</span>
+    </label>
+    
+    <input type="file" id="file-input" name="file-input" value = ''>
+    
+    
+  </div>
+  <input   placeholder="Enter your message..." type="text" id="msg" name="msg"   style="width: {% if request.user.role != 'A' %} 265px {%endif%};" />
+  <button type="submit" id="ticket_no" name="ticket_no" value="{{ticket.ticket_no}}" class="msger-send-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
+      <path
+        fill="none"
+        d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+      ></path>
+      <path
+        stroke-linejoin="round"
+        stroke-linecap="round"
+        stroke-width="33.67"
+        stroke="#6c6c6c"
+        d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+      ></path>
+    </svg>
+  </button>
+</div>
+{% if request.user.role == 'A' %}
+<!-- email check box confirmation--> 
+<label class="material-checkbox">
+        <input type="checkbox" id = 'email' name = 'email' >
+        <span class="checkmark"></span>
+        Email
+      </label>
+      <input type="hidden" name="emeailans" id="emeailans" value="">
+    {%endif%}
+ 
+<div id='emailpopup' class="card" style='display : none;'>
+
+        <div class="content">
+            <span class="title">Confirm Email Notification ?</span>
+            <div class="desc">Send an email notification to the client about this message?</div> 
+            <div class="actions">
+                <div>
+                  <input type="hidden" name="ticket_no" value="{{ticket.ticket_no}}" >
+                    <button   class="download" id="popup-yes" >Send email</a>
+                </div>
+                <div>
+                    <button type="button" onclick="javascript:document.getElementById('emailpopup').style.display='None'; document.getElementById('email').checked = false; document.getElementById('popup-yes').value='N';  "  class="notnow" id="popup-no">Not now</a> 
+                </div>
+            </div>    
+        </div>
+        <button type="button" class="close" onclick="javascript: document.getElementById('emailpopup').style.display='none'">
+            <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        </button>
+</div>
+
+</form>
+
+
+
+<script src="{% static '/js/chat.js' %}"></script>
+
+</body>
+{% endblock %}
+</html>
+
+

@@ -1,0 +1,63 @@
+from django.urls import path,include
+from .views import *
+
+urlpatterns = [
+    path('',adminLogin,name='admin_login'),
+    path('admin_login/',adminLogin,name='admin_login'),
+    path('admin_signout/',admin_sigout,name='admin_signout'),
+    path('admin_home/',home,name='admin_home'),
+    path('admin_home/<cmpnyId>/<frmdate>/<todate>/',home,name='admin_home'),
+    path('admin_home/<cmpnyId>/<frmdate>/<todate>/<searchkey>/<flag>/',home,name='admin_home'),
+    path('companymanagement/',companyManagement,name='company_management'),
+    path('company/',addcompany,name='add_company'),
+    path('companyedit/<int:cmpId>/',editCompanyDetails,name='edit_company'),
+    path('companysettings/<cmpnyId>/',companySettings,name='company_settings'),
+    path('departmentManagement/<int:companyId>/',departmentManagement,name='department_management'),
+    path('adddepartment/<int:companyId>/',addDepartment,name='add_department'),   
+    path('usermanagement/<int:cmpId>/',userManagement,name='user_management'),
+    path('usersList/<cmpnyId>/',usersListredir,name='users_list'),
+    # path('edituser/<usrId>/',editUser,name= 'edit_user'),
+    path('adduser/<int:companyId>',addUser,name='add_user'),
+    # path('adminpendings/',adminPendingsDashboard,name='admin_pendings'),
+    path('categoryManagement/<int:companyId>/',categoryManagement,name='category_management'),
+    path('categoryRedir/<category>/<cmpnyId>/',categoryRedDir,name='category_redir'),
+    path('addcategory/<int:companyId>/',addCategory,name='add_category'),   
+    path('del_ticket_admn/<int:ticketid>/',deleteTicket,name='delete_admin_ticket'), 
+    path('developersManagement/',developersManagement,name='developer_management'), 
+    path('add_developer/',addDev,name='add_developer'),
+    # path('get_ticket_details/<ticket_no>/',get_ticket_details,name='ajax_ticket_details'),#Ticket details fetching using ajax
+    path('update_is_active/<item_id>/',update_is_active,name='update_is_active'),
+    path('developer_tcktlist/<ticket_id>/',assignTicketList,name='assignTicket'),
+    path('assign_tckt/',assignTicket,name='assignTicket'),
+    # path('adminactive/',adminActiveDashboard,name='active_admin_tickets'),
+    path('admin_inprogress/',adminInProgress,name='admin_inprogress'),
+    path('admin_inprogress/<cmpnyId>/<frmdate>/<todate>',adminInProgress,name='admin_inprogress'),
+    path('admin_inprogress/<cmpnyId>/<frmdate>/<todate>/<searchkey>/<flag>/',adminInProgress,name='admin_inprogress'),
+
+    path('admin_forwarded/',adminForwarded,name='admin_forwarded'),
+    path('admin_forwarded/<cmpnyId>/<frmdate>/<todate>/',adminForwarded,name='admin_forwarded'),
+    path('admin_forwarded/<cmpnyId>/<frmdate>/<todate>/<searchkey>/<flag>/',adminForwarded,name='admin_forwarded'),
+
+    path('admin_closed/',adminClosed,name='admin_closed'),
+    path('admin_closed/<cmpnyId>/<frmdate>/<todate>/',adminClosed,name='admin_closed'),
+    path('admin_closed/<cmpnyId>/<frmdate>/<todate>/<searchkey>/<flag>/',adminClosed,name='admin_closed'),
+
+    # path('admin_hold/<ticket_id>/',adminHold,name = 'admin_hold'),
+    #  path('cadmin/<ticket_id>/',adminHold,name = 'admin_hold'),
+    path('tstradmnacpt/<ticket_id>/',tstrAdmnAcpt,name='admin_inprogress'),
+    path('tstr_ops/',testerOperations,name='tstr_ops'),
+    path('devops/',devOperations,name='devops'),
+    path('logs/<ticket_id>/',logs,name='logs'),
+    path('filter/',tcktFilter,name = 'ticket_filter'),
+    path('adminclose/<tno>/<remarks>/',admnRjct,name = 'admin_close'),
+    path('queryclose/<tno>/<remarks>/',admnQryClse,name = 'query_close'),
+    path('reports/',adminReports, name = 'reports'),
+    path('developerEdit/<dev_id>/',developerEdit, name = 'developer_edit'),
+    path('userEdit/<usr_id>/',userEdit, name = 'user_edit'),
+    path('deleteCompany/', deleteCompany , name = 'deleteCompany'),
+    path('deleteCategory/',categoryDelete, name = 'category_delete'),
+    path('psswdReset/',psswdReset, name = 'psswd_reset'),
+    path('reports',ticketsReport, name = 'reports'),
+    path('reports/<frmdate>/<todate>/<status>/<developer>/<client>/', ticketsReport, name='reports'), #newly added url for reports
+
+]

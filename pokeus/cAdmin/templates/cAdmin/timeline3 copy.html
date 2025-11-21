@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+{%load static%}
+
+  <title>Ticket Outlook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+    *, html, body {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-;
+      font-family: 'Poppins', sans-serif;
+      perspective: 800px;
+    }
+    body {
+      background-color: #ffff;
+      width: 100%;
+      min-height: 100vh;
+       /* display: flex;  */
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      overflow-x: hidden;
+    }
+
+    .outlook-header {
+      background-color: #a3a3c2; /* Blue background color */
+      color: white; /* White font color */
+      text-align: center;
+      /*border-radius: 20px 0 0 0;  Rounded corners only at the top */
+      font-size: 1.3rem;
+      padding: 0 5px; /* Remove padding at the top and add padding to the sides */
+      height: 115px; /* Adjust the height as needed */
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .timeline {
+      width: 100%;
+      background-color: white;
+      color: #fff;
+      padding: 80px;
+      padding-top: 0;
+      
+       z-index: 0;
+       
+    }
+    .timeline ul {
+      list-style-type: none;
+      border-left: 2px solid #094a68;
+      padding: 10px 5px;
+    }
+
+    
+     .timeline li:first-child:after{
+content: none;
+}
+
+
+    .timeline ul li {
+      padding: 20px 20px;
+      position: relative;
+      cursor: pointer;
+      transition: 0.5s;
+    }
+    .timeline ul li span {
+      display: inline-block;
+      background-color: #1685b8;
+      border-radius: 25px;
+      padding: 2px 5px;
+      font-size: 15px;
+      text-align: center;
+    }
+    .timeline ul li .content h3 {
+      color: black;
+      font-size: 17px;
+      padding-top: 5px;
+    }
+    .timeline ul li .content p {
+      padding: 5px 0px 15px 0px;
+      font-size: 15px;
+      color: black;
+    }
+    .timeline ul li:before {
+      position: absolute;
+      content: '';
+      width: 10px;
+      height: 10px;
+      background-color: #34ace0;
+      border-radius: 50%;
+      left: -11px;
+      top: 28px;
+      transition: 0.5s;
+    }
+    .timeline ul li:hover {
+      background-color: #e1eaea;
+    }
+    .timeline ul li:hover:before {
+      background-color: #0F0;
+      box-shadow: 0px 0px 10px 2px #0F0;
+    }
+    @media (max-width: 300px) {
+      .timeline {
+        width: 100%;
+        padding: 30px 5px 30px 10px;
+      }
+      .timeline ul li .content h3 {
+        color: #34ace0;
+        font-size: 15px;
+      }
+
+    }
+   
+   
+    .status-label {
+          
+            color: black; /* Text color */
+            padding: 0px 8px; /* Padding for spacing */
+            border-radius: 10px; /* Rounded corners */
+            font-size: 12px;
+            text-align: center;
+            vertical-align: top;
+        }
+        
+    .user-image {
+    float: left; /* Float the user image to the right */
+    margin-left: 8px; /* Add some margin to create space between the text and the image */
+}
+
+     #scrollToTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1;
+  background-color: #e0e0eb;
+  color: black;
+  border: none;
+  border-radius: 50%;
+  padding: 15px;
+  cursor: pointer;
+}
+
+#scrollToTopBtn:hover {
+  color:white;
+  background-color: grey; /* Change color on hover */
+}
+
+
+  </style>
+</head>
+<body>
+    
+ 
+
+      
+        <div class="outlook-header">
+            <h1 style="color: black;">OUTLOOK</h1>
+            <h3 style="color:#ffffff;">{{ticket_id}}</h3>
+            
+        </div>
+        
+	
+  
+  {% for log in logs %}
+
+        {% if log.status == 'TP' and log.dev_id == ''   %}
+        <br>
+         <div class="timeline" id='timeline'>
+        <ul class="timeline">
+        <li>
+        <span>Raised Ticket with ticket number</span>
+        <div class="content">
+          <h3>Issued On : {{log.issued_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+           
+          </p>
+              <span class="status-label" style="background-color: #ffc299;">
+                  <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+                  {{ log.updated_by.company.companyName }} ({{ log.updated_by.username }})
+              </span>
+
+        </div>
+      </li>
+
+      {%elif log.status == 'TA' and log.expiry != '' and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span> Admin accepted ticket</span>
+        <div class="content">
+          <h3>Accepted On: {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adebad;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+            {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'TRA'  and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span> Admin Reassigned Ticket {{log.status}}</span>
+        <div class="content">
+          <h3>Accepted On: {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adebad;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+            {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+
+      {%elif log.status == 'DA' and log.expiry == '' and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span> Developer accepted ticket</span>
+        <div class="content">
+          <h3>Accepted On: {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;"> 
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+           {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'DA' and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span>Developer has accepted </span>
+        <div class="content">
+          <h3>Issued On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+            {{log.updated_by.username}}</span>
+
+        </div>
+      </li>
+      {%elif log.status == 'DH' and log.dev_id != '' and log.tester_id == ''  %}	   
+      <li>
+        <span>Developer requested for clarification</span>
+        <div class="content">
+          <h3>Issued On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+           {{log.updated_by.username}}</span>
+
+        </div>
+      </li>
+
+      {%elif log.status == 'TH' and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span> Admin approved & Forwarded it to client</span>
+        <div class="content">
+          <h3>Approved On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+         <span class="status-label" style="background-color: #adebad;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+           {{log.updated_by.username}}</span>
+
+
+
+        </div>
+      </li>
+
+      {%elif log.status == 'TP' and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span> User has sent clarification & forwarded to admin </span>
+        <div class="content">
+          <h3>Approved On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #ffc299;"> 
+           <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'DA' and log.expiry != '' and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span> Developer accepted clarification </span>
+        <div class="content">
+          <h3>Accepted On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'EH'  and log.dev_id != '' and log.tester_id == '' %}	   
+      <li>
+        <span> Developer closed ticket & forwarded to admin </span>
+        <div class="content">
+          <h3>Forwarded On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+      
+      {%elif log.status == 'EP'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Admin Forwarded to tester</span>
+        <div class="content">
+          <h3>Forwarded On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adebad;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'EA'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Tester Accepted ticket  </span>
+        <div class="content">
+          <h3>Accepted On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #ecc6d8;">
+           <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'BP'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Tester reported bug </span>
+        <div class="content">
+          <h3>Reportted on : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #ecc6d8;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+           {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+      
+      {%elif log.status == 'PP'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Tester completed testing & Forwarded to admin </span>
+        <div class="content">
+          <h3>Completion On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #ecc6d8;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'PA'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Admin Forwarded to client for testing </span>
+        <div class="content">
+          <h3>Forwarded On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adebad;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+         {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'RC'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Client accepted for Live forwarding </span>
+        <div class="content">
+          <h3>Accepted On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #ffc299;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.company.companyName}} ({{log.updated_by.username}})</span>
+      
+
+        </div>
+      </li>
+      
+      {%elif log.status == 'RL'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Admin forwarded to developer for copy the program  </span>
+        <div class="content">
+          <h3>Forwarded On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adebad;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+      {%elif log.status == 'RA'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Developer accepted Program copy command </span>
+        <div class="content">
+          <h3>Accepted On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+      
+      {%elif log.status == 'CR'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> User Declined to Accept </span>
+        <div class="content">
+          <h3>Declined On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #a1eeee;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.company.companyName}} ({{log.updated_by.username}})</span>
+      
+
+        </div>
+      </li>
+      
+      {%elif log.status == 'CA'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Developer accepted user requirements </span>
+        <div class="content">
+          <h3>Accepted On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+      
+      {%elif log.status == 'CD'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Developer closed user request  </span>
+        <div class="content">
+          <h3>Query closed On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+
+      {%elif log.status == 'CD'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Developer closed user request  </span>
+        <div class="content">
+          <h3>Query closed On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+      {%elif log.status == 'PC'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span> Developer copied program to live.  </span>
+        <div class="content">
+          <h3>Query closed On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adc2eb;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+      {%elif log.status == 'TC'  and log.dev_id != '' and log.tester_id != '' %}	<!--Have doubt -->   
+      <li>
+        <span  style="background-color: rgb(133, 223, 106);"> Admin closed Ticket  </span>
+        <div class="content">
+          <h3>closed On : {{log.updated_on | date:"D,dS M' y - h:iA"}}</h3>
+          <p>
+            
+          </p>
+          <span class="status-label" style="background-color: #adebad;">
+          <img src="{% static '/images/user-img.png' %}" alt="User Image" class="user-image">
+          {{log.updated_by.username}}</span>
+      
+
+        </div>
+      </li>
+     
+      {%endif%}
+      {%endfor%}
+    </ul>
+   
+  </div>
+
+<!-- Add an ID to the X symbol for easier access -->
+
+<button id="scrollToTopBtn" onclick="scrollToTop()">top</button>
+
+
+<script>
+  // Function to scroll to the top of the page
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Smooth scrolling
+    });
+  }
+
+  // Show the scroll-to-top button when the user scrolls down
+  window.onscroll = function() {
+    var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  };
+</script>
+
+
+
+
+</body>
+</html>

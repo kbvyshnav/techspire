@@ -1,0 +1,178 @@
+{% extends "User/userbaseUI.html" %}
+{% block body %}
+
+<style>
+    .btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: popins, sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: Right;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 1px grey;
+  }
+
+  input::file-selector-button {
+  font-weight: bold;
+  color: indigo;
+  padding: 0.5em;
+  border: thin solid grey;
+  border-radius: 3px;
+}
+
+.register {
+  text-align: center;
+  background: #3C91E6;
+  color:white;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+}
+
+.register:hover{
+  background: #bbd9f6; 
+}
+
+
+.back{
+  text-align: center;
+  background: red;
+  color:white;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+  margin-left:20px;
+}
+
+.back:hover {
+  background: #ff9999; 
+}
+
+
+#id_subject,
+#id_category,
+#id_priority{
+  width: 450px; 
+  padding: 2px 7px 2px 7px;
+  height: 25px; 
+  border: 1px solid #ccc; 
+  border-radius:7px;
+  outline: none;
+  font-family: poppins, sans-serif;
+}
+
+#id_subject:hover,
+#id_category:hover,
+#id_priority:hover{
+  border-color: #999; 
+}
+
+#id_desc{
+  width: 455px; 
+  padding: 2px 7px 2px 7px;
+  height: 130px; 
+  border: 1px solid #ccc; 
+  border-radius:7px;
+  outline: none;
+  font-family: poppins, sans-serif;
+}
+#id_subject:hover,
+#id_category:hover,
+#id_priority:hover,
+#id_desc:hover{
+  border-color: #999; 
+}
+
+
+ /* #id_file{
+  background: #40bf40;
+  color: #ffffff;
+  border-radius:8px;
+  cursor: pointer;
+  
+
+}  */
+
+    </style>
+
+<div class="table-data">
+    <div class="order">
+        <!-- <div class="head" > -->
+             <span style="color:#2a2185; font-weight:bold; font-size: 1.4rem;"> RAISE TICKET</span>
+            
+             <hr>
+        <!-- </div> -->
+        <br>
+         <table id="table-datas">
+            <form method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <tbody>
+            <tr><td>Issue </td><td>{{ form.subject}}</td></tr>
+            <tr><td>Category </td><td>{{ form.category}}</td></tr>
+            <tr><td>Priority </td><td>{{ form.priority}}</td></tr>
+            <tr><td>Describe Issue</td><td>{{form.desc}} <br>
+            <tr><td>Upload File </td><td>{{form.file}} <br>
+            <!-- <span id="characterCount" style="color:red ; font-size: 12px;">100 characters left</span>
+            <br> -->
+          </td></tr>
+
+           <tr><td class="exclude-hover"><button type="submit" class="btn register" >Create</button><a href="{% url 'user_home'%}"><button type="button" class="btn back"  >Cancel</button></a></td></tr>
+           </form>
+
+             </ul>
+           </div>
+         {% if form.errors %}
+         <div class="alert alert-danger">
+           <strong>Form Error:</strong>
+           <ul>
+             {% for field in form %}
+               {% for error in field.errors %}
+                 <li>{{ field.label }}: {{ error }}</li>
+               {% endfor %}
+             {% endfor %}
+           </ul>
+         </div>
+       {% endif %}
+<!-- check this later -->
+        </div>     
+        </tbody>
+
+    </table>
+
+
+</div>
+
+<script>
+    document.getElementById('raise_ticket').classList.add('active');
+        document.getElementById('main-head').style.display ='none';
+
+    function updateCharacterCount() {
+            const textarea = document.getElementById('id_desc');
+            const maxLength = textarea.getAttribute('maxlength');
+            const currentLength = textarea.value.length;
+            const charactersLeft = maxLength - currentLength;
+            
+            const characterCountElement = document.getElementById('characterCount');
+            characterCountElement.textContent = charactersLeft + ' characters left';
+            console.log(characterCountElement.textContent);
+        }
+        
+        // Call the function on page load to set the initial character count
+        updateCharacterCount();
+</script>
+
+{%endblock%}

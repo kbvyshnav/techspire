@@ -1,0 +1,24 @@
+jinoyofficial@gmail.com
+Select a valid choice. That choice is not one of the available choices.                                                                           $(document).ready(function() {
+	$('#id_Department').prop('disabled', true);
+    $('#id_Company').on('change', function() {
+        var company_id = $(this).val();
+		$('#id_Department').prop('disabled', false);
+        $.ajax({
+            url: '/get_departments/',
+            data: {
+                'company_id': company_id
+            },
+            dataType: 'json',
+            success: function(data) {
+                var options = '<option value="">---------</option>';
+                $.each(data, function(index, value) {
+                    options += '<option value="' + value.Company_id + '">' + value.Department_Name + '</option>';
+                });
+					
+                $('#id_Department').html(options);
+            } 
+        });
+    });
+	
+});                   the proble is the printed request query dict shows <QueryDict: {'csrfmiddlewaretoken': ['w2Zt5C2chLTG3UNhB0fMqU4kpYy6Gagq6gOzj6YLgffsCTthVOiv2VwVRRJHTt2f'], 'User_Id': ['sfsdf'], 'Company': ['2'], 'First_Name': ['dsfsdf'], 'Last_Name': ['sdfsdf'], 'Date_Joined': ['2023-03-09'], 'Department': ['undefined'], 'Email': ['sdfsdfsdf@gmail.com']}>

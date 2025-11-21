@@ -1,0 +1,192 @@
+{% extends "cAdmin/baseUI.html" %}
+
+{% block body %}
+{% load static %}
+<style>
+    
+
+    .register {
+  text-align: center;
+  background: #3C91E6;
+  color:white;
+  width:15%;
+  padding: 8px;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+}
+
+.register:hover{
+  background: #bbd9f6; 
+}
+
+
+.back{
+  text-align: center;
+  background: red;
+  color:white;
+  padding: 8px;
+  width:15%;
+  outline:none;
+  font-family: poppins, sans-serif;
+  cursor:pointer;
+  border:none;
+  transition: background 0.3s ease;
+  box-shadow:3px 3px 3px 1px grey; 
+  margin-left:20px;
+}
+
+.back:hover {
+  background: #ff9999; 
+}
+
+    #id_username,
+    #id_first_name,
+    #id_last_name,
+    #id_email,
+    #id_date_joined,
+    #id_password,
+    #id_contact,
+    #id_slct_role {
+        width: 200px; 
+        height: 30px; 
+        border: 1px solid #ccc; 
+        border-radius: 5px;
+        padding: 5px; 
+        outline: none; 
+        font-family: poppins, sans-serif;
+    }
+
+   #id_username:hover,
+    #id_first_name:hover,
+    #id_last_name:hover,
+    #id_email:hover,
+    #id_date_joined:hover,
+    #id_password:hover,
+    #id_contact:hover,
+    #id_slct_role:hover {
+      border-color: #999; 
+    }
+
+  .back-btn-addev {
+    width: 30px;
+    height: 30px;
+    margin-left: 900px;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.back-btn-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.5s;
+}
+
+.back-btn-addev:hover .back-btn-inner {
+    background-color: #aaa;
+}
+
+.back-btn-addev img {
+    width: 50%;
+    height: auto;
+    transition: transform 0.5s;
+}
+
+.back-btn-addev:hover img {
+    transform: scale(1.2);
+}
+
+</style>
+
+<div class="table-data">
+    <div class="order">
+      <div class="head" > 
+        <span style="color:#800080; font-weight:bold; font-size: 1.2rem;">ADD DEVELOPER/TESTER</span>
+            
+               <div class="back-btn-addev" onclick="goBack()">
+                  <div class="back-btn-inner">
+                      <img src="{% static 'images/back-btn-arrw.png' %}" title="Click to go back" alt="back-button-logo">
+                  </div>
+               </div>
+       </div> 
+        <hr>
+        <form method="POST" action="" onsubmit="javascript: return dev_add_validation();">
+            {% csrf_token %}
+            <table id="table-datas" >
+                <tbody>
+                    <tr>
+                        <td>Username</td>
+                        <td>{{ form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>First name</td>
+                        <td>{{ form.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last name</td>
+                        <td>{{ form.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>E-mail</td>
+                        <td>{{ form.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date of join</td>
+                        <td>{{ form.date_joined }}</td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>{{ form.password }}</td>
+                    </tr>
+                    <tr>
+                        <td>Contact</td>
+                        <td>{{ form.contact }}</td>
+                    </tr>
+                    <tr>
+                        <td>Select Role</td>
+                        <td>{{ form.slct_role }}</td>
+                    </tr>
+                    <tr>
+                        
+                        <td><button type="submit" class="btn register" >Register</button><button type="submit" onclick="goBack()" class="btn back">Cancel</button</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>  
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+{% endif %}
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+function dev_add_validation(){
+    var cnf = confirm('Are you sure you want to register ?')
+    if(cnf == true){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load static %}
+		
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static '/css/styleuser.css' %}">
+
+	<script
+  src="https://code.jquery.com/jquery-3.6.4.min.js"
+  integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+  crossorigin="anonymous"></script>
+ 
+	<title>User Dashboard</title>
+</head>
+
+<style>
+
+#sidebar {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+#raise_ticket {
+    background-color: #8775bd;
+    background-image: linear-gradient(145deg, #9a8bce, #6d5aa7);
+    padding: 24px;
+    border-radius: 48px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+	margin-top: 10px;
+    align-items: center;
+    height: 48px;
+    margin-left: 25px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.2);
+}
+
+#raise_ticket:hover {
+    background-color: #5f4b9b;
+    transform: scale(1.05); 
+    box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.35), -6px -6px 18px rgba(255, 255, 255, 0.25);
+}
+
+
+#raise_ticket i {
+    margin-right: 5px;
+    font-size: 18px;
+}
+
+#raise_ticket .text {
+    color: white;
+    font-size: 15px;
+}
+
+
+/* Notification Dropdownnnnnnn */
+  .notification {
+    position: relative;
+    display: inline-block;
+    font-size: 32px;
+    color: #7863b6;
+    cursor: pointer;
+}
+
+.notification:hover i {
+    color: #090222;
+}
+
+.num {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff3b30;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-wrap {
+    position: absolute;
+    top: 94%; 
+    right: 15%; 
+    width: 400px; 
+    max-height: 0; 
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out; 
+}
+
+.notification-wrap.open-menu {
+    max-height: 600px; 
+}
+
+.notification-menu {
+    background-color: white;
+    padding: 0 20px; 
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px #737373; 
+    height: 350px; 
+    overflow-y: auto; 
+}
+
+.notification-header {
+    font-weight: 500;
+    color: purple;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 0; 
+    background-color: white; 
+    padding: 10px 0; 
+    z-index: 1; 
+}
+
+.notification-date {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #666;
+    margin: 10px 0;
+}
+
+.notification-date::before,
+.notification-date::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #ccc; 
+    margin: 0 10px;
+}
+
+ 
+.notification-header + hr {
+    position: sticky;
+    top: 40px;
+    margin-top: 10px;
+    border: 0;
+    height: 1px;
+    background-color: #ccc; 
+}
+
+.notification-link {
+    display: block;
+	font-size: 13px;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #d4edda; 
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.notification-link:hover {
+    background-color: #c3e6cb;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.notification-link p {
+    width: 100%;
+}
+
+
+</style>
+
+{%block content%}
+<body>
+ 
+
+	
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<img src="{% static 'images/mefs_logo.png' %}" alt="mefs_logo" width="50" height="50" style="margin-left: 10px; margin-top: 10px;">
+			 <span class="text" style="color:  #2a2185;margin-left: 10px; font-size:2rem;margin-top: 10px;font-weight: bold;">Tweedle.</span>
+		</a>
+        
+		<ul class="side-menu top">
+			<li id='dashboard'>
+				<a href="{%url 'user_home' %}"> 			
+					<i class='bx bxs-home'></i>
+					<span class="text"style="color: purple;">Dashboard</span>
+				</a>
+			</li>
+
+			<li id='user-management'>
+				<a href="{% url 'sub_user_management' %}"> 	
+					<i class='bx bxs-user-plus' ></i>
+					<span class="text"style="color: purple;">User Management </span>
+				</a>
+			</li>
+
+
+			<li id='rejected-tickets'>				
+				<a href="{% url 'rejected_tickets' %}">					
+					<i class='bx bx-no-entry'></i>				
+					<span class="text" style="color: purple;">Rejected Tickets</span>
+				</a>
+			</li>
+
+
+			<div id="raise_ticket_container">
+    <button id="raise_ticket" onclick=location.href="{% url 'raise_ticket' %}">
+        <i class='bx bx-message-square-add' ></i>
+        <span class="text">Raise Ticket</span>
+    </button>
+</div>
+
+			
+		</ul>
+		
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			
+			<!-- <a href="#" class="nav-link">Categories</a> -->
+			<form action="#">
+				<div class="form-input">
+					<!-- <input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button> -->
+				</div>
+			</form>
+
+			<!-- NOTIFICATION SECTION START -->
+			<a href="#" class="notification" id='notbutton' onclick="toggleNotifications()">
+				<i class='bx bxs-bell' id='notbtn'></i> <!-- Notification Icon -->
+				<span class="num" id='notbt'>{{bell_not.count}}</span> <!-- Number of notifications -->
+			</a>
+
+			<div class="notification-wrap" id="notificationMenu">
+				<div class="notification-menu">
+					<div class="notification-header">
+						<h3>Notifications</h3>
+					</div>
+					<hr>
+					{% for notific in bell_not %}
+					<a href="#" class="notification-link">
+						<p><b>({{notific.count}})</b> new {% if notific.count == 1 %} message {%else%} messages {%endif%} has been received in the chat of Ticket ID {{ notific.ticket_no }} </p>
+					</a>
+
+					{%endfor%}
+				</div>
+
+			</div>
+			<!-- NOTIFICATION SECTION END -->
+
+			<span class="text" style="margin-left: 10px;color : purple;">{% if user.is_authenticated %}{{user.first_name}} {{ user.last_name}} {% endif %}</span>
+
+
+			<a href="#" class="profile-icon">
+				<img src="{% static 'images/profile-icon.png' %}" onclick="toggleMenu()">
+			</a>
+
+			<div class="sub-menu-wrap" id="subMenu">
+				<div class="sub-menu">
+					<div class="user-info">
+						<img src="{% static 'images/user-img.png' %}">
+						<h3>{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }} {% endif %}</h3>
+					</div>
+					<hr>
+                    
+                    <a href="{% url 'psswd_reset' %}" class="sub-menu-link"  >
+						<img src="{% static 'images/settings-icon.png' %}">
+						<p>Password</p>
+						<span>></span>
+					</a>
+					
+					<a href="{% url 'admin_signout' %}" class="sub-menu-link">
+						<img src="{% static 'images/logout-icon.png' %}">
+						<p>Logout</p>
+						<span>></span>
+					</a>
+
+				</div>
+			</div>
+
+		</nav>
+
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		
+		<main>
+			
+			<div class="main-head" id='main-head'> 
+			<div class="header-section">
+
+			<form action="{% url 'usersrch' %}" method="post" id="search_panel" name="search_panel" >   
+				{% csrf_token %}
+				<input type="hidden" id="page_id_val" name="page_id_val" value="">
+	
+		 
+				
+	
+	
+				<div class="time-period">
+							<div class="timep-position">
+								<span>Ticket Date</span>
+							</div>
+							<div class="date-input">
+								<span>From</span>
+								<input type="date" id="fromDateInput" name="fromDateInput" >  
+								<span>To</span>
+								<input type="date" id="toDateInput" name="toDateInput">
+							</div>					
+				</div>
+	
+			</div>
+	 
+				<div class="searchfile-icon">
+					<button onclick="javascript:return cmpny_drpdwn_validator();" style="border: none;background:transparent;">
+						<a href="#" onclick="javascript:return cmpny_drpdwn_validator();">
+							<img src="{% static 'images/search-filei.png' %}" alt="Search File">
+						</a>
+					</button>
+				</div>
+	
+	
+	
+				
+			<div class="search-tktid">
+				<div class="search-container">
+					
+					<input type="text" name = 'keyword' id = 'keyword' value="" placeholder="Search ticket ID ..." >	
+					<button class="search-button" onclick="javascript:return ticket_search();">
+					<img class="search-logo" src="{% static 'images/search-icon.png' %}" alt="search-logo"></button>
+				</div>		
+			</div>
+	</div>
+		</form>
+
+		</div>
+
+    </div>
+
+{%block body%}
+            
+
+            
+{% endblock %} 
+
+
+
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+	
+
+
+
+
+
+{%endblock%}
+
+<script src="{% static '/js/user.js' %}"></script>
+  <script>
+
+ {%comment%} {% for message in messages %}
+  alert('{{ message }}')
+  {% endfor %}
+{%endcomment%}
+	var prev_date = "{{prev_date }}";
+	var to_date = "{{to_date }}";
+	var searchkey = "{{keyword}}"; if (searchkey == 'None'){ searchkey = null}
+	
+	srch_data_keeper(prev_date,to_date,searchkey);
+
+// for notification div @sa 06/02/2025
+document.addEventListener("click", function(event) {
+	var notificationMenu = document.getElementById("notificationMenu");
+	 var button = document.getElementById("notbutton");
+
+	 // Check if click is outside the menu and the button
+	 if (!notificationMenu.contains(event.target) && event.target !== button) {
+	 //console.log('dsdsdsd');
+	 if(notificationMenu.classList.contains("open-menu")){
+		 if(event.target.id!='notbtn' && event.target.id!='notbutton' && event.target.id!='notbt')
+			 notificationMenu.classList.remove("open-menu");
+		   }
+	 }
+ });
+
+
+
+	
+	</script>
+</body>
+
+</html>

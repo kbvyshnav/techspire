@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load static %}
+	{{ redirect_to_login_immediately }}
+<script src="{% static '/js/script.js' %}"></script>
+		
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
+	
+	<script
+  src="https://code.jquery.com/jquery-3.6.4.min.js"
+  integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+  crossorigin="anonymous"></script>
+ 
+	<title>Admin Dashboard</title>
+
+	{%block scripts %}
+	<!-- used to write css scrips -->
+	{%endblock%}
+
+</head>
+{%block content%}
+<body>
+ 
+
+	
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<img src="{% static 'images/mefs_logo.png' %}" alt="mefs_logo" width="50" height="50" style="margin-left: 10px; margin-top: 10px;">
+            <span class="text" style="margin-left: 10px; font-size:2rem;margin-top: 10px;font-weight: bold;">Techspire.</span>
+        </a>
+        
+		<ul class="side-menu top">
+			<li id='dashboard'>
+				<a href="{%url 'admin_home'  %}"> 
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				    <img class="dashboard-icon"  src="{% static 'images/dashboard-icon.png' %}" alt="dashboard-icon">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			
+			<li id="companymanagement" >
+            
+				<a href="{% url 'company_management'  %}">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<img class="company-mngt-icon"  src="{% static 'images/company-mngt-icon.png' %}" alt="company-mngt-icon">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="text">Company Management</span>
+				</a>
+	
+			</li>
+
+			<li id="developersmanagement" >
+            
+				<a href="{% url 'developer_management'  %}">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<img class="team-mngt-icon"  src="{% static 'images/team-mngt-icon.png' %}" alt="team-mngt-icon">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="text">Team Management</span> 
+				</a>
+	
+			</li>
+
+			<li id="performance_report" >
+            
+				<a href="#" onclick="openReportStandalone('{% url 'reports' %}'); return false;">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<img class="report"  src="{% static 'images/report.png' %}" alt="report-icon">
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="text">Report</span> 
+				</a>
+	
+			</li>
+
+
+			
+		</ul>
+		<ul class="side-menu">
+			{% comment %} <li id="settings">
+				<a href="% url 'settings' %}">
+					<i class='bx bxs-cog' ></i>
+					<span class="text">Settings</span>
+				</a>
+			</li> {% endcomment %}
+			
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<!-- <i class='bx bx-menu' ></i>
+			<a href="#" class="nav-link">Categories</a> -->
+			<form action="#">
+				<div class="form-input">
+					
+				</div>
+			</form>
+
+			<!-- NOTIFICATION SECTION START -->
+			<a href="#" class="notification" id='notbutton' onclick="toggleNotifications()">
+				<i class='bx bxs-bell' id='notbtn'></i> <!-- Notification Icon -->
+				<span class="num" id='notbt'>{{bell_not.count}}</span> <!-- Number of notifications -->
+			</a>
+
+			<div class="notification-wrap" id="notificationMenu">
+				<div class="notification-menu">
+					<div class="notification-header">
+						<h3>Notifications</h3>
+					</div>
+					<hr>
+
+					
+					{% for notific in bell_not %}
+					<a href="#" class="notification-link">
+						<p><b>({{notific.count}})</b> new {% if notific.count == 1 %} message {%else%} messages {%endif%} has been received in the chat of Ticket ID {{ notific.ticket_no }} </p>
+					</a>
+
+					{%endfor%}
+				</div>
+
+			</div>
+			<!-- NOTIFICATION SECTION END -->
+
+
+
+
+ 
+
+			 <span class="text" style="margin-left: 10px;color : purple;">{% if user.is_authenticated %}{{user.first_name}} {{ user.last_name}} {% endif %}</span>
+			 
+
+
+			<a href="#" class="profile-icon" id='profbtn'>
+				<img id='profimg' src="{% static 'images/profile-icon.png' %}" onclick="toggleMenu()">
+			</a>
+
+			<div class="sub-menu-wrap" id="subMenu">
+				<div class="sub-menu">
+					<div class="user-info">
+						<img src="{% static 'images/user-img.png' %}">
+						<h3>{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }} {% endif %}</h3>
+					</div>
+					<hr>
+
+					<a href="{% url 'psswd_reset' %}" class="sub-menu-link"  >
+						<img src="{% static 'images/settings-icon.png' %}">
+						<p>Password</p>
+						<span>></span>
+					</a>
+
+					<a href="{% url 'admin_signout' %}" class="sub-menu-link">
+						<img src="{% static 'images/logout-icon.png' %}">
+						<p>Logout</p>
+						<span>></span>
+					</a>
+
+				</div>
+			</div>
+
+			  
+			
+
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			
+			<form action="{% url 'ticket_filter' %}" method="post" id="search_panel" onsubmit="javascript: return search_validator();">   
+				{% csrf_token %}
+			<input type="hidden" id="page_id_val" name="page_id_val" value="">
+			<input type="hidden" id="flag" name="flag" value="1">
+
+     <div class="main-head" id = "main-head" >
+		<div class="header-section">
+			<div class="company">
+				<span class="company-position">Company</span>
+				<select id="companyDropdown" name="companyDropdown">
+					
+				    <option value="*" selected >All Companies</option>
+					{% for company in filter_cname %}
+					<option value="{{company.companyCode}}">{{company.companyCode}}</option>
+					{%endfor%}
+				</select>
+			</div>
+
+
+            <div class="time-period">
+			            <div class="timep-position">
+							<span>Ticket Date</span>
+						</div>
+						<div class="date-input">
+							<span>From</span>
+							<input type="date" id="fromDateInput" name="fromDateInput" onchange="javascript: onChangeValidator()" >  
+							<span>To</span>
+							<input type="date" id="toDateInput" name="toDateInput" onchange="javascript: onChangeValidator()">
+						</div>					
+		    </div>
+
+		</div>
+ 
+			{% comment %} <div class="searchfile-icon">
+				<button onclick="javascript: flag(); return cmpny_drpdwn_validator();" style="border: none;background:transparent;">
+					<a href="#" onclick="javascript:return cmpny_drpdwn_validator();">
+						<img src="{% static 'images/search-filei.png' %}" alt="Search File">
+					</a>
+				</button>
+			</div> {% endcomment %}
+
+
+
+			
+        <div class="search-tktid">
+			<div class="search-container">
+				<input type="hidden" value="" id="key" name="key">
+				<input type="text" name = 'keyword' id = 'keyword' placeholder="Search ticket ID ..." >	
+				<button class="search-button" onclick="javascript:return ticket_search();">
+				<img class="search-logo" src="{% static 'images/search-icon.png' %}" alt="search-logo"></button>
+			</div>		
+		</div>
+</div>
+	</form>	
+
+
+
+
+
+
+
+
+
+{%block body%}
+            
+
+            
+{% endblock %} 
+
+
+
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+	
+
+
+
+
+
+{%endblock%}
+
+<script>
+
+function openReportStandalone(url) {
+    window.open(url, "_blank", "width=1200,height=800,top=100,left=200,noopener,noreferrer");
+}
+
+var cmpny_name= "{{company_id}}";
+var prev_date = "{{prev_date }}";
+var to_date = "{{to_date }}";
+var searchkey = "{{keyword}}"; if (searchkey == 'None'){ searchkey = null}	
+function flag() { document.getElementById('flag').value = '1';}
+srch_data_keeper(cmpny_name,prev_date,to_date,searchkey);
+
+// for notification div @sa 06/02/2025
+document.addEventListener("click", function(event) {
+           var notificationMenu = document.getElementById("notificationMenu");
+            var button = document.getElementById("notbutton");
+
+            // Check if click is outside the menu and the button
+            if (!notificationMenu.contains(event.target) && event.target !== button) {
+			//console.log('dsdsdsd');
+			if(notificationMenu.classList.contains("open-menu")){
+				if(event.target.id!='notbtn' && event.target.id!='notbutton' && event.target.id!='notbt')
+                	notificationMenu.classList.remove("open-menu");
+				  }
+            }
+        });
+// for profile div @sa 06/02/2025
+document.addEventListener("click", function(event) {
+           var notificationMenu = document.getElementById("subMenu");
+            var button = document.getElementById("profbtn");
+
+            // Check if click is outside the menu and the button
+			//console.log(event.target,event.target.id);
+            if (!notificationMenu.contains(event.target) && event.target !== button) {
+			if(notificationMenu.classList.contains("open-menu")){
+				if(event.target.id!='profbtn' && event.target.id!='profimg')
+                	notificationMenu.classList.remove("open-menu");
+				  }
+            }
+        });
+
+</script>
+</body>
+
+</html>

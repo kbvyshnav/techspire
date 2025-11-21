@@ -1,0 +1,151 @@
+
+
+
+
+from django.core.mail import send_mail
+
+def send_ticket_update_email(to_email, ticket_id, admin_message):
+    subject = f"Important Update on Ticket #{ticket_id}"
+    email_body = f"""
+    Dear Client,
+
+    An important message has been added by the admin in the chat section of your ticket.
+
+    🔹 Ticket ID: {ticket_id}
+
+    📩 New Message:
+    "{admin_message}"
+
+    Please log in to your account to review and respond as needed.
+
+    Best Regards,
+    Tweedle Support Team
+    """
+
+    send_mail(
+        subject,
+        email_body,
+        'support@yourdomain.com',
+        [to_email],
+        fail_silently=False,
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Important Update on Ticket #{{ ticket_id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+            text-align: center;
+        }
+        .ticket-info {
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Important Update on Ticket #{{ ticket_id }}
+        </div>
+        <div class="content">
+            <p>Dear Client,</p>
+            <p>An important message has been added by the admin in the chat section of your ticket.</p>
+
+            <p>🔹 <span class="ticket-info">Ticket ID: {{ ticket_id }}</span></p>
+
+            <p>📩 <strong>New Message:</strong></p>
+            <p>"{{ message }}"</p>
+
+            <p>Please log in to your account to review and respond as needed.</p>
+
+            <p>Best Regards,</p>
+            <p><strong>Tweedle Support Team</strong></p>
+        </div>
+        <div class="footer">
+            &copy; 2025 Middle East Financial Software Solutions. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+

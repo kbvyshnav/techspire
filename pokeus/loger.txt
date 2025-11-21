@@ -1,0 +1,285 @@
+Internal Server Error: /user/usrPsswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/User/views.py", line 356, in userPsswdReset
+    return render(request,'User/userPsswdReset.html',{})
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'psswd_reset' not found. 'psswd_reset' is not a valid view function or pattern name.
+Internal Server Error: /user/usrPsswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/User/views.py", line 343, in userPsswdReset
+    password_is_correct = check_password(psswd, request.user.password)
+NameError: name 'check_password' is not defined
+Internal Server Error: /user/usrPsswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/User/views.py", line 344, in userPsswdReset
+    password_is_correct = check_password(psswd, request.user.password)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/utils/functional.py", line 268, in inner
+    return func(_wrapped, *args)
+AttributeError: 'AnonymousUser' object has no attribute 'password'
+Internal Server Error: /user/usrPsswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/User/views.py", line 344, in userPsswdReset
+    password_is_correct = check_password(psswd, request.user.password)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/utils/functional.py", line 268, in inner
+    return func(_wrapped, *args)
+AttributeError: 'AnonymousUser' object has no attribute 'password'
+Internal Server Error: /cadmin/psswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/cAdmin/views.py", line 1043, in psswdReset
+    password_is_correct = check_password(psswd, request.user.password)
+NameError: name 'check_password' is not defined
+Internal Server Error: /cadmin/psswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 132, in render
+    compiled_parent = self.get_parent(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 129, in get_parent
+    return self.find_template(parent, context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 107, in find_template
+    template, origin = context.template.engine.find_template(
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/engine.py", line 161, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/cAdmin/views.py", line 1061, in psswdReset
+    return render(request,'testers/testerPsswdReset.html',{})
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 63, in render
+    reraise(exc, self.backend)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 84, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html
+Internal Server Error: /cadmin/psswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 132, in render
+    compiled_parent = self.get_parent(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 129, in get_parent
+    return self.find_template(parent, context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 107, in find_template
+    template, origin = context.template.engine.find_template(
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/engine.py", line 161, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/cAdmin/views.py", line 1061, in psswdReset
+    return render(request,'testers/testerPsswdReset.html',{})
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 63, in render
+    reraise(exc, self.backend)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 84, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html
+Internal Server Error: /cadmin/psswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 132, in render
+    compiled_parent = self.get_parent(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 129, in get_parent
+    return self.find_template(parent, context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 107, in find_template
+    template, origin = context.template.engine.find_template(
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/engine.py", line 161, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/cAdmin/views.py", line 1061, in psswdReset
+    return render(request,'testers/testerPsswdReset.html',{})
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 63, in render
+    reraise(exc, self.backend)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 84, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html
+Internal Server Error: /cadmin/psswdReset/
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 132, in render
+    compiled_parent = self.get_parent(context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 129, in get_parent
+    return self.find_template(parent, context)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader_tags.py", line 107, in find_template
+    template, origin = context.template.engine.find_template(
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/engine.py", line 161, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "/home/tweedlec/public_html/tweedle/pokeus/cAdmin/views.py", line 1061, in psswdReset
+    return render(request,'testers/testerPsswdReset.html',{})
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 63, in render
+    reraise(exc, self.backend)
+  File "/home/tweedlec/virtualenv/public_html/tweedle/pokeus/3.9/lib/python3.9/site-packages/django/template/backends/django.py", line 84, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: developers/testerbaseUI.html

@@ -1,0 +1,37 @@
+
+
+JUNK : VYSHNAV
+
+
+              <div id = 'dev_slct_TSTR' class="child"> <!-- For status : DA-->
+                  
+                <table>
+                <tr class="exclude-hover" >
+                    <td>
+                      <!-- Function : devops() 
+                        Refers : developer operations
+                      usage : All developer related inbox queries
+                      -->
+                      <tr><td><input type ="date"  id="exp"></td></tr>
+                       <tr><td> <button type="button"  id = 'dev_btn' onclick="devops('DA')"> Accept </button> </td></tr>
+                    </td>
+                </tr>
+                </table>
+
+              </div> 
+
+              <div id = 'dev_slct_PGMCPY' class="child"> <!-- For status : RA-->
+                  
+                <table>
+                <tr class="exclude-hover" >
+                    <td>
+                      <!-- Function : devops() 
+                        Refers : developer operations
+                      usage : All developer related inbox queries
+                      -->
+                       <tr><td> <button type="button"  id = 'dev_btn' onclick="devops('RA')"> Accept </button> </td></tr>
+                    </td>
+                </tr>
+                </table>
+
+              </div>

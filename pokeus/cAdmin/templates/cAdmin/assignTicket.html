@@ -1,0 +1,261 @@
+{% extends "cAdmin/baseUI.html" %}
+{% load static %}
+{% block body %}
+
+<style>
+
+.box {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background-color: #fff;
+ border-radius: 20px;
+ box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+ padding: 20px;
+ width: 1000px;
+ height: 500px;
+}
+
+.exit-symbol {
+ position: absolute;
+ top: 10px;
+ right: 24px;
+ font-size: 30px;
+ cursor: pointer;
+}
+.btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: Right;
+  }
+  .btn:focus, .btn.focus {
+    outline: 0;
+  }
+
+
+
+.view {
+  background: #1181dd;
+  color: #ffffff;
+}
+
+.view:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+
+.users {
+  background: #1e7575;
+  color: #f5f5f5;
+}
+
+.users:hover {
+  background: #2d5e5e;
+  color: #ffffff;
+}
+
+.edit {
+ background: #1181dd;
+ position: fixed;
+ top: 30%;
+ left : 1.9%;
+ color: #ffffff;
+}
+
+.edit:hover {
+ background: #069ff8;
+ color: #ffffff;
+}
+.settings {
+  background: #1181dd;
+  
+  color: #ffffff;
+}
+
+.settings:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+
+/* body 
+{
+counter-reset: Serial;  /* Set the Serial counter to 0 */
+}
+
+tr td:first-child:before
+{
+counter-increment: Serial;/* Increment the Serial counter */
+content:  counter(Serial) " ."; /* Display the counter */
+} */
+
+
+
+</style>
+
+
+<div class="table-data">
+    <div class="order">
+        <div class="head" >
+            <h4  >Assign Ticket</h4>
+            <!-- <i class='bx bx-search' ></i>
+            <i class='bx bx-filter' ></i> -->
+        
+        </div>
+         <table id="table-datas">
+            <thead>
+                
+                <tr>
+                    <th>Developer Name</th>
+                    <th>E-mail</th>
+                    <th>Phonenumber</th>
+
+     
+                    <!-- <th>Date Of Expiry</th>
+                    <th>View Ticket</th> -->
+                    
+                    
+                </tr>
+                
+            </thead>
+            <tbody>
+                {% for lst in devs %}      
+                <td> {{lst.first_name}}&nbsp;{{lst.last_name}}</td>
+                <td> {{lst.email}}</td>
+                <td> {{lst.contact}} 
+        
+                <button type="submit" class="btn users" onclick="redirectToAssignView(this.id,this.value)"  value="{{ticket_id}}" id="{{lst.id}}"><i class='bx bx-user' >&nbsp;Assign</i></td>
+                
+                </tr> 
+                {% empty %}
+                <tr><td><b> No developers added yet!</b><td></tr>
+                
+                {% endfor %}            
+        
+                <!-- exit symbol -->
+              </div>
+              <div class="box" id="myBox" style="display: none;">
+              <span class="exit-symbol" onclick="closeBox()">&times;</span>
+              <p><b>Other details</b></p>
+              <p id="address"></p>
+              </div>
+            
+            
+
+        </div></tbody>
+           </table>
+</div>
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+{% endif %}
+
+
+
+{% block script %}
+<script>
+document.getElementById('developersmanagement').classList.add('active');
+
+const viewButtons = document.querySelectorAll('.view');
+const box = document.getElementById('myBox');
+const addressElement = document.getElementById('address');
+
+// Add event listeners to each "View Details" button
+viewButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    const address = button.value;
+    const cmpnyId = button.id;
+    const editUrl = "/cadmin/companyedit/" + cmpnyId + "/";
+    const anchorTag = document.createElement("a");
+    anchorTag.href = editUrl;
+    const editButton = document.createElement("button");                               
+    editButton.type = "button";
+    editButton.className = "btn edit";
+    editButton.innerText = "Edit";
+    anchorTag.appendChild(editButton);
+    addressElement.innerHTML = '<table> <tbody  style="padding: 4px; text-align:left; width:50px; height:100px; overflow:auto ;"></br><b>Address: &nbsp; &nbsp; &nbsp;</b>' + address + ' \
+    </tbody></table>';
+    addressElement.appendChild(anchorTag);
+
+    box.style.display = 'block';
+  });
+});
+
+function redirectToAssignView(id,value) {
+  var url = "/cadmin/assign_tckt/" + value + "/"+ id + "/";
+  window.location.href = url;
+}
+
+function settings(id) {
+  var url = "/cadmin/companysettings/" + id + "/";
+  window.location.href = url;
+}
+
+document.addEventListener('click', (event) => {
+  const isClickInside = box.contains(event.target);
+  const isViewButtonClick = Array.from(viewButtons).some((button) => button.contains(event.target));
+
+  if (!isClickInside && !isViewButtonClick) {
+    box.style.display = 'none';
+  }
+});
+
+box.addEventListener('click', (event) => {
+  event.stopPropagation();
+});
+
+// exit symbol
+function closeBox() {
+ var box = document.getElementById("myBox");
+ box.style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  const is_active_checkboxes = document.querySelectorAll("[data-item-id]");
+
+  is_active_checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener("change", function() {
+      const itemId = this.getAttribute("data-item-id");
+      const username = this.getAttribute('value');
+      const isChecked = this.checked;
+
+      // Send the data to the server using AJAX
+      fetch(`/cadmin/update_is_active/${itemId}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: JSON.stringify({ is_active: isChecked }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Optionally, handle the response from the server
+        if (isChecked) {
+          alert(`Enabled ${username}`);
+        } else {
+          alert(`Disabled ${username}`);
+        }
+        console.log(data);
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error("Error:", error);
+      });
+    });
+  });
+});
+</script>
+{% endblock %}
+{%endblock%}

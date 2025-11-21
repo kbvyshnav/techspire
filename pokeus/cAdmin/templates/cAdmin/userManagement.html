@@ -1,0 +1,156 @@
+{% extends "cAdmin/baseUI.html" %}
+{% load static %}
+{% block body %}
+
+<style>
+
+    .box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  width: 1000px;
+  height: 500px;
+}
+
+ /* Exit symbol */
+body 
+{
+ counter-reset: Serial;/* Set the Serial counter to 0 */
+}
+
+tr td:first-child:before
+{
+ counter-increment: Serial; /* Increment the Serial counter */
+ content: counter(Serial)" ."; /* Display the counter */
+}
+
+.btn.useradd {
+  text-align: center;
+  background: #800080;
+  color: white;
+  padding: 8px;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s ease;
+  box-shadow: 3px 3px 3px 1px grey;
+  border-radius: initial;
+}
+
+.btn.useradd:hover {
+  background: #cc99cc;
+}
+
+.back-btn{
+margin-left:975px;
+cursor:pointer;
+}
+
+.edit-btn-icon{
+  width: 20px; 
+  height: auto; 
+  cursor:pointer;
+}
+
+</style>
+
+
+<div class="table-data">
+    <div class="order">
+        <div class="head" >
+            <h4 style="color: purple;font-size:1.2rem; ">USERS </h4>
+        
+            <a href="{% url 'add_user' companyId=cmpnyId %}">
+              <button type="button" class="btn useradd">Add User</button>
+            </a>
+              
+<div class="back-btn" onclick="goBack()">
+                  <div class="back-btn-inner">
+                      <img src="{% static 'images/back-btn-arrw.png' %}" title="Click to go back" alt="back-button-logo">
+                  </div>
+              </div>
+        
+        </div>
+         <table id="table-datas">
+            <thead>
+                
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    {%comment%}<th>Department</th>{%endcomment%}
+                    <th>E-Mail</th>
+                    <th>Date Of Join</th>
+                    <th></th>
+                    <th> </th>
+                    <!-- <th>Date Of Expiry</th>
+                    <th>View Ticket</th> -->
+                    
+                    
+                </tr>
+              </thead>
+              <tbody>
+                  {% for lst in Users %}
+                  <tr><td> {{lst.username}}</td>
+                  
+                  <td> {{lst.first_name}} &nbsp; {{lst.last_name}}</td>
+{%comment%}                  <td>{{lst.department}}</td>{%endcomment%}
+                  <td> {{lst.email}}</td>
+                  <td> {{lst.date_joined}}</td>
+                  <td><img src="{% static 'images/edit-btn-icon.png' %}" title="Edit user" alt="edit button" class="edit-btn-icon" onclick="javascript:return router('{{lst.id}}');"></td>
+                  
+                 </tr>    
+                 
+                  {% endfor %}            
+  </div>
+ </div>
+          <div class="box" id="myBox" style="display: none;">
+              <p><b>Other details</b></p>
+              <p id="address"></p>
+            </div>
+              
+              
+  
+          </div></tbody>
+            </thead>
+           
+           </table>
+</div>
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+    {% debug %}
+{% endif %}
+
+<script>
+document.getElementById('main-head').style.display ='none';
+
+function router(uid){
+
+  var cf = confirm('Are you sure you want to edit this user?');
+
+  if(cf == true){
+    window.location.href = '/cadmin/userEdit/' + uid + '/';
+    return true;
+  }
+  else{
+    return false;
+  }
+
+}
+
+
+   function goBack() {
+  window.history.back();
+   }
+</script>
+
+{%endblock%}

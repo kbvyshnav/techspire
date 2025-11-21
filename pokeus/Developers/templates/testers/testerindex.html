@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  
+  <head>  
+
+    
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.8.11/tailwind.min.css"
+      integrity="sha512-KO1h5ynYuqsFuEicc7DmOQc+S9m2xiCKYlC3zcZCSEw0RGDsxcMnppRaMZnb0DdzTDPaW22ID/gAGCZ9i+RT/w=="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'index.css' %}" >
+   
+    <title>User Login </title>
+  
+  </head>
+  <body>
+    
+    <form action="{% url 'user_login' %}" method="POST">
+      {% csrf_token %}
+    <div class="background" id="background"></div>
+    <div class="bg-white rounded p-20 text-center shadow-md">
+     <pre> <h1 class="text-3xl">       User Login        </h1></pre>
+      <div class="my-4 text-left">
+        <label for="email" class="text-gray-900">Username</label>
+        <input
+          type="text"
+          class="border block w-full p-1 mt-1 rounded"
+          name="username"
+          placeholder="Enter  username"
+          
+        />
+      </div>
+
+      <div class="my-4 text-left">
+        <label for="email" class="text-gray-900">Password:</label>
+        <input
+          type="password"
+          class="border block w-full p-1 mt-1 rounded"
+          name="password"
+          placeholder="Enter Password"
+          autocomplete="current-password"
+        />
+      </div>
+    </form>
+      <div class="my-4 text-left">
+        {% if flag == 1 %}
+        <label color:'blue'  for="email" class="text-gray-900">Username or password does not match</label>
+        {% elif flag == 2 %}
+        <label color:'blue'  for="email" class="text-gray-900">Deactivated by the Admin</label>
+        {% endif %}
+      </div>
+      <button
+        class="bg-black text-white py-2 mt-4 inline-block w-full rounded"
+        type="submit">
+        Submit
+      </button>
+    </div>
+    
+
+   
+   
+  
+  </body>
+ 
+  
+  
+
+  
+  
+</html>

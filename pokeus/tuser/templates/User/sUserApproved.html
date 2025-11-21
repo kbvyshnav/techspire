@@ -1,0 +1,792 @@
+
+{% extends "User/sUserbaseUI.html" %}
+{% block body %}
+{% load static%}
+<style>
+
+.exit-symbol {
+ position: absolute;
+ top: 10px;
+ right: 24px;
+ font-size: 30px;
+ cursor: pointer;
+} 
+
+
+
+.box .child {
+  display: none;
+}
+
+.popup-header {
+  background-color: #668aaf; /* Blue background color */
+  color: white; /* White font color */
+  text-align: center;
+  border-radius: 20px 0 0 0; /* Rounded corners only at the top */
+  font-size: 1.3rem;
+  padding: 0 5px; /* Remove padding at the top and add padding to the sides */
+  height: 110px; /* Adjust the height as needed */
+  line-height: 40px; /* Vertically center the content */
+  position: sticky;
+  top: 0;
+}
+
+
+.popup-header p {
+  margin: 0; /* Remove the top and bottom margin for the paragraph */
+}
+
+.ticket-id {
+  text-align: left;
+  font-size: 2rem;
+  padding: 15px 25px 0; /* Adjust padding to move content higher */
+  margin-top: -45px; /* Add negative margin to move the entire block upwards */
+}
+
+.panel-label {
+    background-color: white; /* Background color */
+    color: black; /* Text color */
+    padding: 0px 15px 5px; /* Padding for spacing (adjust the top padding) */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 24px;
+}
+
+.status-label {
+    background-color: #3c91e6; /* Background color */
+    color: white; /* Text color */
+    padding: 5px 15px; /* Padding for spacing */
+    border-radius: 25px; /* Rounded corners */
+    font-size: 14px;
+    margin-top: 20px; /* Add top margin to move it downwards */
+    margin-left: 0px; /* Add left margin to move it to the left */
+    border: 1px solid white; /* Light and thin white border */
+}
+
+
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 755px;
+  margin-top:-30px /* Adjust the left margin as needed */
+  /* Add top margin to push buttons down slightly */
+}
+
+.header-button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.header-button:hover {
+  background-color: #3462C2;
+}
+
+.ticket-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  padding: 20px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+  margin: 30px auto 0; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.ticket-details {
+  font-size: 1rem;
+  line-height: 2.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the top-left */
+}
+
+.ticket-details p {
+  margin: 0; /* Remove margin for paragraphs inside the ticket-details box */
+}
+
+.ticket-details span {
+  text-align: center; /* Center the text in the span elements */
+}
+
+.gap {
+  height: 20px; /* Adjust the height of the gap as needed */
+}
+
+.additional-details-box {
+  background-color: #f3f3f3; /* Off-white shaded background color */
+  border-radius: 20px;
+  padding: 25px; /* Add padding for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center horizontally */
+  text-align: left; /* Center text horizontally */
+   margin: 0 auto; /* Center the box horizontally */
+  max-width: 900px; /* Set a maximum width */
+}
+
+
+.additional-details p {
+  margin: 10px 0; /* Add margin for spacing between paragraphs */
+}
+
+  .view {
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  width: 5em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 300%;
+  border-radius: 30px;
+  z-index: 1;
+}
+.btn {
+    appearance: none;
+      -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    min-width: 100px;
+    border: 0px;
+      -webkit-transition: background-color 100ms linear;
+      -ms-transition: background-color 100ms linear;
+       transition: background-color 100ms linear;
+    float: left;
+  }
+.view:hover {
+  animation: ani 8s linear infinite;
+  border: none;
+}
+
+@keyframes ani {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 400%;
+  }
+}
+
+.view:before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 400%;
+  border-radius: 35px;
+  transition: 1s;
+}
+
+#view:hover::before {
+  filter: blur(20px);
+}
+
+#view:active {
+  background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+}
+  #open {
+    display: inline-block;
+  border-radius: 20px;
+  background-color: #7948d4;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.edit {
+  background: #1181dd;
+  
+  color: #ffffff;
+}
+.delete {
+  background: #e20b0b;
+  
+  color: #ffffff;
+}
+.edit:hover {
+  background: #069ff8;
+  color: #ffffff;
+}
+.exit-symbol {
+position: absolute;
+top: 10px;
+right: 24px;
+font-size: 30px;
+cursor: pointer;
+}
+#table-datas {
+        border-collapse: collapse; /* This removes the default spacing between table cells */
+        width: 100%;
+        cursor:pointer;
+    }
+
+    #table-datas tbody tr {
+        border-bottom: 1px solid #dddddd; /* Add a bottom border to tbody rows */
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2); /* Add a small shadow to the bottom of each row */
+         border-right: none; /* Hide the right vertical border */
+        border-left: none; /* Hide the left vertical border */
+    }
+
+    #table-datas th, #table-datas td {
+        text-align: left;
+        /* padding: 8px;  */
+    }
+  
+  .exclude-hover td {
+  padding: 10px; /* Adjust the padding as needed */
+}
+
+.thead-tstrheader {
+  background-color:#cc4400;
+  color: white;
+  padding-left: 17px
+  width: 200px; 
+  height: 50px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 10px 10px 0 0;
+  }
+
+
+.flex-ticketbox {
+            display: flex;
+            justify-content: space-around;
+            
+            
+        }
+           .flex-item1 {          
+            width: 120px;
+            height: 50px;
+            margin: 1px;
+            text-align: left;
+            font-size: 16px;
+            font-weight:bold;                      
+           }
+
+          
+        .flex-item2 {
+    width: 100px;
+    height: 50px;
+    margin: 1px;
+    text-align: right;
+    font-size: 16px;
+    margin-left: 150px; 
+}
+
+
+       .flex-item3 {
+    width: 100px;
+    height: 50px;
+    margin: 1px;
+    text-align: left;
+    font-size: 16px;
+    margin-left: 80px; 
+}
+
+</style>
+
+{% comment %} ============================================================================================================================= {% endcomment %}
+   
+   <ul class="box-info">
+
+
+
+  <a href="{% url 'sub_user_home'  prev_date to_date keyword%}">
+	<li>
+		<i class='bx bx-hourglass'style='color: #802b00; background-color: #ffaa80;' ></i>
+		<span class="text">
+			<h3 id="Requests">{{forwarded}}</h3>
+			<p>Forwarded</p>
+		</span>
+	</li></a>
+  <a href="{% url 'sub_user_approved'  prev_date to_date keyword%}">
+  <li style="background-color:  #ffeee6; 	padding: 24px;  border-radius: 20px; display: flex;align-items: center;  grid-gap: 24px;  outline: none;  border-color: #7a7aff;  box-shadow: 0 0 5px #802b00;">
+		<i class='bx bx-calendar-check' style='color: #802b00; background-color: #ffaa80;'></i>
+		<span class="text">
+			<h3 id="Pending" >{{tickets.count}}</h3>
+			<p>Approved</p>
+		</span>
+	</li> 
+</a>
+
+<a href="{% url 'sub_user_rejected'  prev_date to_date keyword %}">
+    <li>
+      <i class='bx bx-no-entry'style='color: #802b00; background-color: #ffaa80;' ></i>
+      <span class="text">
+        <h3 id="Pending" >{{rejected}}</h3>
+        <p>Rejected</p>
+      </span>
+    </li></a>
+
+  <a href="{% url 'sub_user_closed'  prev_date to_date keyword %}">
+	<li><i class='bx bx-window-close'style='color: #802b00; background-color: #ffaa80;'></i>
+		<span class="text">
+			<h3 id="Closed">{{closed}}</h3>
+			<p>Closed</p>
+		</span>
+	</li>
+</a>
+</ul>
+
+<div class="table-data">
+    <div class="order">
+        <div class="head" id="t-head">
+            <h3>Tickets <p style="color:#cc4400 ; display: inline;">APPROVED</p></h3>
+            
+        </div>
+         <table id="table-datas">
+             <thead class="thead-tstrheader">
+                    <td>Ticket ID</td>
+                   
+                    <td>  </td>
+                    <td>Category</td>
+                    <td>Subject</td>
+                    <td>Approved on</td>
+                    <td>  </td>
+                    <td>  </td>
+                    
+                </tr>
+            </thead>
+        </div>
+           
+        <tbody>
+          {% for ticket in tickets %}
+          <tr data-ticket="{{ ticket.ticket_no }}"  id="{{ticket.ticket_no}}" onclick=" showticket('{{ticket.ticket_no}}','{{ticket.maker.username}}');"><td>  {{ticket.reference_ticket }} </td>
+           
+            {% if ticket.file.url is not None%}
+          <td class="projection">
+
+                    <a href="{{ ticket.file.url }}" target="_blank"> <button class="attachment-icon" title="open files" onclick="event.stopPropagation();" ></button></a>
+
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+                    </td>
+
+                    {% else %}
+                    <td> </td>
+                    <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="none">
+                    {% endif %}
+                     <td>{{ticket.category.ctgryName}}</td>
+            <td>{{ticket.subject}}</td>
+            <td>{{ticket.user_approved | date:"d-m-y"}}</td>
+
+            
+
+            <td><input type="hidden" id = 'tstatus{{ticket.ticket_no}}' value="{{ticket.status}}"></td>
+            <td><input type="Hidden" id = 'tdes{{ticket.ticket_no}}' value="{{ticket.desc}}"></td>
+            <td><input type="Hidden" id = 'tsub{{ticket.ticket_no}}' value="{{ticket.subject}}"></td>
+            <td><input type="Hidden" id = 'tref{{ticket.ticket_no}}' value="{{ticket.reference_ticket}}"></td>
+            <td><input type="Hidden" id = 'tpriority{{ticket.ticket_no}}' value="{{ticket.priority}}"></td>
+            <td><input type="Hidden" id = 'tapproved{{ticket.ticket_no}}' value="{{ticket.approved_on | date:'d-m-y'}}"></td>
+            <td><input type="Hidden" id = 'tissue{{ticket.ticket_no}}' value="{{ticket.issued_on | date:'d-m-y'}}"></td>
+            <td><input type = 'Hidden' id = 'ticketstat{{ticket.ticket_no}}' value="{{ticket.ticket_status}}"></td>
+            {% if ticket.file.url is not None%}
+            <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="{{ticket.file.url}}">
+            {%else %}
+            <input type="Hidden" id = 'tfile{{ticket.ticket_no}}' value="none">
+            {% endif %}
+            <td><input type="Hidden" id = 'tcli{{ticket.ticket_no}}' value="{{ticket.client}}">
+            <input type="Hidden" id = 'seltno' value="">
+            </td>
+            {%empty%}
+          <td style="text-align: center; color: red;">NO ENTRIES!</td>
+            {% endfor %}
+          </tr>
+
+          <input type="Hidden" id = 'updtid' value="">
+        <input type="hidden" id="page_id" value="A">
+
+            
+              
+        
+        </tbody>
+
+    </table>
+    <!--<div class="box" id="myBox" style="display: none;">
+      <span class="exit-symbol" onclick="closeBox()">&times;</span>
+       <p style="color:rgb(63, 109, 238);"><b><u>Ticket Details</u></b></p>
+     <p id="ticketinfo"></p>
+      </div>-->
+    
+  </div> 
+</div>
+
+  <!--TICKET DETAILS BOX-------------------->
+
+      <div class="box" name="tcktpopupview" id="tcktpopupview" style="overflow-y: auto;" >
+        <div>
+            <div class="popup-header">
+            
+          <!-- <span class="panel-label">Inbox</span>  -->
+                      <span class="exit-symbol" onclick="javascript:closeBox();" title="Close">&times;</span>
+
+            <div class="ticket-id">Ticket : <span id="ticket_noview"></span>
+                <div ><span class="status-label" id="tstatview"></span></div>
+                
+
+              
+            </div>  
+          </div>
+          
+          
+           <hr>
+
+            <body>
+                  <br>
+                
+                <div class="ticket-details-box">
+                  <div class="ticket-details">
+
+                        <div class="flex-ticketbox">
+                                <div class="flex-item1">Ref ID</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="reference_id"></span></div>
+                                 
+                         </div>
+
+                         <div class="flex-ticketbox">
+                                <div class="flex-item1">Issue Date</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tissueview"></span></div>
+                                 
+                         </div>
+
+                         <div class="flex-ticketbox">
+                                <div class="flex-item1">Approved On</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tapproved"></span></div>
+                                 
+                         </div>
+
+                        <div class="flex-ticketbox">
+                                <div class="flex-item1">Priority</div>
+                                <div class="flex-item2">:</div>
+                                <div class="flex-item3"><span id="tpriview"></span></div>
+                                 
+                         </div>
+
+                  </div>
+                </div>
+
+                <!--  gap -->
+              <div class="gap"></div>
+
+                <div class="additional-details-box">
+                  <div class="additional-details">
+                      <p><b>Subject :</b></p>
+                      <p id="tsubview"></p>
+                      <p><b>File :</b></p>
+                      <a id="tfileview"></a>
+                      <p><b>Description :</b></p>
+                      <textarea input type="text" disabled id="tdescview" rows="6" cols="100"
+                          style="border: none; color: #342E37; font-family: poppins, sans-serif; font-size: 16px;"></textarea>
+                  </div>
+               </div>
+
+              <!--  gap -->
+              <div class="gap"></div>
+              <!--  gap -->
+
+    </div>
+</div>
+
+<div id = 'logframe' class = "log">
+
+  <header><span  id="closeButton" class="closeboxlog" onclick="javascript:document.getElementById('logframe').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+    </header>
+    <div class="popup-body" >
+      <iframe id="frame1" style="display: none ;" name="frame1" class="log" scrolling ='yes'   width="50%" height="100%" frameborder="0">
+      </iframe>
+  </div>
+  </div>
+
+  <div id = 'chat-div'  class="chat-frame" >
+    <header><span  id="close-chat" class="chat-close"  onclick="javascript:document.getElementById('chat-div').style.display='none';document.getElementById('close-chat').style.display='none';"><img src="{% static '/images/back-btn-arrw.png' %}"></span>
+     </header>
+   
+    <iframe id="chat" class="chat-frame"  src="" name="chat"  scrolling="no"  frameborder="0">
+           </iframe>  
+   
+   </div>
+  
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+   
+{% endif %}
+
+
+{% block script %}
+
+<script>
+ document.getElementById('dashboard').classList.add('active');
+
+function showticket(tno,user){
+// alert(tno)
+document.getElementById("tcktpopupview").style.display = "block";
+document.getElementById('updtid').value = tno;
+var tdesc = 'tdes'+ tno;
+var tsub = 'tsub'+tno; // subject
+var tpriority = 'tpriority'+tno; //priority
+var tcl = 'tcli' + tno; //Client
+var tfile = 'tfile' + tno;
+var tissue = 'tissue' + tno;
+var tstat = 'tstatus' + tno;
+var ticketstat = 'ticketstat' + tno;
+var approved_on_id = 'tapproved' + tno;
+
+var tref = 'tref' +tno;
+var tref_value = document.getElementById(tref).value;
+// alert(tref_value)
+
+// alert( document.getElementById(ticketstat).value)
+var status_value = document.getElementById(ticketstat).value;
+var st = null;
+// alert(status_value)
+
+if (status_value == 'TP'  )
+{
+   st = 'Ticket Forwarded';
+}
+else if( status_value == 'TA' ){
+  st = 'Ticket Accepted';
+}
+else if( status_value == 'DA' ){
+  st = 'Developer Accepted';
+}
+else if (status_value == 'EA' )
+{
+  st = 'Tester Accepted';
+}
+else if( status_value == 'RL' ){
+  st = 'Ready to Live';
+}
+else if( status_value == 'DH' || status_value == 'TH'){
+  st = 'Ticket On Hold';
+}
+else if( status_value == 'PA'){
+  st = 'Ready for client testing';
+}
+else if( status_value == 'PC'){
+  st = 'Copied to live.';
+}
+else
+{
+   st = 'In progress';
+}
+
+
+// alert(tfile)
+//document.getElementById('updtidview').value = tno; // This variable will get the current selected ticket id
+
+
+  document.getElementById('reference_id').innerHTML = tno
+  document.getElementById('ticket_noview').innerHTML= tref_value
+
+
+document.getElementById('tstatview').innerHTML= st; 
+// document.getElementById('maker').innerHTML="Maker: "+ user; // user name
+document.getElementById('tapproved').innerHTML=  document.getElementById(approved_on_id).value;
+document.getElementById('tsubview').innerHTML=  document.getElementById(tsub).value; // ticket subject
+document.getElementById('tissueview').innerHTML= document.getElementById(tissue).value; 
+document.getElementById('tdescview').innerHTML= document.getElementById(tdesc).value; // ticket description
+document.getElementById('tpriview').innerHTML= document.getElementById(tpriority).value; // ticket priority
+// document.getElementById('tcli').innerHTML='Client :' + document.getElementById(tcl).value; // ticket client
+var fileurl = document.getElementById(tfile).value;
+  // alert(document.getElementById(tdesc).value);
+  if(fileurl != 'none'){
+  var fileurl = document.getElementById(tfile).value;
+  var link =document.createElement('a'); 
+  link.href = fileurl;
+  link.target = '_blank';
+  link.textContent = ' Click here to view file';
+  // alert(link);
+  document.getElementById('tfileview').appendChild(link);
+  }
+  else{
+    document.getElementById('tfileview').innerHTML = ' No Files Attached.';
+  }
+
+
+}
+function outlook() {
+    var tid = document.getElementById('updtid').value;
+    // alert(tid)
+    var logsUrl = '/cadmin/logs/' + tid + '/';
+    document.getElementById('frame1').src = logsUrl;
+    document.getElementById('logframe').style.display = 'block';
+    document.getElementById('frame1').style.display = 'block';
+}
+function chatfn(){
+
+var tid = document.getElementById('updtid').value.trim();
+
+document.getElementById('chat').src = "{% url 'chtbx' 0 %}".replace('0', tid);
+// alert(document.getElementById('chat').src)
+document.getElementById('chat-div').style.display = 'block';
+document.getElementById('close-chat').style.display = 'block';
+document.getElementById('chat').style.display = 'block';
+}
+
+//     $(document).ready(function() {
+//     // Define the Ajax function
+//     function updateCount() {
+//         $.ajax({
+//             url: "% url 'Get_Ticket_Count' id=LoggedUser.id %}",
+//             type: 'GET',
+//             dataType: 'json',
+//             success: function(response) {
+              
+//               console.log(response);
+//         var data = response.data;
+//         for(var i=0; i<data.length; i++){
+//             console.log(data[i].status, data[i].count);
+//             if (data[i].status =='PENDING' ){
+//             $('#Requests').html(data[i].count);}
+//             if(data[i].status== 'IN PROGRESS'){
+//             $('#Pending').html(data[i].count);}
+            
+//             if(data[i] == 'CLOSED'){
+//             $('#Closed').html(data[i].count);}
+           
+
+//         }
+                
+//             }
+//         });
+//     }
+
+//     // Call the function on page load and every 10 seconds
+//     updateCount();
+//     // setInterval(updateCount, 10000);
+// });
+
+// // <!-- fetch('/Get_Ticket_Count/')
+// //   .then(response => response.json())
+// //   .then(data => console.log(data.count));
+
+// $(document).ready(function() {
+//     function updateCount() {
+//       // Your code
+//     }
+
+//     // Call the function on page load and every 10 seconds
+//     updateCount();
+//     // setInterval(updateCount, 10000);
+//   });
+
+//   $(document).ready(function() {
+//     function updateDatas() {
+//       $.ajax({
+//         url: "{% url 'dashboard_pendings' %}",
+//         type: 'GET',
+//         dataType: 'json',
+//         success: function(data) {
+//           // Parse the data from the server and update the table
+//           var myData = JSON.parse(data);
+//           var t_details = myData.ticket_data.reverse();
+//           var tbody = $('#table-datas tbody');
+//           var thead = $('#t-head')
+//           var counter = 0;
+
+//           tbody.empty();
+//           $.each(t_details, function(index, item) {
+//             counter++;
+//             var row = $('<tr>');
+//             row.append($('<td style="color:red;" >').text(item.ticketid));
+//               row.append($('<td >').text(item.client));
+//             row.append($('<td>').text(item.issue));
+//             row.append($('<td>').text(item.doe));
+//             // row.append($('<td>').text(item.priority));
+//             // row.append($('<td>').text(item.DOExp));
+//             row.append($('<td>').append($('<button>').text('View').attr('id', item.ticketid).attr('class', 'view').on('click', function(e) {
+//               e.stopPropagation(); // Prevent click event from propagating to parent elements
+//               const box = document.getElementById('myBox');
+//               const ticketinfo_tag = document.getElementById('ticketinfo');
+//               const ticket_id = item.ticketid;
+//               const issue_info = item.issue
+//               const editUrl = "/user/del_ticket/" + ticket_id + "/";
+//               const anchorTag = document.createElement("a");
+//               anchorTag.href = editUrl;
+//               const editButton = document.createElement("button");
+//               editButton.type = "button";
+//               editButton.className = "btn edit";
+//               editButton.innerText = "Edit";
+
+//               const deleteButton = document.createElement("button");
+//               deleteButton.type = "button";
+//               deleteButton.className = "btn delete";
+//               deleteButton.innerText = "Delete";
+//               anchorTag.appendChild(editButton);
+//               anchorTag.appendChild(deleteButton);
+//               ticketinfo_tag.innerHTML = '<table> <tbody  style="padding: 4px; text-align:left; width:50px; height:100px; overflow:auto ;"><tr><td><b>Ticket ID:</b>' + ticket_id + '</td><tr> \
+//                 <tr><td><b>Issue :</b>' + issue_info + '</td><tr> \
+//                   <tr><td><b>Issue Descripton :</b>' + item.issuedesc + '</td><tr> \
+//                                              </tbody></table><br>';
+//               ticketinfo_tag.appendChild(anchorTag);
+//               box.style.display = 'block';
+//             })));
+//             tbody.append(row);
+//           });
+//           $('#Requests').html(counter);
+//           $('#Pending').html(myData.ticket_count.pendings); 
+//           console.log('myData:', myData);
+// console.log('ticket_count:', myData.ticket_count);
+// // console.log('pendings:', myData.ticket_count.pendings);
+//         }
+//       });
+//     }
+
+//     updateDatas();
+//     setInterval(updateDatas, 10000);
+//     console.log('wokegd');
+//   });
+
+//   // Add an event listener to hide the 'myBox' when clicking outside of it
+//   $(document).on('click', function(event) {
+//     if (!$(event.target).closest('#myBox').length) {
+//       var box = document.getElementById("myBox");
+//       box.style.display = "none";
+//     }
+//   });
+  
+
+// exit symbol
+function closeBox() {
+//  var box = document.getElementById("myBox");
+//   box.style.display = "none";
+document.getElementById('tfileview').innerHTML =null;
+document.getElementById("tcktpopupview").style.display = "none";
+}
+
+
+
+
+</script>
+
+{%endblock%}
+
+{%endblock%}
