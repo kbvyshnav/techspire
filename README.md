@@ -12,4 +12,4 @@ TechSpire is a robust, full-featured ticketing and customer support platform bui
 
 - Customizable Reporting: Generate insights into support performance, common issues, and resolution times.
 
-- 
+
